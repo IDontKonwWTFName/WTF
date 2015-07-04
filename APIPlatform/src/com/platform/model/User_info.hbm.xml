@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.platform.model">  
+	<class name="User_info" table="user_info">   
+	    <id name="user_id" type="java.lang.String"></id>  
+	    <property name="birthday" type="java.lang.String"></property> 
+	    <property name="headiconurl" type="java.lang.String"></property>
+	    <property name="user_name" type="java.lang.String"></property>
+	    <property name="sex" type="java.lang.Integer"></property>
+	    <property name="phonenumber" type="java.lang.String"></property>
+	    <property name="email" type="java.lang.String"></property>
+	</class>  
+</hibernate-mapping>  

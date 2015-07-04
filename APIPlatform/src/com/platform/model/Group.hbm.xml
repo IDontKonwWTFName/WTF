@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.platform.model">  
+	<class name="Group" table="group">   
+	    <id name="shouhuan_id" type="java.lang.String"></id>  
+	    <property name="group_type" type="java.lang.Integer"></property> 
+	    <property name="group_describe" type="java.lang.String"></property>
+	    <property name="group_name" type="java.lang.String"></property>
+	</class>  
+</hibernate-mapping>  

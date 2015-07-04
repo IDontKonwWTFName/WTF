@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.platform.model">  
+	<class name="Repairment" table="repairment">   
+	    <id name="repairment_id" type="java.lang.Integer"></id>  
+	    <property name="shouhuan_id" type="java.lang.String"></property> 
+	    <property name="repair_time" type="java.util.Date"></property>
+	    <property name="repair_payment" type="java.lang.Integer"></property>
+	    <property name="repair_info" type="java.lang.String"></property>
+	</class>  
+</hibernate-mapping>  
