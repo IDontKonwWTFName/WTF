@@ -65,7 +65,7 @@ public class ShouhuanServlet extends HttpServlet {
 			SQLQuery query = s.createSQLQuery("select * from dbo.[shouhuan] where shouhuan_id="+id).addEntity(Shouhuan.class);
 			Shouhuan hand = (Shouhuan) query.uniqueResult();
 			System.out.println(hand.getBirthday());
-			
+			 
 			data.put("code","100");
 			data.put("msg", "获取数据成功");
 			data.put("data", JSONObject.fromObject(hand).toString());
@@ -168,8 +168,12 @@ public class ShouhuanServlet extends HttpServlet {
 //	        System.out.println(line);
 	        sb.append(line);
 	    }
-	    System.out.println(sb.toString());
-	    JSONObject jo = JSONObject.fromObject(sb.toString());
+	    
+	    //
+	    String sb1=new String(sb.toString().getBytes(),"utf-8");
+		   // System.out.println(sb.toString());
+		    System.out.println("user_info-----update"+sb1);
+	    JSONObject jo = JSONObject.fromObject(sb1.toString());
 	    String id = null;
 	    String which = null;
 	    String value = null;
@@ -198,7 +202,7 @@ public class ShouhuanServlet extends HttpServlet {
 		Transaction t = s.beginTransaction();
 		
 		try{
-			String sql = "update shouhuan set "+which+" = "+value+" where shouhuan_id ="+id;
+			String sql = "update shouhuan set "+which+" = '"+value+"' where shouhuan_id ="+id;
 			System.out.println(sql);
 			SQLQuery query = s.createSQLQuery(sql);
 			query.addEntity(Shouhuan.class);

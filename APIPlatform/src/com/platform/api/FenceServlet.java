@@ -63,7 +63,7 @@ public class FenceServlet extends HttpServlet {
 		Session s = sf.openSession();
 	
 		try{
-			SQLQuery query = s.createSQLQuery("select * from fence where fence_id="+id_i).addEntity(Fence.class);
+			SQLQuery query = s.createSQLQuery("select * from dbo.[fence] where fence_id="+id_i).addEntity(Fence.class);
 			Fence fec = (Fence) query.uniqueResult();
 			
 			data.put("code","100");
@@ -192,7 +192,7 @@ public class FenceServlet extends HttpServlet {
 		Transaction t = s.beginTransaction();
 		
 		try{
-			String sql = "update fence set "+which+" = "+value+" where fence_id ="+id;
+			String sql = "update fence set "+which+" = '"+value+"' where fence_id ="+id;
 			System.out.println(sql);
 			SQLQuery query = s.createSQLQuery(sql);
 			query.addEntity(Fence.class);
@@ -250,7 +250,7 @@ public class FenceServlet extends HttpServlet {
 		Transaction t = s.beginTransaction();
 	
 		try{
-			SQLQuery query = s.createSQLQuery("delete from fence where fence_id=?");
+			SQLQuery query = s.createSQLQuery("delete from dbo.[fence] where fence_id=?");
 			query.addEntity(Fence.class);
 			query.setParameter(0, id);
 			query.executeUpdate();

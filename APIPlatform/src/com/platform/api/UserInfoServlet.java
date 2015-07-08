@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -89,7 +91,16 @@ public class UserInfoServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		String id = request.getParameter("user_id");
-		String birth = request.getParameter("birthday");
+		String birthString = request.getParameter("birthday");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		java.util.Date birth = null;
+		try {
+			birth = sdf.parse(birthString);
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		String url = request.getParameter("headiconurl");
 		Integer sex = 0;
 		String name = request.getParameter("username");
@@ -103,7 +114,7 @@ public class UserInfoServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 		
-		System.out.println("User_info: "+id+" "+birth+" "+url+" "+sex+" "+name+" "+num+" "+email);
+		System.out.println("User_info: "+id+" "+birthString+" "+url+" "+sex+" "+name+" "+num+" "+email);
 		response.setContentType("text/x-json");
 		
 		PrintWriter out = response.getWriter();
@@ -159,7 +170,9 @@ public class UserInfoServlet extends HttpServlet {
 //	        System.out.println(line);
 	        sb.append(line);
 	    }
-	    System.out.println(sb.toString());
+	  String sb1=new String(sb.toString().getBytes(),"utf-8");
+	    //System.out.println("user_info-----update"+sb.toString());
+	System.out.println("user_info-----update"+sb1);
 	    JSONObject jo = JSONObject.fromObject(sb.toString());
 	    String id = null;
 	    String which = null;
@@ -182,14 +195,14 @@ public class UserInfoServlet extends HttpServlet {
 			return;
 	    }
 		
-		System.out.println("User_info(update): "+which+"->"+value);
+		System.out.println("dbo.[User_info](update): "+which+"->"+value);
 		
 		SessionFactory sf = new Configuration().configure().buildSessionFactory();
 		Session s = sf.openSession();
 		Transaction t = s.beginTransaction();
 		
 		try{
-			String sql = "update user_info set "+which+" = "+value+" where user_id ="+id;
+			String sql = "update dbo.[User_info] set "+which+" = '"+value+"' where user_id ="+id;
 			System.out.println(sql);
 			SQLQuery query = s.createSQLQuery(sql);
 			query.addEntity(User_info.class);

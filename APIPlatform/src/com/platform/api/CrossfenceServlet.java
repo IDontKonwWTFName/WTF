@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Date;
 
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.hibernate.SQLQuery;
@@ -74,18 +76,20 @@ public class CrossfenceServlet extends HttpServlet {
 		
 		SessionFactory sf = new Configuration().configure().buildSessionFactory();
 		Session s = sf.openSession();
-	
+	     //有多个穿越围栏的数据
 		try{
-			SQLQuery query = s.createSQLQuery("select * from cross_fence where fence_id=?");
+			SQLQuery query = s.createSQLQuery("select * from dbo.[cross_fence] where fence_id=?");
 			query.addEntity(Cross_fence.class);
 			query.setParameter(0, id);
 //			query.setParameter(1, time_fmt.format(time));
-			Cross_fence info = (Cross_fence) query.uniqueResult();
+			//Cross_fence info = (Cross_fence) query.list();
+			List<Cross_fence> info =  (List<Cross_fence>) query.list();
+			//Cross_fence info = null;
 			
 			data.put("code","100");
 			data.put("msg", "获取数据成功");
-			data.put("data", JSONObject.fromObject(info).toString());
-			
+			//data.put("data", JSONObject.fromObject(info).toString());
+			data.put("data", JSONArray.fromObject(info).toString());
 			out.println(JSONObject.fromObject(data).toString());
 		}catch(Exception e)
 		{
@@ -267,7 +271,7 @@ public class CrossfenceServlet extends HttpServlet {
 		Transaction t = s.beginTransaction();
 	
 		try{
-			SQLQuery query = s.createSQLQuery("delete from cross_fence where fence_id=?");
+			SQLQuery query = s.createSQLQuery("delete from dbo.[cross_fence] where fence_id=?");
 			query.addEntity(Cross_fence.class);
 			query.setParameter(0, id);
 			query.executeUpdate();

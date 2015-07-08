@@ -159,7 +159,9 @@ public class ShouhuanLogServlet extends HttpServlet {
 //	        System.out.println(line);
 	        sb.append(line);
 	    }
-	    System.out.println(sb.toString());
+	    String sb1=new String(sb.toString().getBytes(),"utf-8");
+	   // System.out.println(sb.toString());
+	    System.out.println("user_info-----update"+sb1);
 	    JSONObject jo = JSONObject.fromObject(sb.toString());
 	    String id = null;
 	    String which = null;

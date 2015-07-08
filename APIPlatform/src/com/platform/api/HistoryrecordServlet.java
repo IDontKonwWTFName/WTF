@@ -4,12 +4,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.mail.search.DateTerm;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -111,7 +113,17 @@ public class HistoryrecordServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		String shid = request.getParameter("shouhuan_id");
 		String fid = request.getParameter("from_id");
-		String time = request.getParameter("time");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+	
+		String timeString= request.getParameter("time");
+		Date time =null;
+		try {
+			time = sdf.parse(timeString);
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			System.out.println("∏Ò Ω¥ÌŒÛ");
+			e1.printStackTrace();
+		}
 		Integer type = 0;
 		String url = request.getParameter("record_url");
 		

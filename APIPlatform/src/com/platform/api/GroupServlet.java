@@ -64,7 +64,7 @@ public class GroupServlet extends HttpServlet {
 		Session s = sf.openSession();
 	
 		try{
-			SQLQuery query = s.createSQLQuery("select * from `group` where shouhuan_id="+id).addEntity(Group.class);
+			SQLQuery query = s.createSQLQuery("select * from dbo.[group] where shouhuan_id="+id).addEntity(Group.class);
 			Group info = (Group) query.uniqueResult();
 			
 			data.put("code","100");
@@ -186,7 +186,7 @@ public class GroupServlet extends HttpServlet {
 		Transaction t = s.beginTransaction();
 		
 		try{
-			String sql = "update `group` set "+which+" = "+value+" where shouhuan_id ="+id;
+			String sql = "update `group` set "+which+" = '"+value+"' where shouhuan_id ="+id;
 			System.out.println(sql);
 			SQLQuery query = s.createSQLQuery(sql);
 			query.addEntity(Shouhuan.class);

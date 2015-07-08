@@ -1,15 +1,17 @@
 package com.platform.model;
 
+import java.util.Date;
+
 public class User_info
 {
-	private String birthday;
+	private Date birthday;
 
-	public void setBirthday(String birthday)
+	public void setBirthday(Date birthday)
 	{
 		this.birthday = birthday;
 	}
 
-	public String  getBirthday()
+	public Date getBirthday()
 	{
 		return birthday;
 	}

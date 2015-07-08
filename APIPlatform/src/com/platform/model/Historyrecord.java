@@ -1,6 +1,7 @@
 package com.platform.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Historyrecord implements Serializable
 {
@@ -56,14 +57,14 @@ public class Historyrecord implements Serializable
 	}
 
 
-	private String time;
+	private Date time;
 
-	public void setTime(String time)
+	public void setTime(Date time)
 	{
 		this.time = time;
 	}
 
-	public String  getTime()
+	public Date  getTime()
 	{
 		return time;
 	}

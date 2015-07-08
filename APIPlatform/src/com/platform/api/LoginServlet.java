@@ -65,7 +65,7 @@ public class LoginServlet extends HttpServlet {
 		
 		try{  
             //准备数据   
-            SQLQuery query = s.createSQLQuery("select * from user where user_id="+id).addEntity(User.class);
+            SQLQuery query = s.createSQLQuery("select * from dbo.[user] where user_id="+id).addEntity(User.class);
             User user = (User)query.uniqueResult();
             if(user != null && user.getPassword().equals(passwd))
             {
