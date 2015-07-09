@@ -43,6 +43,8 @@ public class ShouhuanServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		request.setCharacterEncoding("utf-8");   
+        response.setCharacterEncoding("utf-8");
 		String id = request.getParameter("shouhuan_id");
 		System.out.println("Shouhuan_id: "+id);
 		response.setContentType("text/x-json");
@@ -90,6 +92,8 @@ public class ShouhuanServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		request.setCharacterEncoding("utf-8");   
+        response.setCharacterEncoding("utf-8");
 		String id = request.getParameter("shouhuan_id");
 		
 		String birth = request.getParameter("birthday");
@@ -160,6 +164,8 @@ public class ShouhuanServlet extends HttpServlet {
 	 */
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		request.setCharacterEncoding("utf-8");   
+        response.setCharacterEncoding("utf-8");
 		BufferedReader in = new BufferedReader(new InputStreamReader(request.getInputStream()));  
 	    String line;  
 	    StringBuilder sb = new StringBuilder();
@@ -239,6 +245,8 @@ public class ShouhuanServlet extends HttpServlet {
 	 */
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		request.setCharacterEncoding("utf-8");   
+        response.setCharacterEncoding("utf-8");
 		String id = request.getParameter("shouhuan_id");
 		System.out.println("Shouhuan(delete): "+id);
 		response.setContentType("text/x-json");

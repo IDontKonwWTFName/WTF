@@ -43,6 +43,8 @@ public class FenceServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		request.setCharacterEncoding("utf-8");   
+        response.setCharacterEncoding("utf-8");
 		String id = request.getParameter("fence_id");
 		System.out.println("Fence: "+id);
 		response.setContentType("text/x-json");
@@ -90,6 +92,8 @@ public class FenceServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		request.setCharacterEncoding("utf-8");   
+        response.setCharacterEncoding("utf-8");
 		String fence = request.getParameter("fence");
 		String fence_name = request.getParameter("fence_name");
 		String sh_id = request.getParameter("shouhuan_id");
@@ -154,6 +158,8 @@ public class FenceServlet extends HttpServlet {
 	 */
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		request.setCharacterEncoding("utf-8");   
+        response.setCharacterEncoding("utf-8");
 		BufferedReader in = new BufferedReader(new InputStreamReader(request.getInputStream()));  
 	    String line;  
 	    StringBuilder sb = new StringBuilder();
@@ -229,6 +235,8 @@ public class FenceServlet extends HttpServlet {
 	 */
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		request.setCharacterEncoding("utf-8");   
+        response.setCharacterEncoding("utf-8");
 		String id = request.getParameter("fence_id");
 		System.out.println("Fence_id(delete): "+id);
 		response.setContentType("text/x-json");

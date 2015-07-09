@@ -33,13 +33,15 @@ public class LoginServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		request.setCharacterEncoding("utf-8");   
+        response.setCharacterEncoding("utf-8");
 		response.setContentType("text/json");
 		JSONObject jo = new JSONObject();
 		Map<String,String> user = new HashMap<String, String>();
 		user.put("name","APIPlatform");
-		user.put("version","1.0");
-		user.put("author", "carpela");
-		user.put("email", "carpela@163.com");
+		user.put("version","0.21");
+		user.put("author", "手环");
+		user.put("email", "@哈工大");
 		jo = JSONObject.fromObject(user);
 		System.out.println(jo.toString());
 		PrintWriter out = response.getWriter();

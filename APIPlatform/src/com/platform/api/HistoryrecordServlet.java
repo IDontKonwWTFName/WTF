@@ -49,6 +49,8 @@ public class HistoryrecordServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		request.setCharacterEncoding("utf-8");   
+        response.setCharacterEncoding("utf-8");
 		String id = request.getParameter("shouhuan_id");
 //		Date time = null;
 //		SimpleDateFormat time_fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -111,6 +113,8 @@ public class HistoryrecordServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		request.setCharacterEncoding("utf-8");   
+        response.setCharacterEncoding("utf-8");
 		String shid = request.getParameter("shouhuan_id");
 		String fid = request.getParameter("from_id");
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -180,6 +184,8 @@ public class HistoryrecordServlet extends HttpServlet {
 	 */
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		request.setCharacterEncoding("utf-8");   
+        response.setCharacterEncoding("utf-8");
 		BufferedReader in = new BufferedReader(new InputStreamReader(request.getInputStream()));  
 	    String line;  
 	    StringBuilder sb = new StringBuilder();
@@ -255,6 +261,8 @@ public class HistoryrecordServlet extends HttpServlet {
 	 */
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		request.setCharacterEncoding("utf-8");   
+        response.setCharacterEncoding("utf-8");
 		String id = request.getParameter("shouhuan_id");
 		System.out.println("Historyrecord(delete): "+id);
 		response.setContentType("text/x-json");

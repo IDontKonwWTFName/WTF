@@ -40,7 +40,8 @@ public class UploadServlet extends HttpServlet {
 			throws ServletException, IOException {
 		String id_by_session="18646098148";
 		System.out.println("upload");
-		request.setCharacterEncoding("utf-8");// 设置编码
+		request.setCharacterEncoding("utf-8");   
+        response.setCharacterEncoding("utf-8");;// 设置编码
 		boolean isMultipart = ServletFileUpload.isMultipartContent(request);
         //判断是是否是Multipart
 		if (isMultipart) {

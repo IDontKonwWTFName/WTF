@@ -43,6 +43,8 @@ public class ServiceServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		request.setCharacterEncoding("utf-8");   
+        response.setCharacterEncoding("utf-8");
 		String type = request.getParameter("service_type");
 		System.out.println("Service: "+type);
 		response.setContentType("text/x-json");
@@ -90,6 +92,8 @@ public class ServiceServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		request.setCharacterEncoding("utf-8");   
+        response.setCharacterEncoding("utf-8");
 		String desc = request.getParameter("describle");
 		Integer type = 0;
 		Integer price = 0;
@@ -149,6 +153,8 @@ public class ServiceServlet extends HttpServlet {
 	 */
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		request.setCharacterEncoding("utf-8");   
+        response.setCharacterEncoding("utf-8");
 		BufferedReader in = new BufferedReader(new InputStreamReader(request.getInputStream()));  
 	    String line;  
 	    StringBuilder sb = new StringBuilder();
@@ -224,6 +230,8 @@ public class ServiceServlet extends HttpServlet {
 	 */
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		request.setCharacterEncoding("utf-8");   
+        response.setCharacterEncoding("utf-8");
 		String id = request.getParameter("service_type");
 		System.out.println("Service_type(delete): "+id);
 		response.setContentType("text/x-json");

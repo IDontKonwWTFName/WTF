@@ -32,7 +32,8 @@ public class DownloadServlet extends HttpServlet{
 			throws ServletException,IOException{
 		
 		//String dataDirectory =request.getServletContext().getRealPath("WEB-INF/data");
-		
+		request.setCharacterEncoding("utf-8");   
+        response.setCharacterEncoding("utf-8");
 		
 		SessionFactory sessionFactory=new Configuration().configure().buildSessionFactory();
 		org.hibernate.Session session = sessionFactory.openSession();
@@ -67,6 +68,7 @@ public class DownloadServlet extends HttpServlet{
         	output.write(temp);
         }
         System.out.println("download");
+        
 		
 	}
 

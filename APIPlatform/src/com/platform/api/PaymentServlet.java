@@ -45,6 +45,8 @@ public class PaymentServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		request.setCharacterEncoding("utf-8");   
+        response.setCharacterEncoding("utf-8");
 		String id = request.getParameter("payment_id");
 		
 		System.out.println("Payment_id: "+id);
@@ -93,6 +95,8 @@ public class PaymentServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		request.setCharacterEncoding("utf-8");   
+        response.setCharacterEncoding("utf-8");
 		Integer id = 0;
 		Integer type = 0;
 		String usid = request.getParameter("user_id");
@@ -155,6 +159,8 @@ public class PaymentServlet extends HttpServlet {
 	 */
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		request.setCharacterEncoding("utf-8");   
+        response.setCharacterEncoding("utf-8");
 		BufferedReader in = new BufferedReader(new InputStreamReader(request.getInputStream()));  
 	    String line;  
 	    StringBuilder sb = new StringBuilder();
@@ -230,6 +236,8 @@ public class PaymentServlet extends HttpServlet {
 	 */
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		request.setCharacterEncoding("utf-8");   
+        response.setCharacterEncoding("utf-8");
 		String id = request.getParameter("payment_id");
 		System.out.println("Payment_id(delete): "+id);
 		response.setContentType("text/x-json");

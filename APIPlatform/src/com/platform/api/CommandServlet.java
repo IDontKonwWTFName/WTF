@@ -47,6 +47,8 @@ public class CommandServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		request.setCharacterEncoding("utf-8");   
+        response.setCharacterEncoding("utf-8");
 		String userid = request.getParameter("id");
 		String cmd = request.getParameter("cmd");
 		System.out.println("CMD: "+cmd+" User:"+userid);
