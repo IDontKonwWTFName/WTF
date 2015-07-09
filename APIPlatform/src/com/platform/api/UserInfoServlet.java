@@ -64,7 +64,7 @@ public class UserInfoServlet extends HttpServlet {
 		try{
 			SQLQuery query = s.createSQLQuery("select * from user_info where user_id="+userid).addEntity(User_info.class);
 			User_info info = (User_info) query.uniqueResult();
-			System.out.println(info.getBirthday());
+			//System.out.println(info.getBirthday());
 			
 			data.put("code","100");
 			data.put("msg", "获取数据成功");
@@ -103,7 +103,8 @@ public class UserInfoServlet extends HttpServlet {
 		}
 		String url = request.getParameter("headiconurl");
 		Integer sex = 0;
-		String name = request.getParameter("username");
+		String name =new String(request.getParameter("username").toString().getBytes(),"utf-8");
+		//String name = request.getParameter("username");
 		String num = request.getParameter("phonenumber");
 		String email = request.getParameter("email");
 		
