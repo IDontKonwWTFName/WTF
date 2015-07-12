@@ -11,18 +11,26 @@ import java.io.OutputStream;
 
 
 
+import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.sound.midi.MidiDevice.Info;
+
+import net.sf.json.JSONObject;
 
 import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
+import com.platform.model.User;
 import com.platform.model.User_info;
 
 @WebServlet("/download")
@@ -38,6 +46,20 @@ public class DownloadServlet extends HttpServlet{
 		SessionFactory sessionFactory=new Configuration().configure().buildSessionFactory();
 		org.hibernate.Session session = sessionFactory.openSession();
 		Transaction transaction =session.beginTransaction();
+		
+		response.setContentType("text/x-json"); 
+		PrintWriter out = response.getWriter();
+		Map<String, String> data = new HashMap<String, String>();
+		HttpSession session1 = request.getSession();
+		User userInfo = (User)session1.getAttribute("user");
+		if(userInfo==null)
+		{
+			data.put("code","200");
+			data.put("msg", "获取数据失败");
+			data.put("data", "");
+			out.println(JSONObject.fromObject(data).toString());
+			return;
+		}
 		
 		String id_by_session="18646098148";
 		User_info info = null;

@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import net.sf.json.JSONObject;
 
@@ -58,6 +59,8 @@ public class CommandServlet extends HttpServlet {
 		SessionFactory sf = new Configuration().configure().buildSessionFactory();
 		Session s = sf.openSession();
 		
+		HttpSession session1 = request.getSession();
+		User userInfo = (User)session1.getAttribute("user");
 		boolean flag = true;
 		/*
 		 * 	执行命令
@@ -66,7 +69,7 @@ public class CommandServlet extends HttpServlet {
 		 * 
 		 */
 		
-		if(flag){
+		if(flag && userInfo != null){
 			// 执行成功
 			data.put("code","100");
 			data.put("msg", "操作成功");
