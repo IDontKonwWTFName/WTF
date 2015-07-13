@@ -68,6 +68,25 @@ public class CommandServlet extends HttpServlet {
 		 * 	交互
 		 * 
 		 */
+		 switch (cmd) {
+		// 关机,将命令发给手环：netty
+		case "1":
+			
+		    flag=true;
+			break;
+		case "2":
+			
+			break;
+		case "3":
+			
+			break;
+		case "4":
+			
+			break;
+		default:
+			//flag=false;
+			break;
+		}
 		
 		if(flag && userInfo != null){
 			// 执行成功
