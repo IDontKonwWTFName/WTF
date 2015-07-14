@@ -7,16 +7,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import net.sf.json.*;
-
 import java.util.*;
 import java.io.*;
-
 import org.hibernate.*;
 import org.hibernate.cfg.Configuration;
-
 import com.platform.model.User;
 /**
  * Servlet implementation class LoginServlet
@@ -71,17 +66,6 @@ public class LoginServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		JSONObject msg;
 		Map<String, String> data = new HashMap<String, String>();
-
-		HttpSession session1 = request.getSession();
-		User userInfo = (User)session1.getAttribute("user");
-		
-		if(userInfo == null){
-			System.out.println("session 中user属性值为空"); 
-			userInfo = new User();
-			userInfo.setUser_id(id);
-			userInfo.setPassword(passwd);
-			session1.setAttribute("user", userInfo);
-		}
 		
 		try{  
             //准备数据   

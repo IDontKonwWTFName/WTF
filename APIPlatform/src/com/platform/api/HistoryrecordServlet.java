@@ -17,7 +17,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -69,9 +68,8 @@ public class HistoryrecordServlet extends HttpServlet {
 		
 		PrintWriter out = response.getWriter();
 		Map<String, String> data = new HashMap<String, String>();
-		HttpSession session1 = request.getSession();
-		User userInfo = (User)session1.getAttribute("user"); 
-		if(id==null || id.equals("") || userInfo == null)
+		
+		if(id==null || id.equals(""))
 		{
 			data.put("code","200");
 			data.put("msg", "获取数据失败");
@@ -130,15 +128,18 @@ public class HistoryrecordServlet extends HttpServlet {
 			System.out.println("格式错误");
 			e1.printStackTrace();
 		}
-		Integer type = 0;
+		
+		//Boolean类型
+		Boolean type = null;
+		String typeString=request.getParameter("from_type");
+		if (typeString.equals("1")){
+			type=true;
+		}else {
+			type=false;
+		}
+		
 		String url = request.getParameter("record_url");
 		
-		try{
-			type = Integer.valueOf(request.getParameter("type"));
-		}catch(Exception e)
-		{
-			e.printStackTrace();
-		}
 		
 		System.out.println("Historyrecord: "+shid+" "+fid+" "+time+" "+type+" "+url);
 		response.setContentType("text/x-json");
@@ -148,16 +149,7 @@ public class HistoryrecordServlet extends HttpServlet {
 		SessionFactory sf = new Configuration().configure().buildSessionFactory();
 		Session s = sf.openSession();
 		Transaction t = s.beginTransaction();
-		HttpSession session1 = request.getSession();
-		User userInfo = (User)session1.getAttribute("user");
-		if(userInfo==null)
-		{
-			data.put("code","200");
-			data.put("msg", "获取数据失败");
-			data.put("data", "");
-			out.println(JSONObject.fromObject(data).toString());
-			return;
-		}
+		
 		try{
 			
 			Historyrecord hr = new Historyrecord();
@@ -214,17 +206,7 @@ public class HistoryrecordServlet extends HttpServlet {
 		
 		PrintWriter out = response.getWriter();
 		Map<String, String> data = new HashMap<String, String>();
-		HttpSession session1 = request.getSession();
-		User userInfo = (User)session1.getAttribute("user");
-		if(userInfo==null)
-		{
-			data.put("code","200");
-			data.put("msg", "获取数据失败");
-			data.put("data", "");
-			out.println(JSONObject.fromObject(data).toString());
-			return;
-		}
-		try{
+	    try{
 	    	id = jo.getString("shouhuan_id");
 			which = jo.getString("which");
 			value = jo.getString("value");
@@ -290,9 +272,8 @@ public class HistoryrecordServlet extends HttpServlet {
 		
 		PrintWriter out = response.getWriter();
 		Map<String, String> data = new HashMap<String, String>();
-		HttpSession session1 = request.getSession();
-		User userInfo = (User)session1.getAttribute("user"); 
-		if(id==null || id.equals("") || userInfo==null)
+		
+		if(id==null || id.equals(""))
 		{
 			data.put("code","200");
 			data.put("msg", "获取数据失败");

@@ -10,7 +10,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.swing.border.EmptyBorder;
 
 import net.sf.json.JSONObject;
@@ -40,7 +39,7 @@ public class RegisterServlet extends HttpServlet{
 			SessionFactory sessionFactory= new Configuration().configure().buildSessionFactory();
 			Session session=sessionFactory.openSession();
 			Transaction transaction=session.beginTransaction();
-			Map<String,String>data =new HashMap<String,String>(); 
+			Map<String,String>data =new HashMap<String,String>();
 			try {
 				
 				SQLQuery sqlQuery= session.createSQLQuery("select * from dbo.[user] where user_id = "+id).addEntity(User.class);

@@ -11,7 +11,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import net.sf.json.JSONObject;
 
@@ -52,9 +51,8 @@ public class RepairmentServlet extends HttpServlet {
 		
 		PrintWriter out = response.getWriter();
 		Map<String, String> data = new HashMap<String, String>();
-		HttpSession session1 = request.getSession();
-		User userInfo = (User)session1.getAttribute("user"); 
-		if(userid==null || userid.equals("") || userInfo==null)
+		
+		if(userid==null || userid.equals(""))
 		{
 			data.put("code","200");
 			data.put("msg", "获取数据失败");
@@ -127,16 +125,7 @@ public class RepairmentServlet extends HttpServlet {
 		SessionFactory sf = new Configuration().configure().buildSessionFactory();
 		Session s = sf.openSession();
 		Transaction t = s.beginTransaction();
-		HttpSession session1 = request.getSession();
-		User userInfo = (User)session1.getAttribute("user");
-		if(userInfo==null)
-		{
-			data.put("code","200");
-			data.put("msg", "获取数据失败");
-			data.put("data", "");
-			out.println(JSONObject.fromObject(data).toString());
-			return;
-		}
+		
 		try{
 			
 			Repairment rep = new Repairment();
@@ -193,17 +182,7 @@ public class RepairmentServlet extends HttpServlet {
 		
 		PrintWriter out = response.getWriter();
 		Map<String, String> data = new HashMap<String, String>();
-		HttpSession session1 = request.getSession();
-		User userInfo = (User)session1.getAttribute("user");
-		if(userInfo==null)
-		{
-			data.put("code","200");
-			data.put("msg", "获取数据失败");
-			data.put("data", "");
-			out.println(JSONObject.fromObject(data).toString());
-			return;
-		}
-		try{
+	    try{
 	    	id = jo.getString("repairment_id");
 			which = jo.getString("which");
 			value = jo.getString("value");
@@ -269,9 +248,8 @@ public class RepairmentServlet extends HttpServlet {
 		
 		PrintWriter out = response.getWriter();
 		Map<String, String> data = new HashMap<String, String>();
-		HttpSession session1 = request.getSession();
-		User userInfo = (User)session1.getAttribute("user"); 
-		if(id==null || id.equals("") ||userInfo==null)
+		
+		if(id==null || id.equals(""))
 		{
 			data.put("code","200");
 			data.put("msg", "获取数据失败");

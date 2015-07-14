@@ -5,14 +5,14 @@ import java.util.Date;
 
 public class Historyrecord implements Serializable
 {
-	private Integer from_type;
+	private Boolean from_type;
 
-	public void setFrom_type(Integer from_type)
+	public void setFrom_type(Boolean from_type)
 	{
 		this.from_type = from_type;
 	}
 
-	public Integer  getFrom_type()
+	public Boolean  getFrom_type()
 	{
 		return from_type;
 	}

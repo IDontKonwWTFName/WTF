@@ -1,25 +1,18 @@
 package com.platform.api;
 
 import java.io.*;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import net.sf.json.JSONObject;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-
-import com.platform.model.User;
 
 /**
  * 
@@ -65,19 +58,6 @@ public class FileUpLoad extends HttpServlet {
 		//高水平的API文件上传处理
 		ServletFileUpload upload = new ServletFileUpload(factory);
 		
-		response.setContentType("text/x-json"); 
-		PrintWriter out1 = response.getWriter();
-		Map<String, String> data = new HashMap<String, String>();
-		HttpSession session1 = request.getSession();
-		User userInfo = (User)session1.getAttribute("user");
-		if(userInfo==null)
-		{
-			data.put("code","200");
-			data.put("msg", "获取数据失败");
-			data.put("data", "");
-			out1.println(JSONObject.fromObject(data).toString());
-			return;
-		}
 		
 		try {
 			//可以上传多个文件
