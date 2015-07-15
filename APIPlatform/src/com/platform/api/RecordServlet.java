@@ -67,16 +67,7 @@ public class RecordServlet extends HttpServlet {
         //判断是是否是Multipart
 		if (isMultipart) {
 			System.out.println("is multipart");
-			//获取路径
-			//String realPath =this.getServletContext().getRealPath("historyrecord/");
-			String realPath =this.getServletContext().getRealPath("HistoryRecord");
-			System.out.println("url:" + realPath);
-            //创建文件
-			File dir = new File(realPath);
-            
-			if (!dir.exists()) {
-				dir.mkdir();
-			}
+		
    
 			DiskFileItemFactory factory = new DiskFileItemFactory();
 			 //设置 缓存的大小，当上传文件的容量超过该缓存时，直接放到 暂时存储室
@@ -94,20 +85,34 @@ public class RecordServlet extends HttpServlet {
 
 			try {
 				List<FileItem> items = upload.parseRequest(request);
-				
+				JSONObject js=null;
 				for (FileItem item : items) {
 					if (item.isFormField()) { // username="username"
 						//设置字符串
 						String name = item.getFieldName();
 						value = item.getString("utf-8");
-						System.out.println(value);
+						js=JSONObject.fromObject(value);
+						System.out.println(name+"+++++"+value);
 						//shouhuan.set
 
 						//System.out.println(name + " = " + value);
 					} else { // 文件
-						//将文件写入磁盘,聊天记录的地址是以 
+						//传输时，Json文件在前面
+						//获取路径,得提前知道卸载那个文件夹，语音文件夹,
+						//String realPath =this.getServletContext().getRealPath("historyrecord/");
+						String realPath =this.getServletContext().getRealPath("WEB-INF/data/HistoryRecord/"+js.getString("shouhuan_id"));
+						System.out.println("url:" + realPath);
+			            //创建文件
+						File dir = new File(realPath);
+			            
+						if (!dir.exists()) {
+							dir.mkdir();
+						}
+						//将文件写入磁盘,聊天记录的地址是以shouhuan_id文件夹
+						String name = item.getFieldName();
+						System.out.println("------------------------");
 						String filename = item.getName();
-						path=id_by_session+ time+filename.substring(filename.lastIndexOf("."));
+						path=js.getString("from_id")+"_"+ time+filename.substring(filename.lastIndexOf("."));
 						item.write(new File(dir, path));
 						//User_info user_info=new User_info();
 						//将path写入数据库
@@ -128,7 +133,7 @@ public class RecordServlet extends HttpServlet {
 					}
 
 				}
-			JSONObject js=JSONObject.fromObject(value);
+			
 			Boolean type = null;
 			if (js.getString("from_type").equals("1")){
 				type=true;
