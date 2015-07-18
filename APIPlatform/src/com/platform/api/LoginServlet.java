@@ -55,10 +55,11 @@ public class LoginServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		request.setCharacterEncoding("utf-8");   
         response.setCharacterEncoding("utf-8");
+        response.setContentType("text/x-json");
 		String id = request.getParameter("user_id");
 		String passwd = request.getParameter("passwd");
 		System.out.println("Login: "+id+" "+passwd);
-		response.setContentType("text/x-json");
+		
 		
 		SessionFactory sf = new Configuration().configure().buildSessionFactory();  
         Session s = sf.openSession();  
@@ -91,6 +92,7 @@ public class LoginServlet extends HttpServlet {
 	    } 
 		msg = JSONObject.fromObject(data);
 		out.println(msg.toString());
+		System.out.println(msg.toString());
 	}
 	
 	/**

@@ -1,11 +1,15 @@
 package com.platform.api;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +20,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.RepaintManager;
 
 import net.sf.json.JSONObject;
 
@@ -33,139 +38,186 @@ import antlr.debug.TraceAdapter;
 
 import com.platform.model.Shouhuan;
 import com.platform.model.User_info;
-
+//数据格式：json，key，value，加文件，url不用发
 @WebServlet("/headicon")
 public class HeadIconServlet extends HttpServlet {
 	// private String getFilename
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String id_by_session="18646098148";
-		System.out.println("upload");
-		request.setCharacterEncoding("utf-8");   
-        response.setCharacterEncoding("utf-8");;// 设置编码
-        
-        
-        String id = request.getParameter("shouhuan_id");
-		String birth = request.getParameter("birthday");
-		//String url = request.getParameter("headiconurl");
-		String url="";
-		Integer sex = 0;
-		Integer tmprgt = 0;
-		Integer ver = 0;
-		String nick = request.getParameter("nickname");
-		String name = request.getParameter("name");
-		String reg = request.getParameter("registrationdate");
+		String id_by_session = "15045693947";
+		request.setCharacterEncoding("utf-8");
+		response.setCharacterEncoding("utf-8");
+		// 设置编码
+		response.setContentType("text/json");
+
 		
-		try{
-			sex = Integer.valueOf(request.getParameter("sex"));
-			tmprgt = Integer.valueOf(request.getParameter("temporaryright"));
-			ver = Integer.valueOf(request.getParameter("currentversion"));
-		}catch(NumberFormatException e)
-		{
-			e.printStackTrace();
-		}
 		boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-        //判断是是否是Multipart
+		// 判断是是否是Multipart
 		if (isMultipart) {
 			System.out.println("is multipart");
-			//获取路径
-			String realPath = this.getServletContext().getRealPath("upload");
+			// 获取路径
 
-			System.out.println("url:" + realPath);
-            //创建文件
-			File dir = new File(realPath);
-            
-			if (!dir.exists()) {
-				dir.mkdir();
-			}
-   
 			DiskFileItemFactory factory = new DiskFileItemFactory();
-			 //设置 缓存的大小，当上传文件的容量超过该缓存时，直接放到 暂时存储室
+			// 设置 缓存的大小，当上传文件的容量超过该缓存时，直接放到 暂时存储室
 			factory.setSizeThreshold(1024 * 1024);
 			ServletFileUpload upload = new ServletFileUpload(factory);
-
 			upload.setHeaderEncoding("utf-8");
-			
-			Map<String, String> dataHashMap =new HashMap<String,String>();
 
+			Map<String, String> data = new HashMap<String, String>();
+			Map<String, String> getdata = new HashMap<String, String>();
+			JSONObject jsonObject = null;
+			
+			
+			SessionFactory sf = new Configuration().configure()
+					.buildSessionFactory();
+			Session session = sf.openSession();
+			Transaction t = session.beginTransaction();
 			try {
 				List<FileItem> items = upload.parseRequest(request);
+
 				
-				SessionFactory sf =new Configuration().configure().buildSessionFactory();
-				Session session=sf.openSession();
-				Transaction t = session.beginTransaction();
-				
-			
 
 				for (FileItem item : items) {
 					if (item.isFormField()) { // username="username"
-						//设置字符串
-//						String name = item.getFieldName();
-//						String value = item.getString("utf-8");
-//						dataHashMap.put(name, value);
-						//shouhuan.set
-
-						//System.out.println(name + " = " + value);
-					} else { // 文件
-						//将文件写入磁盘
-						String filename = item.getName();
-						String path=id_by_session+ name.substring(name.lastIndexOf("."));
-						item.write(new File(dir, path));
-						//User_info user_info=new User_info();
-						//将path写入数据库
+						// 设置字符串,取得字符串JSON
+						String name = item.getFieldName();
+						String value = item.getString("utf-8");
+						jsonObject = JSONObject.fromObject(value);
 						
-						
-						Map<String, String> data = new HashMap<String, String>();
-						try{
+						// shouhuan.set
+						System.out.println(name + " = " + value);
+					} else {
+						// 文件
+						// 将文件写入磁盘
+						String realPath = this.getServletContext().getRealPath("WEB-INF/data/HeadIcon");
 
-							url=path;
-							//String sql = "update dbo.[User_info] set "+"headiconurl"+" = '"+path+"' where shouhuan_id ="+id;
-							//System.out.println(sql);
-							//SQLQuery query = session.createSQLQuery(sql);
-							//query.addEntity(User_info.class);
-//							SQLQuery query = s.createSQLQuery("update user set ? = ? where user_id = ?");
-//							query.setParameter(0, which);
-//							query.setParameter(1, value);
-//							query.setParameter(2, id);
-							//query.executeUpdate();
-							t.commit();
-							
-							data.put("code","100");
-							data.put("msg", "跟新数据成功");
-							data.put("data", "");
-							response.getWriter().println(JSONObject.fromObject(data).toString());
-						}catch(Exception e){
-							data.put("code","200");
-							data.put("msg", "跟新数据成功");
-							data.put("data", "");
-							
-						}finally{
-							session.close();
-							sf.close();
+						System.out.println("url:" + realPath);
+						// 创建文件
+						File dir = new File(realPath);
+
+						if (!dir.exists()) {
+							dir.mkdir();
 						}
-
+						// 得到文件对象,写图片文件时，
+						//
+						String name = item.getName();
+						//String path = jsonObject.getString("id")+ name.substring(name.lastIndexOf("."));
+						String path = id_by_session+ name.substring(name.lastIndexOf("."));
+						item.write(new File(dir, path));
+						// User_info user_info=new User_info();
+						// 将path写入数据库
+						jsonObject.put("headiconurl", path);
 					}
-
 				}
-				Shouhuan shouhuan = new Shouhuan();
-				shouhuan.setShouhuan_id(id);
-				shouhuan.setBirthday(birth);
-				shouhuan.setHeadiconurl(url);
-				shouhuan.setSex(sex);
-				shouhuan.setName(name);
-				shouhuan.setNickname(nick);
-				shouhuan.setTemporaryright(tmprgt);
-				shouhuan.setRegistrationdate(reg);
-				shouhuan.setCurrentversion(ver);
 				
-				session.save(shouhuan);
+				String sql = "update dbo.[User_info] set ";
+				//+which+" = '"+value+"' where user_id ="+id
+				//遍历JSONObject，得到key，value,并设置sql语句，注意第二对修改面前要加“，”逗号,sql语句最好加分号
+				Iterator iterator=jsonObject.keys();
+				String key = (String) iterator.next();
+				String value = jsonObject.getString(key);
+				sql = sql + key +" = "+"'"+value+"'" ;
+				while (iterator.hasNext()){
+					key = (String) iterator.next();
+					if(key.equals("user_id")){
+					id_by_session=jsonObject.getString(key);
+					}else{
+						value = jsonObject.getString(key);
+						sql = sql + " , "+key +" = "+"'"+value+"'" ;
+					}
+					
+				}
+				sql=sql+" where user_id = "+"'"+id_by_session+"'";
+				
+				SQLQuery sqlQuery=session.createSQLQuery(sql).addEntity(User_info.class);
+				sqlQuery.executeUpdate();
 				t.commit();
+				
+				data.put("code", "100");
+				data.put("msg", "跟新数据成功");
+				data.put("data", "");
+				response.getWriter().println(JSONObject.fromObject(data).toString());
 
 			} catch (Exception e) {
 				e.printStackTrace();
+				data.put("code", "200");
+				data.put("msg", "跟新数据失败");
+				data.put("data", "");
 			}
+			finally{
+				session.close();
+				sf.close();
+				System.out.println(data.toString());
+			}
+		}else{
+			
+			//不是文件的时候，可以改多项
+			Map<String, String>data =new HashMap<String,String>();
+			SessionFactory sf = new Configuration().configure()
+					.buildSessionFactory();
+			Session session = sf.openSession();
+			Transaction t = session.beginTransaction();
+			try{
+			BufferedReader in = new BufferedReader(new InputStreamReader(request.getInputStream()));  
+		    String line;  
+		    StringBuilder sb = new StringBuilder();
+		    while ((line = in.readLine()) != null)
+		    {  
+//		        System.out.println(line);
+		        sb.append(line);
+		    }
+		    //汉字基数
+		  String sb1=new String(sb.toString().getBytes(),"utf-8");
+		    //System.out.println("user_info-----update"+sb.toString());
+		System.out.println("user_info-----update"+sb1);
+		    JSONObject jsonObject = JSONObject.fromObject(sb1);
+		    
+		    String sql = "update dbo.[User_info] set ";
+			//+which+" = '"+value+"' where user_id ="+id
+			//遍历JSONObject，得到key，value,并设置sql语句，注意第二对修改面前要加“，”逗号,sql语句最好加分号
+			Iterator iterator=jsonObject.keys();
+			String key = (String) iterator.next();
+			String value = jsonObject.getString(key);
+			sql = sql + key +" = "+"'"+value+"'" ;
+			while (iterator.hasNext()){
+				key = (String) iterator.next();
+				if(key.equals("user_id")){
+				id_by_session=jsonObject.getString(key);
+				}else{
+					value = jsonObject.getString(key);
+					sql = sql + " , "+key +" = "+"'"+value+"'" ;
+				}
+				
+				
+			}
+			//sql=sql+" where user_id = "+"'"+id_by_session+"'";
+			sql=sql+" where user_id = "+"'"+id_by_session+"'";
+			
+			SQLQuery sqlQuery=session.createSQLQuery(sql).addEntity(User_info.class);
+			sqlQuery.executeUpdate();
+			t.commit();
+				
+				data.put("code","100");
+				data.put("msg", "更新数据成功");
+				data.put("data", "");
+				
+				response.getWriter().println(JSONObject.fromObject(data).toString());
+				
+			}catch(Exception e)
+			{
+				data.put("code","200");
+				data.put("msg", "修改数据失败");
+				data.put("data", "");
+				e.printStackTrace();
+				response.getWriter().println(JSONObject.fromObject(data).toString());
+			}
+			finally
+			{
+				session.close();
+				sf.close();
+			}
+			
 		}
 	}
 
 }
-

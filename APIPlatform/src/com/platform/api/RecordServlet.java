@@ -117,19 +117,6 @@ public class RecordServlet extends HttpServlet {
 						//User_info user_info=new User_info();
 						//将path写入数据库
 						
-						
-						Map<String, String> data = new HashMap<String, String>();
-						try{
-							data.put("code","100");
-							data.put("msg", "跟新数据成功");
-							data.put("data", "");
-							response.getWriter().println(JSONObject.fromObject(data).toString());
-						}catch(Exception e){
-							
-						}finally{
-							
-						}
-
 					}
 
 				}
@@ -148,6 +135,13 @@ public class RecordServlet extends HttpServlet {
 			hr.setFrom_type(type);
 			session.save(hr);
 			t.commit();
+			Map<String, String> data = new HashMap<String, String>();
+			
+			data.put("code","100");
+			data.put("msg", "跟新数据成功");
+			data.put("data", "");
+			response.getWriter().println(JSONObject.fromObject(data).toString());
+			
 
 			} catch (Exception e) {
 				e.printStackTrace();
