@@ -25,8 +25,9 @@ import org.hibernate.cfg.Configuration;
 
 import com.platform.model.User_info;
 
-@WebServlet("/download")
-public class DownloadServlet extends HttpServlet{
+@WebServlet("/recorddownload")
+//参数:文件地址
+public class RecordDownloadServlet extends HttpServlet{
 
 	public void  doPost(HttpServletRequest request ,HttpServletResponse response)
 			throws ServletException,IOException{
@@ -34,29 +35,31 @@ public class DownloadServlet extends HttpServlet{
 		//String dataDirectory =request.getServletContext().getRealPath("WEB-INF/data");
 		request.setCharacterEncoding("utf-8");   
         response.setCharacterEncoding("utf-8");
+       // response.setContentType("text/json");
+        String url = request.getParameter("url");
 		
-		SessionFactory sessionFactory=new Configuration().configure().buildSessionFactory();
-		org.hibernate.Session session = sessionFactory.openSession();
-		Transaction transaction =session.beginTransaction();
+//		SessionFactory sessionFactory=new Configuration().configure().buildSessionFactory();
+//		org.hibernate.Session session = sessionFactory.openSession();
+//		Transaction transaction =session.beginTransaction();
+//		
+//		String id_by_session="18646098148";
+//		User_info info = null;
+//		try {
+//			//SQLQuery sqlQuery=((SQLQuery) session.createQuery("select headiconurl " +" from dbo.[user_info] "+" where user_id= "id_by_session)).addEntity(User_info.class);
+//			
+//			SQLQuery query = session.createSQLQuery("select headiconurl from user_info where user_id="+id_by_session).addEntity(User_info.class);
+//		     info=(User_info)query.uniqueResult();
+//		    System.out.println(info.getHeadiconurl());
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//		}finally{
+//			session.close();
+//			sessionFactory.close();
+//		}
 		
-		String id_by_session="18646098148";
-		User_info info = null;
-		try {
-			//SQLQuery sqlQuery=((SQLQuery) session.createQuery("select headiconurl " +" from dbo.[user_info] "+" where user_id= "id_by_session)).addEntity(User_info.class);
-			
-			SQLQuery query = session.createSQLQuery("select headiconurl from user_info where user_id="+id_by_session).addEntity(User_info.class);
-		     info=(User_info)query.uniqueResult();
-		    System.out.println(info.getHeadiconurl());
-		} catch (Exception e) {
-			// TODO: handle exception
-		}finally{
-			session.close();
-			sessionFactory.close();
-		}
 		
-		
-		//File f=new File("C:/apache-tomcat-7.0.62/webapps/APIPlatform/upload/"+info.getHeadiconurl());
-	    File f =new File("C:/Users/军/Desktop/data/HeadIcon/"+info.getHeadiconurl());
+		File f=new File("C:/Users/军/Desktop/data/record/"+url);
+	    
         FileInputStream fi=new FileInputStream(f);
         byte temp[]=new byte[1024*3];//3M的空间
         //回复

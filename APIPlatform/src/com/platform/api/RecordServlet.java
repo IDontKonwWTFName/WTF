@@ -100,7 +100,8 @@ public class RecordServlet extends HttpServlet {
 						//传输时，Json文件在前面
 						//获取路径,得提前知道卸载那个文件夹，语音文件夹,
 						//String realPath =this.getServletContext().getRealPath("historyrecord/");
-						String realPath =this.getServletContext().getRealPath("WEB-INF/data/HistoryRecord/"+js.getString("shouhuan_id"));
+						//String realPath =this.getServletContext().getRealPath("WEB-INF/data/HistoryRecord/"+js.getString("shouhuan_id"));
+						String realPath = "C:/Users/军/Desktop/data/HistoryRecord/"+js.getString("shouhuan_id");
 						System.out.println("url:" + realPath);
 			            //创建文件
 						File dir = new File(realPath);
