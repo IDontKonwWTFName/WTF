@@ -60,8 +60,6 @@ public class CommandServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		request.setCharacterEncoding("utf-8");
 		response.setCharacterEncoding("utf-8");
-		
-		response.setContentType("text/x-json");
 		String userid = request.getParameter("id");
 		String parameter= request.getParameter("parameter");
 		String shouhuan_id=request.getParameter("shouhuan_id");
@@ -371,7 +369,6 @@ public class CommandServlet extends HttpServlet {
 			//
 			flag=true;
 			System.out.println(NettyString);
-			break;
 	//RESET
 		case "20":
 			companyString="LJ";
@@ -390,7 +387,6 @@ public class CommandServlet extends HttpServlet {
 			//
 			flag=true;
 			System.out.println(NettyString);
-			break;
 			
 	//CR 定位指令
 		case "21":
@@ -410,7 +406,6 @@ public class CommandServlet extends HttpServlet {
 			//
 			flag=true;
 			System.out.println(NettyString);
-			break;
 	//BT  蓝牙
 		case "22":
 			companyString="LJ";
@@ -429,7 +424,6 @@ public class CommandServlet extends HttpServlet {
 			//
 			flag=true;
 			System.out.println(NettyString);
-			break;
 	//WORK 工作时间段设置
 		case "23":
 			companyString="LJ";
@@ -448,7 +442,6 @@ public class CommandServlet extends HttpServlet {
 			//
 			flag=true;
 			System.out.println(NettyString);
-			break;
 	//WORKTIME
 		case "24":
 			companyString="LJ";
@@ -467,7 +460,6 @@ public class CommandServlet extends HttpServlet {
 			//
 			flag=true;
 			System.out.println(NettyString);
-			break;
 	//POWEROFF 关机
 		case "25":
 			companyString="LJ";
@@ -486,7 +478,6 @@ public class CommandServlet extends HttpServlet {
 			//
 			flag=true;
 			System.out.println(NettyString);
-			break;
 	//REMOVE 取下手环报警开关
 		case "26":
 			companyString="LJ";
@@ -505,7 +496,6 @@ public class CommandServlet extends HttpServlet {
 			//
 			flag=true;
 			System.out.println(NettyString);
-			break;
 	//FLOWER 小红花
 		case "27":
 			companyString="LJ";
@@ -524,7 +514,6 @@ public class CommandServlet extends HttpServlet {
 			//
 			flag=true;
 			System.out.println(NettyString);
-			break;
 	//PULSE 脉搏
 		case "28":
 			companyString="LJ";
@@ -543,47 +532,6 @@ public class CommandServlet extends HttpServlet {
 			//
 			flag=true;
 			System.out.println(NettyString);
-			break;
-	//短语显示设置指令	
-		case "33":
-			companyString="LJ";
-			 cmdString="MESSAGE";
-			 nettyParameter=parameter;
-			//len是一个00XX类型的十六进制数
-			l=nettyParameter.length()+cmdString.length()+1;
-			// l=cmdString.length();
-			 len= String.format("%04x", l);
-			
-			NettyString="["+companyString+"*"+shouhuan_id+"*"+len+"*"+cmdString+","+nettyParameter+"]";
-			
-			//传给netty
-			
-			
-			//
-			flag=true;
-			System.out.println(NettyString);
-			break;
-	//白名单设置指令		
-		case "41":
-			companyString="LJ";
-			 cmdString="WHITELIST1";
-			 nettyParameter=parameter;
-			//len是一个00XX类型的十六进制数
-			// l=nettyParameter.length()+cmdString.length()+1;
-			 l=cmdString.length();
-			 len= String.format("%04x", l);
-			
-			 NettyString="["+companyString+"*"+shouhuan_id+"*"+len+"*"+cmdString+","+nettyParameter+"]";
-			
-			
-			//传给netty
-			
-			
-			//
-			flag=true;
-			System.out.println(NettyString);
-			break;
-		
 			
 		default:
 			//flag=false;

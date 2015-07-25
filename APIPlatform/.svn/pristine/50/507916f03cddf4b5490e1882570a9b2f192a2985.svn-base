@@ -80,7 +80,7 @@ public class LoginServlet extends HttpServlet {
 			User user = (User)query.uniqueResult();
             if(user != null && user.getPassword().equals(passwd))
             {
-            //登录成功后返回所有关联手环ID
+            //登录成功后返回关联手环信息?
             	SQLQuery sqlQuery =s.createSQLQuery("select * from dbo.[relation] where user_id=:user_id").addEntity(Relation.class);
             	sqlQuery.setString("user_id", user_id);
             	List<Relation> relations=sqlQuery.list();

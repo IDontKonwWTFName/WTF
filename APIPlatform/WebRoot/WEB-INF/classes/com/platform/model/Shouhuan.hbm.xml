@@ -5,7 +5,7 @@
 <hibernate-mapping package="com.platform.model">  
 	<class name="Shouhuan" table="shouhuan">   
 	    <id name="shouhuan_id" type="java.lang.String"></id>  
-	    <property name="birthday" type="java.lang.String"></property> 
+	    <property name="birthday" type="java.util.Date"></property> 
 	    <property name="headiconurl" type="java.lang.String"></property>
 	    <property name="temporaryright" type="java.lang.Integer"></property>
 	    <property name="sex" type="java.lang.Integer"></property>

@@ -35,8 +35,8 @@ public class zhangtingxiuServlet extends HttpServlet {
 		Map<String,String> user = new HashMap<String, String>();
 		user.put("name","张婷秀");
 		user.put("nickname","停车");
-		user.put("sex", "女？男");
-		user.put("oo", "LJ");
+		user.put("sex", "女");
+		user.put("oo", "正在/(ㄒoㄒ)/~~哭");
 		jo = JSONObject.fromObject(user);
 		System.out.println(jo.toString());
 		PrintWriter out = response.getWriter();

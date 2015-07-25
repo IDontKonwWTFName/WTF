@@ -60,8 +60,6 @@ public class CommandServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		request.setCharacterEncoding("utf-8");
 		response.setCharacterEncoding("utf-8");
-		
-		response.setContentType("text/x-json");
 		String userid = request.getParameter("id");
 		String parameter= request.getParameter("parameter");
 		String shouhuan_id=request.getParameter("shouhuan_id");
