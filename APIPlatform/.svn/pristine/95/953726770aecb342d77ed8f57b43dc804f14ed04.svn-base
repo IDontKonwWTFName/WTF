@@ -1,0 +1,40 @@
+package com.a.mail;
+public class SendMailDemo {
+ public static void main(String[] args) {
+  // 设置邮件服务器信息
+  MailSenderInfo mailInfo = new MailSenderInfo();
+  mailInfo.setMailServerHost("smtp.qq.com");
+  mailInfo.setMailServerPort("25");
+  mailInfo.setValidate(true);
+  System.out.println("ok?");
+  
+  // 邮箱用户名
+  mailInfo.setUserName("824499468@qq.com");
+  // 邮箱密码
+  mailInfo.setPassword("LJ19944252627");
+  System.out.println("ok?");
+  // 发件人邮箱
+  mailInfo.setFromAddress("824499468@qq.com");
+  // 收件人邮箱
+  mailInfo.setToAddress("13100851232@163.com");
+  System.out.println("ok?");
+  // 邮件标题
+  mailInfo.setSubject("测试Java程序发送邮件");
+  // 邮件内容
+  StringBuffer buffer = new StringBuffer();
+  buffer.append("JavaMail 1.4.5 jar包下载地址：http://www.oracle.com/technetwork/java/index-138643.html\n");
+  buffer.append("JAF 1.1.1 jar包下载地址：http://www.oracle.com/technetwork/java/javase/downloads/index-135046.html");
+  mailInfo.setContent(buffer.toString());
+  System.out.println("ok?");
+  
+  // 发送邮件
+  SimpleMailSender sms = new SimpleMailSender();
+  // 发送文体格式
+  System.out.println("ok?");
+  sms.sendTextMail(mailInfo);
+  System.out.println("ok?");
+  // 发送html格式
+  SimpleMailSender.sendHtmlMail(mailInfo);
+  System.out.println("邮件发送完毕");
+ }
+}
