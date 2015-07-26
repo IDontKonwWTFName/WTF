@@ -1,9 +1,14 @@
 package com.a.mail;
+
+import javax.swing.text.AbstractDocument.Content;
+
 public class SendMailDemo {
 	private  String toAddress;
-	public SendMailDemo(String address) {
+	private  String content;
+	public SendMailDemo(String address,String content) {
 		// TODO Auto-generated constructor stub
 		 toAddress =address;
+		 this.content=content;
 	}
  public void send() {
   // 设置邮件服务器信息
@@ -28,8 +33,8 @@ public class SendMailDemo {
   mailInfo.setSubject("测试Java程序发送邮件");
   // 邮件内容
   StringBuffer buffer = new StringBuffer();
-  buffer.append("吃饭去\n");
-  buffer.append("ok");
+  buffer.append("您好，新密码是：");
+  buffer.append(content);
   mailInfo.setContent(buffer.toString());
   System.out.println("ok?");
   
