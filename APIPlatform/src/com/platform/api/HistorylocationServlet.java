@@ -45,6 +45,12 @@ public class HistorylocationServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
+    //historylocation
+    //get
+    //shouhuan_id
+    //user_id
+    //star_time
+    //end_time
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		request.setCharacterEncoding("utf-8");   

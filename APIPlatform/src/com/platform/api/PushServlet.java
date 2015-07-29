@@ -52,8 +52,8 @@ public class PushServlet extends HttpServlet{
 		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("in push");
 		
-			String apiKey = "GzddpTYVNK5TyphCL2eAddga";
-			String secretKey = "vHoVYaUKmEzLL4F6yivggoDOkS5Dz9k1";  
+			String apiKey = "4EuPdgS8Gi0onoWiM6dV1z1I";
+			String secretKey = "ufZTEYd0c8oPM2DlsbnGbZiHhGuN9Ku8";  
 			PushKeyPair pair = new PushKeyPair(apiKey,secretKey);
 			try{                                                                                                                                                                                             
 			BaiduPushClient pushClient = new BaiduPushClient(pair,
@@ -65,10 +65,10 @@ public class PushServlet extends HttpServlet{
 			    }
 			});
 			PushMsgToSingleDeviceRequest yun_request = new PushMsgToSingleDeviceRequest().
-				    addChannelId("4587906591108883625").
+				    addChannelId("3473377944743044766").
 				    addMsgExpires(new Integer(3600)).   //设置消息的有效时间,单位秒,默认3600 x 5.
 				    addMessageType(1).                  //设置消息类型,0表示消息,1表示通知,默认为0.
-				    addMessage("{\"title\":\"TEST\",\"description\":\"Hello Baidu push!\"}").
+				    addMessage("{\"title\":\"TEST\",\"description\":\"LJ is comingHello Baidu push!\"}").
 				    addDeviceType(3);          //设置设备类型，3 for android, 4 for ios.
 			PushMsgToSingleDeviceResponse yun_response = pushClient.
 					pushMsgToSingleDevice(yun_request);
