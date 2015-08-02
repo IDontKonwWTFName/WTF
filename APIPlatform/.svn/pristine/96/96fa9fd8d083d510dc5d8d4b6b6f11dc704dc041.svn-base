@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='utf-8'?>  
+<!DOCTYPE hibernate-configuration PUBLIC  
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"  
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">  
+<hibernate-configuration>  
+    <session-factory>  
+      <property name="hibernate.connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
+        <property name="hibernate.connection.password">lj</property>
+        <property name="hibernate.connection.url">jdbc:sqlserver://172.20.166.4:1433;databasename=mydb</property>
+        <property name="hibernate.connection.username">sa</property>
+  
+        <property name="connection.pool_size">10</property>  	
+      
+        <property name="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</property>
+        <property name="show_sql">true</property>  
+      
+  
+        <mapping resource="com/platform/model/User.hbm.xml"/>
+        <mapping resource="com/platform/model/User_info.hbm.xml"/> 
+        <mapping resource="com/platform/model/User_log.hbm.xml"/>   
+        <mapping resource="com/platform/model/Shouhuan.hbm.xml"/>  
+        <mapping resource="com/platform/model/Shouhuan_log.hbm.xml"/>
+        <mapping resource="com/platform/model/Service.hbm.xml"/>  
+        <mapping resource="com/platform/model/Repairment.hbm.xml"/>
+        <mapping resource="com/platform/model/Relation.hbm.xml"/>
+        <mapping resource="com/platform/model/Payment.hbm.xml"/>
+        <mapping resource="com/platform/model/Historyrecord.hbm.xml"/>
+        <mapping resource="com/platform/model/Historylocation.hbm.xml"/>
+        <mapping resource="com/platform/model/Group.hbm.xml"/>
+        <mapping resource="com/platform/model/Fence.hbm.xml"/>
+        <mapping resource="com/platform/model/Cross_fence.hbm.xml"/>
+    </session-factory>  
+</hibernate-configuration>  

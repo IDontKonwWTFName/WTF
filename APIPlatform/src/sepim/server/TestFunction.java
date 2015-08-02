@@ -82,7 +82,7 @@ public class TestFunction extends Thread {
 					dos.writeUTF("[SG*"+ringId+"*0002*LZ]");
 				}
 				if(receiveMessageFromServer.contains("URL")){
-					dos.writeUTF("[SG*"+ringId+"*006B*URL,url:http://maps.google.com.hk/maps?q=N22.571695,E113.861404,Locate date:2014-4-23,Locate time:18:16:59]");
+					dos.writeUTF("[SG*"+ringId+"*006B*URL,url:http://maps.google.com.hk/maps?q=N22.571695,E113.861404;Locate date:2014-4-23;Locate time:18:16:59]");
 				}
 				if(receiveMessageFromServer.contains("SOSSMS")){
 					dos.writeUTF("[SG*"+ringId+"*0006*SOSSMS]");
@@ -102,11 +102,11 @@ public class TestFunction extends Thread {
 					"imei:1234SG*56789012345;"+
 					"url:113.81.229.9;"+
 					"port:5900;"+
-					"center:;"+
-					"slave:;"+
-					"sos1:;"+
-					"sos2:;"+
-					"sos3:;"+
+					"center:123456;"+
+					"slave:654321;"+
+					"sos1:1111111;"+
+					"sos2:2222222;"+
+					"sos3:3333333;"+
 					"upload:30S;"+
 					"work mode:1;"+
 					"bat level:3;"+
@@ -168,7 +168,7 @@ public class TestFunction extends Thread {
 		try {
 				ID = ++ID;
 				System.out.println("client" + ID);
-				InetAddress ipadd = InetAddress.getByName("192.168.0.102");
+				InetAddress ipadd = InetAddress.getByName("172.20.166.4");
 				Socket s = new Socket(ipadd, 8082);
 				TestFunction a = new TestFunction(ID, s);
 				a.start();

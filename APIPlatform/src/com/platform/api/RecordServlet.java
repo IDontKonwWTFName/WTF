@@ -36,7 +36,7 @@ import antlr.debug.TraceAdapter;
 import com.platform.model.Historyrecord;
 import com.platform.model.Shouhuan;
 import com.platform.model.User_info;
-////错误的
+
 
 ////
 @WebServlet("/record")
@@ -46,8 +46,11 @@ public class RecordServlet extends HttpServlet {
 			throws ServletException, IOException {
 		String id_by_session = "18646098148";
 		System.out.println("upload");
+		
 		request.setCharacterEncoding("utf-8");
 		response.setCharacterEncoding("utf-8");
+		response.setContentType("text/x-json");
+		
 		;// 设置编码
 
 		String value = "";
@@ -81,12 +84,13 @@ public class RecordServlet extends HttpServlet {
 			Session session = sf.openSession();
 			Transaction t = session.beginTransaction();
 
+			Map<String, String> data = new HashMap<String, String>();
 			try {
 				List<FileItem> items = upload.parseRequest(request);
 				JSONObject js = null;
 				for (FileItem item : items) {
 					if (item.isFormField()) { // username="username"
-						// 设置字符串
+						// 设置字符串，获取json文件
 						String name = item.getFieldName();
 						value = item.getString("utf-8");
 						js = JSONObject.fromObject(value);
@@ -104,7 +108,7 @@ public class RecordServlet extends HttpServlet {
 						String realPath = "C:/Users/军/Desktop/data/HistoryRecord/"
 								+ js.getString("shouhuan_id");
 						System.out.println("url:" + realPath);
-						// 创建文件
+						// 创建文件夹
 						File dir = new File(realPath);
 
 						if (!dir.exists()) {
@@ -138,27 +142,28 @@ public class RecordServlet extends HttpServlet {
 				hr.setFrom_type(type);
 				session.save(hr);
 				t.commit();
-				Map<String, String> data = new HashMap<String, String>();
+				
 
 				data.put("code", "100");
-				data.put("msg", "跟新数据成功");
+				data.put("msg", "上传数据成功");
 				data.put("data", "");
-				response.getWriter().println(
-						JSONObject.fromObject(data).toString());
+				
 
 			} catch (Exception e) {
 				e.printStackTrace();
+				data.put("code", "500");
+				data.put("msg", "上传数据失败");
+				data.put("data", "");
 			} finally {
 				session.close();
 				sf.close();
 			}
+			response.getWriter().println(
+					JSONObject.fromObject(data).toString());
 
 		}
 	}
 
-	private String dateFormat(Date now) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 }

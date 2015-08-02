@@ -90,28 +90,33 @@ public class FenceServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
+	//ÃÌº”Œß¿∏
+	//post:fence_name,shouhuan_id,user_id,fence(points),sign
+	//∑µªÿ:code
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		request.setCharacterEncoding("utf-8");   
         response.setCharacterEncoding("utf-8");
+        response.setContentType("text/x-json");
+        
 		String fence = request.getParameter("fence");
 		String fence_name = request.getParameter("fence_name");
 		String sh_id = request.getParameter("shouhuan_id");
 		String us_id = request.getParameter("user_id");
 		
-		Integer id = 0;
+		//Integer id = 0;
 		Integer sign = 0;
 		
 		try{
-			id = Integer.valueOf(request.getParameter("fence_id"));
+			//id = Integer.valueOf(request.getParameter("fence_id"));
 			sign = Integer.valueOf(request.getParameter("sign"));
 		}catch(NumberFormatException e)
 		{
 			e.printStackTrace();
 		}
 		
-		System.out.println("Fence: "+fence+" "+fence_name+" "+sh_id+" "+us_id+" "+id+" "+sign);
-		response.setContentType("text/x-json");
+		System.out.println("Fence: "+fence+" "+fence_name+" "+sh_id+" "+us_id+" "+sign);
+		
 		
 		PrintWriter out = response.getWriter();
 		Map<String, String> data = new HashMap<String, String>();
@@ -124,7 +129,7 @@ public class FenceServlet extends HttpServlet {
 			Fence fen = new Fence();
 			
 			fen.setFence(fence);
-			fen.setFence_id(id);
+			//fen.setFence_id(id);
 			fen.setFence_name(fence_name);
 			fen.setShouhuan_id(sh_id);
 			fen.setUser_id(us_id);

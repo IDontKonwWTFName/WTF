@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -96,7 +98,10 @@ public class ShouhuanLogServlet extends HttpServlet {
 		request.setCharacterEncoding("utf-8");   
         response.setCharacterEncoding("utf-8");
 		String id = request.getParameter("user_id");
-		String time = request.getParameter("time");
+		//String time =null;//request.getParameter("time");
+		Date time=new Date();
+		//SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		
 		String event = request.getParameter("event");
 		Integer logid = 0;
 		Integer type = 0;
@@ -124,7 +129,7 @@ public class ShouhuanLogServlet extends HttpServlet {
 			log.setEvent(event);
 			log.setLog_type(type);
 			log.setTime(time);
-			log.setShouhuan_log_id(logid);
+			//log.setShouhuan_log_id(logid);
 			log.setShouhuan_id(id);
 			
 			s.save(log);

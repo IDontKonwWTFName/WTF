@@ -19,12 +19,15 @@ public class SocketConnectNetty extends Thread{
 	
 	private Socket s;
 	
+	private String userId;
+	
 	public SocketConnectNetty(){
 		
 	}
 	
-	public SocketConnectNetty(String message,Socket soc)
+	public SocketConnectNetty(String userId,String message,Socket soc)
 	{
+		this.userId = userId;
 		this.message = message;
 		this.clientsocket=soc;
 	}
@@ -37,7 +40,7 @@ public class SocketConnectNetty extends Thread{
 			try{
 				OutputStream Os =clientsocket.getOutputStream();
 				DataOutputStream dos = new DataOutputStream(Os);
-				dos.writeUTF(message);	
+				dos.writeUTF(userId+message);	
 				dos.flush();
 	//			InputStream is=clientsocket.getInputStream();
 	//			DataInputStream dis = new DataInputStream(is);
@@ -53,7 +56,7 @@ public class SocketConnectNetty extends Thread{
 		}
 //	}
 	
-	public void connect(String message){
+	public void connect(String userId,String message){
 		try{
 //			//去除中括号
 //			message = message.substring(1,message.length()-1);
@@ -78,9 +81,9 @@ public class SocketConnectNetty extends Thread{
 //				ctx.getChannel().write("commandError!!!");
 			}
 			System.out.println("当前RingId"+ringId);
-			InetAddress ipadd = InetAddress.getByName("192.168.0.102"); 
+			InetAddress ipadd = InetAddress.getByName("172.20.166.4"); 
 			s=new Socket(ipadd,8082);
-			SocketConnectNetty task = new SocketConnectNetty(message,s);
+			SocketConnectNetty task = new SocketConnectNetty(userId,message,s);
 			task.start();
 		} catch (Exception e1) {
 			e1.printStackTrace();

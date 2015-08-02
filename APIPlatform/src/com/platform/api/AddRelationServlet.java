@@ -102,6 +102,8 @@ public class AddRelationServlet extends HttpServlet {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = session.beginTransaction();
 		String admin_id = null;
+
+		Map<String, String> data = new HashMap<String, String>();
 		// 查询手环关联的是否有管理员，如果有，比较user_id和admin_id
 		try {
 			SQLQuery sqlQuery = session
@@ -113,6 +115,8 @@ public class AddRelationServlet extends HttpServlet {
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.out.println("sql error");
+			data.put("code", "500");
+			data.put("msg", "系统错误");
 
 		}
 
@@ -129,6 +133,9 @@ public class AddRelationServlet extends HttpServlet {
 			session.save(insertRelation);
 			transaction.commit();
 			System.out.println("null");
+			data.put("code", "100");
+			data.put("msg", "添加成功！");
+			data.put("data", "");
 		} else {
 			if (admin_id.equals(user_id)) {
 				// 如果user_id就是管理员，那么设置他推送来的set_userid为关联者
@@ -142,26 +149,39 @@ public class AddRelationServlet extends HttpServlet {
 				session.save(insertRelation);
 				transaction.commit();
 				System.out.println("1");
+
+				data.put("code", "100");
+				data.put("msg", "添加成功");
+				data.put("data", "");
 			} else {
 				// 推送给admin，让他发过来
 				// 应该 从admin_id查询channelID
 				String channelID = null;
 				channelID = "3473377944743044766";
 
+				// 将推送信息 加到jsonObject中
 				JSONObject jsonObject = new JSONObject();
+
 				jsonObject.put("sign", "addRelation");
 				jsonObject.put("shouhuan_id", shouhuan_id);
 				jsonObject.put("set_userid", set_userid);
 				jsonObject.put("power", power);
 				jsonObject.put("relation", relation);
 				JSONObject jsonObject2 = new JSONObject();
+
 				jsonObject2.put("title", "addRelation");
-				jsonObject2.put("description", jsonObject.toString());
+				jsonObject2.put("description", "addRelation");
+				jsonObject2.put("custom_content", jsonObject.toString());
 				new Push().pushToApp(channelID, jsonObject2.toString());
 				System.out.println("推送给管理员！");
+				data.put("code", "200");
+				data.put("msg", "推送给管理员");
+				data.put("data", "");
 
 			}
 		}
+
+		response.getWriter().println(JSONObject.fromObject(data).toString());
 
 		// if ()
 
@@ -170,7 +190,7 @@ public class AddRelationServlet extends HttpServlet {
 	// 修改relation
 	// user_id 发送方
 	// shouhuan_id 手环_id
-	// which,修改什么
+	// which,修改什么,修改relation,power,administer
 	// value，修改的值
 	// set_id，修改的id
 	@Override
@@ -187,7 +207,9 @@ public class AddRelationServlet extends HttpServlet {
 		while ((line = in.readLine()) != null) {
 			sb.append(line);
 		}
-		JSONObject jsonObject = new JSONObject().fromObject(sb.toString());
+		String sb1 = new String(sb.toString().getBytes("utf-8"), "ISO-8859-1");
+		String sb2 = new String(sb1.toString().getBytes("ISO-8859-1"), "utf-8");
+		JSONObject jsonObject = new JSONObject().fromObject(sb2);
 
 		String user_id = null;
 		String shouhuan_id = null;
@@ -207,54 +229,114 @@ public class AddRelationServlet extends HttpServlet {
 		Transaction transaction = session.beginTransaction();
 
 		String admin_id = null;
-		Map<String, String> data=new HashMap<String,String>();
+		Map<String, String> data = new HashMap<String, String>();
+		// 如果修改relation
+		if (which.equals("relation")) {
+			try {
+				SQLQuery sqlQuery2 = session
+						.createSQLQuery("update dbo.[relation] set relation =:value where shouhuan_id=:shouhuan_id and user_id =:set_id");
+				sqlQuery2.setString("vlaue", value);
+				sqlQuery2.setString("shouhuan_id", shouhuan_id);
+				sqlQuery2.setString("set_id", set_id);
+				sqlQuery2.executeUpdate();
+				transaction.commit();
 
-		try {
-			SQLQuery sqlQuery = session
-					.createSQLQuery("select user_id from dbo.[relation] where shouhuan_id=:shouhuan_id and administor=1");
-			sqlQuery.setString("shouhuan_id", shouhuan_id);
-			admin_id = (String) sqlQuery.uniqueResult();
-		} catch (Exception e) {
-			// TODO: handle exception
-			System.out.println("sql error");
-		}
+				data.put("code", "100");
+				data.put("msg", "更改成功！");
+				data.put("data", "");
+				System.out.println("update+++++++++++++++++++++++++++++++");
 
-		if (admin_id == null) {
-			// 系统错误
-			data.put("code", "500");
-			data.put("msg", "系统错误");
-			data.put("data", "");
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
 
-		} else if (admin_id.equals(user_id)) {
-			SQLQuery sqlQuery2 = session
-					.createSQLQuery("update dbo.[relation] set "+ which +"= '"+ value +"' where shouhuan_id=:shouhuan_id and user_id =:set_id");
-			
-//			sqlQuery2.setString("which", which);
-//			sqlQuery2.setString("value", value);
-			sqlQuery2.setString("shouhuan_id", shouhuan_id);
-			sqlQuery2.setString("set_id", set_id);
-			sqlQuery2.executeUpdate();
-			transaction.commit();
-			data.put("code", "100");
-			data.put("msg", "更改成功！");
-			data.put("data", "");
-			System.out.println("update+++++++++++++++++++++++++++++++");
 		} else {
-			// 如果不是管理员，推送给管理员，让管理员来修改权限
-			JSONObject jsonObject2=new JSONObject();
-			jsonObject2.put("set_id", set_id);
-			jsonObject2.put("shouhuan_id", shouhuan_id);
-			jsonObject2.put("which", which);
-			jsonObject2.put("value", value);
-			
-			
-			
-			
-			JSONObject jsonObject_Push=new JSONObject();
-			data.put("code", "200");
-			data.put("msg", "推送到管理员");
-			data.put("data", "");
+			// 查询手环关联的是否有管理员，如果有，比较user_id和admin_id
+			try {
+				SQLQuery sqlQuery = session
+						.createSQLQuery("select user_id from dbo.[relation] where shouhuan_id=:shouhuan_id and administor=1");
+				sqlQuery.setString("shouhuan_id", shouhuan_id);
+				admin_id = (String) sqlQuery.uniqueResult();
+			} catch (Exception e) {
+				// TODO: handle exception
+				System.out.println("sql error");
+			}
+			// 修改权限
+			if (which.equals("power")) {
+				if (admin_id.equals(user_id)) {
+
+					SQLQuery sqlQuery2 = session
+							.createSQLQuery("update dbo.[relation] set "
+									+ which
+									+ "= '"
+									+ value
+									+ "' where shouhuan_id=:shouhuan_id and user_id =:set_id");
+					sqlQuery2.setString("shouhuan_id", shouhuan_id);
+					sqlQuery2.setString("set_id", set_id);
+					sqlQuery2.executeUpdate();
+					transaction.commit();
+					data.put("code", "100");
+					data.put("msg", "更改成功！");
+					data.put("data", "");
+					System.out.println("update+++++++++++++++++++++++++++++++");
+				} else {
+					// 如果不是管理员，推送给管理员，让管理员来修改权限
+					JSONObject jsonObject2 = new JSONObject();
+					jsonObject2.put("sign", "putrelation");
+
+					jsonObject2.put("set_id", set_id);
+					jsonObject2.put("shouhuan_id", shouhuan_id);
+					jsonObject2.put("which", which);
+					jsonObject2.put("value", value);
+
+					JSONObject jsonObject_Push = new JSONObject();
+					jsonObject_Push.put("title", "putRelation");
+					jsonObject_Push.put("description", "putRelation");
+					jsonObject_Push.put("custom_content",
+							jsonObject2.toString());
+
+					data.put("code", "200");
+					data.put("msg", "推送到管理员");
+					data.put("data", "");
+				}
+
+			}
+			//如果转让管理员,先修改set_id为administer置1，然后将原管理员administer置为0，为一整个事务，如果执行错误，回滚
+			if (which.equals("administer")) {
+				if(admin_id.equals(user_id)){
+					try {
+						
+						SQLQuery sqlQuery=session.createSQLQuery("update dbo.[relation] set administer=1 where user_id=:user_id and shouhuan_id=:shouhuan_id");
+						sqlQuery.setString("user_id", set_id);
+						sqlQuery.setString("shouhuan_id", shouhuan_id);
+						sqlQuery.executeUpdate();
+						
+						SQLQuery sqlQuery2=session.createSQLQuery("update dbo.[relation] set administer=1 where user_id=:user_id and shouhuan_id=:shouhuan_id");
+						sqlQuery2.setString("user_id", set_id);
+						sqlQuery2.setString("shouhuan_id", shouhuan_id);
+						sqlQuery2.executeUpdate();
+						
+						transaction.commit();
+						data.put("code", "100");
+						data.put("msg", "更改成功！");
+						data.put("data", "");
+						
+					} catch (Exception e) {
+						// TODO: handle exception
+						if (transaction!=null) {
+							transaction.rollback();
+						}
+						data.put("code","500" );
+						data.put("msg","系统错误" );
+						data.put("data", "");
+					}
+				}
+				
+			}
+
 		}
+
+		
 		response.getWriter().println(JSONObject.fromObject(data).toString());
 
 	}
@@ -266,8 +348,37 @@ public class AddRelationServlet extends HttpServlet {
 		request.setCharacterEncoding("utf-8");
 		response.setCharacterEncoding("utf-8");
 		response.setContentType("text/x-json");
+		
+		String shouhuan_id =request.getParameter("shouhuan_id");
+		String user_id =request.getParameter("user_id");
+		
+		SessionFactory sessionFactory=new Configuration().configure().buildSessionFactory();
+		Session session=sessionFactory.openSession();
+		Transaction transaction= session.beginTransaction();
+		
+		Map<String, String>data=new HashMap<String,String>();
+		
+		try {
+			SQLQuery sqlQuery=session.createSQLQuery("delete from dbo.[relation] where shouhuan_id=:shouhuan_id and user_id=:user_id");
+			sqlQuery.setString("shouhuan_id", shouhuan_id);
+			sqlQuery.setString("user_id", user_id);
+			sqlQuery.executeUpdate();
+			transaction.commit();
+			data.put("code","100" );
+			data.put("msg","删除成功" );
+			data.put("data", "");
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			data.put("code","500" );
+			data.put("msg","系统错误" );
+			data.put("data", "");
+		}
+		
+		
+		
 
-		// request。get
+		response.getWriter().println(JSONObject.fromObject(data).toString());
 
 	}
 

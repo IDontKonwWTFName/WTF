@@ -1,0 +1,23 @@
+package sepim.server.net.packet;
+
+import net.sf.json.JSONObject;
+import sepim.server.clients.World;
+
+public class ANYHandler {
+
+	public void handle(String leixing,String company, String ringId, String contentsLength,
+			String contents) {
+		if(contents.length()>3){
+			World.getWorld().WriteMessageToRing(ringId,"["+company+"*"+ringId+"*"+contentsLength+"*"+contents+"]");
+		}else{
+			System.out.println(ringId+"短信权限控制设置成功！！");
+			//把数据封装进json
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("leixing",leixing);  
+			jsonObject.put("shouhuan_id",ringId); 
+			//把数据推送给手机
+//			new push.xxx(World.getWorld().getRingPhoneListMap().get(ringId),jsonObject);
+		}
+	}
+
+}

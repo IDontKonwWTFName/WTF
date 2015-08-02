@@ -1,5 +1,7 @@
 package com.platform.model;
 
+import java.util.Date;
+
 public class Shouhuan_log
 {
 	private Integer log_type;
@@ -41,14 +43,14 @@ public class Shouhuan_log
 	}
 
 
-	private String time;
+	private Date time;
 
-	public void setTime(String time)
+	public void setTime(Date time)
 	{
 		this.time = time;
 	}
 
-	public String  getTime()
+	public Date getTime()
 	{
 		return time;
 	}

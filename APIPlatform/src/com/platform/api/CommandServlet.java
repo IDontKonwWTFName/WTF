@@ -93,6 +93,9 @@ public class CommandServlet extends HttpServlet {
 		 String len= null;
 		switch (cmd) {
 		// 数据上传间隔设置：netty
+		
+		
+		
 		case "1":
 			
 			 companyString="LJ";	
@@ -106,7 +109,7 @@ public class CommandServlet extends HttpServlet {
 			
 			//传给netty+++++++++++++++++,
 			//将nettyString传给netty
-			new SocketConnectNetty().connect(NettyString);
+			new SocketConnectNetty().connect("3473377944743044766",NettyString);
 			//
 			flag=true;
 			System.out.println(NettyString);
@@ -260,7 +263,7 @@ public class CommandServlet extends HttpServlet {
 			//传给netty
 			
 			
-			//
+			// 
 			flag=true;
 			System.out.println(NettyString);
 			break;

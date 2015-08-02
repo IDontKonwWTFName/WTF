@@ -46,7 +46,9 @@ public class HistorylocationNewServlet extends HttpServlet{
 			} catch (Exception e) {
 				// TODO: handle exception
 				
-				
+				data.put("code", "500");
+				data.put("msg", "system error!");
+				data.put("data", "");
 			}
 			
 			
