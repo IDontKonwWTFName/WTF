@@ -16,6 +16,19 @@ public class Historyrecord implements Serializable
 	{
 		return from_type;
 	}
+	
+	private Boolean isHeard;
+
+	public void setIsHeard(Boolean isHeard)
+	{
+		this.isHeard = isHeard;
+	}
+
+	public Boolean  getIsHeard()
+	{
+		return isHeard;
+	}
+
 
 
 	private String from_id;
@@ -59,7 +72,7 @@ public class Historyrecord implements Serializable
 
 	private Date time;
 
-	public void setTime(Date time)
+	public void setTime(Date time) 
 	{
 		this.time = time;
 	}

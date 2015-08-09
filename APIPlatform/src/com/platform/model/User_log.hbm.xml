@@ -5,7 +5,7 @@
 <hibernate-mapping package="com.platform.model">  
 	<class name="User_log" table="user_log">   
 	    <id name="user_log_id" type="java.lang.Integer">
-	    	<generator class="increment"/>
+	    <generator class="native"/>
 	    </id>  
 	    <property name="log_type" type="java.lang.Integer"></property> 
 	    <property name="user_id" type="java.lang.String"></property>

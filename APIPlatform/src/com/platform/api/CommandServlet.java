@@ -27,6 +27,7 @@ import com.platform.model.User;
 /**
  * Servlet implementation class CommandServlet
  */
+//command  post
 //命令格式
 //cmd:
 //shouhuan_id
@@ -62,14 +63,13 @@ public class CommandServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		request.setCharacterEncoding("utf-8");
 		response.setCharacterEncoding("utf-8");
-		
 		response.setContentType("text/x-json");
-		String userid = request.getParameter("id");
+		
+		String user_id = request.getParameter("user_id");
 		String parameter= request.getParameter("parameter");
 		String shouhuan_id=request.getParameter("shouhuan_id");
-		
 		String cmd = request.getParameter("cmd");
-		System.out.println("CMD: " + cmd + " User:" + userid);
+		
 		PrintWriter out = response.getWriter();
 		Map<String, String> data = new HashMap<String, String>();
 
@@ -92,11 +92,13 @@ public class CommandServlet extends HttpServlet {
 		int l=0;
 		 String len= null;
 		switch (cmd) {
-		// 数据上传间隔设置：netty
+		
+		
+		// 数据上传间隔设置：netty 1
 		
 		
 		
-		case "1":
+		case "UPLOAD":
 			
 			 companyString="LJ";	
 			 cmdString="UPLOAD";
@@ -109,15 +111,16 @@ public class CommandServlet extends HttpServlet {
 			
 			//传给netty+++++++++++++++++,
 			//将nettyString传给netty
-			new SocketConnectNetty().connect("3473377944743044766",NettyString);
+			//user_id,netyystring
+			new SocketConnectNetty().connect(user_id,NettyString);
 			//
 			flag=true;
 			System.out.println(NettyString);
 		    
 			break;
 			
-	////设置中心号码
-		case "2":
+	////设置中心号码   2
+		case "CENTER":
 			 companyString="LJ";
 			 cmdString="CENTER";
 			 nettyParameter=parameter;
@@ -136,8 +139,8 @@ public class CommandServlet extends HttpServlet {
 			
 			
 			break;
-	//辅助中心号码设置
-		case "3":
+	//辅助中心号码设置   3
+		case "SLAVE":
 			 companyString="LJ";
 			 cmdString="SLAVE";
 			 nettyParameter=parameter;
@@ -155,8 +158,27 @@ public class CommandServlet extends HttpServlet {
 			System.out.println(NettyString);
 			
 			break;
-	//SOS 
-		case "8":
+		//控制密码设置  4		
+		case "PW":
+			 companyString="LJ";
+			 cmdString="PW";
+			 nettyParameter=parameter;
+			//len是一个00XX类型的十六进制数
+			 l=nettyParameter.length()+cmdString.length()+1;
+			 len= String.format("%04x", l);
+			
+			NettyString="["+companyString+"*"+shouhuan_id+"*"+len+"*"+cmdString+","+nettyParameter+"]";
+			
+			//传给netty
+			
+			
+			//
+			flag=true;
+			System.out.println(NettyString);
+			
+			break;
+	//SOS 4
+		case "SOS1":
 			companyString="LJ";
 			 cmdString="SOS1";
 			 nettyParameter=parameter;
@@ -174,8 +196,8 @@ public class CommandServlet extends HttpServlet {
 			System.out.println(NettyString);
 			
 			break;
-	//UPGRADE
-		case "9":
+	//UPGRADE  5
+		case "UPGRADE":
 			companyString="LJ";
 			 cmdString="UPGRADE";
 			 nettyParameter=parameter;
@@ -192,8 +214,8 @@ public class CommandServlet extends HttpServlet {
 			flag=true;
 			System.out.println(NettyString);
 			break;
-	//ip port
-		case "10":
+	//ip port  6
+		case "IP":
 			companyString="LJ";
 			 cmdString="IP";
 			 nettyParameter=parameter;
@@ -212,8 +234,8 @@ public class CommandServlet extends HttpServlet {
 			break;
 			
 		//no parameter
-		//FACTORY
-		case "11":
+		//FACTORY   7
+		case "FACTORY":
 			companyString="LJ";
 			 cmdString="FACTORY";
 			// nettyParameter=parameter;
@@ -231,9 +253,10 @@ public class CommandServlet extends HttpServlet {
 			flag=true;
 			System.out.println(NettyString);
 			break;
-		case "12":
+		//设置语言和时区   8
+		case "LZ":
 			companyString="LJ";
-			 cmdString="SOS1";
+			 cmdString="LZ";
 			 nettyParameter=parameter;
 			//len是一个00XX类型的十六进制数
 			 l=nettyParameter.length()+cmdString.length()+1;

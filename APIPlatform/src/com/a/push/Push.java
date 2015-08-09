@@ -1,5 +1,6 @@
 package com.a.push;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.json.JSONObject;
@@ -20,6 +21,14 @@ import com.baidu.yun.push.model.PushMsgToSingleDeviceResponse;
  */
 //带channelID,然后加推送数据（包括sign,加数据）
 public class Push {
+	public static void main(String arg[]) {
+		Push push=new Push();
+		List<String>ids=new ArrayList<>();
+		ids.add("3473377944743044766");
+		ids.add("4587906591108883625");
+		String data="{\"title\":\"TEST\",\"description\":\"Hello Baidu push! LJ is coming!\"}";
+		push.pushToApp(ids, data);
+	}
 	public void pushToApp (String id,String data) {
 
 
@@ -87,11 +96,12 @@ public class Push {
 		
 	}
 
-	public void pushToApp(List<String> id, String data) {
+	public void pushToApp(List<String> ids, String data) {
 
 		System.out.println("in push");
 		//String channelID=id;
-		String channelID="3473377944743044766";
+		//String channelID="3473377944743044766";
+		List< String>id=ids;
 		
 		JSONObject jsonObject=new JSONObject();
 		String message=data;
@@ -110,16 +120,19 @@ public class Push {
 					System.out.println(event.getMessage());
 				}
 			});
-			PushMsgToSingleDeviceRequest yun_request = new PushMsgToSingleDeviceRequest()
-					.addChannelId(channelID)
-					.addMsgExpires(new Integer(3600))
-					. // 设置消息的有效时间,单位秒,默认3600 x 5.
-					addMessageType(1)
-					. // 设置消息类型,0表示消息,1表示通知,默认为0.
-					addMessage(message)
-					.addDeviceType(3); // 设置设备类型，3 for android, 4 for ios.
-			PushMsgToSingleDeviceResponse yun_response = pushClient
-					.pushMsgToSingleDevice(yun_request);
+			//每个channelID都发一次
+			for(String channelIDString:ids){
+				PushMsgToSingleDeviceRequest yun_request = new PushMsgToSingleDeviceRequest()
+				.addChannelId(channelIDString)
+				.addMsgExpires(new Integer(3600))
+				. // 设置消息的有效时间,单位秒,默认3600 x 5.
+				addMessageType(1)
+				. // 设置消息类型,0表示消息,1表示通知,默认为0.
+				addMessage(message)
+				.addDeviceType(3); // 设置设备类型，3 for android, 4 for ios.
+		PushMsgToSingleDeviceResponse yun_response = pushClient
+				.pushMsgToSingleDevice(yun_request);
+			}
 		} catch (PushClientException e) {
 			/*
 			 * ERROROPTTYPE 用于设置异常的处理方式 -- 抛出异常和捕获异常,'true' 表示抛出, 'false' 表示捕获。

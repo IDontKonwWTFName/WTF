@@ -13,5 +13,6 @@
 	    <property name="nickname" type="java.lang.String"></property>
 	    <property name="name" type="java.lang.String"></property>
 	    <property name="registrationdate" type="java.lang.String"></property>
+	    <property name="mode" type="java.lang.Integer"></property>
 	</class>  
 </hibernate-mapping>  

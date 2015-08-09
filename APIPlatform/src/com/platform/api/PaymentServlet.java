@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.hibernate.SQLQuery;
@@ -43,19 +45,25 @@ public class PaymentServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
+    //payment
+    //get
+    //shouhuan_id,user_id
+    //JSONARray  返回: service_type,end_time
+    
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		request.setCharacterEncoding("utf-8");   
         response.setCharacterEncoding("utf-8");
-		String id = request.getParameter("payment_id");
+        response.setContentType("text/x-json");
+		String shouhuan_id = request.getParameter("shouhuan_id");
 		
-		System.out.println("Payment_id: "+id);
-		response.setContentType("text/x-json");
+		System.out.println("Payment_id: "+shouhuan_id);
+		
 		
 		PrintWriter out = response.getWriter();
 		Map<String, String> data = new HashMap<String, String>();
 		
-		if(id==null || id.equals(""))
+		if(shouhuan_id==null || shouhuan_id.equals(""))
 		{
 			data.put("code","200");
 			data.put("msg", "获取数据失败");
@@ -68,12 +76,13 @@ public class PaymentServlet extends HttpServlet {
 		Session s = sf.openSession();
 	
 		try{
-			SQLQuery query = s.createSQLQuery("select * from payment where payment_id="+id).addEntity(Payment.class);
-			Payment info = (Payment) query.uniqueResult();
-			
+			SQLQuery sqlQuery = s.createSQLQuery("select * from payment where shouhuan_id=:shouhuan_id").addEntity(Payment.class);
+			//Payment info = (Payment) query.uniqueResult();
+			sqlQuery.setString("shouhuan_id", shouhuan_id);
+			List<Payment> payment =sqlQuery.list();
 			data.put("code","100");
 			data.put("msg", "获取数据成功");
-			data.put("data", JSONObject.fromObject(info).toString());
+			data.put("data", JSONArray.fromObject(payment).toString());
 			
 			out.println(JSONObject.fromObject(data).toString());
 		}catch(Exception e)
@@ -220,7 +229,7 @@ public class PaymentServlet extends HttpServlet {
 		{
 			data.put("code","200");
 			data.put("msg", "修改数据失败");
-			data.put("data", "");
+			data.put("data ", "");
 			e.printStackTrace();
 			out.println(JSONObject.fromObject(data).toString());
 		}

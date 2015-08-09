@@ -1,6 +1,7 @@
 package com.platform.api;
 
 import java.io.BufferedReader;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -39,6 +40,7 @@ import antlr.debug.TraceAdapter;
 import com.platform.model.Shouhuan;
 import com.platform.model.User_info;
 //数据格式：json，key，value，加文件，url不用发
+//user
 @WebServlet("/headicon")
 public class HeadIconServlet extends HttpServlet {
 	// private String getFilename

@@ -48,7 +48,7 @@ import com.platform.model.Shouhuan_log;
 @WebServlet("/HistoryCrossfenceAndRecord")
 public class HistoryCrossfenceAndRecordServlet extends HttpServlet {
 
-	public void doGet(HttpServletRequest request, HttpServletResponse response)
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
 		response.setCharacterEncoding("utf-8");
@@ -81,7 +81,7 @@ public class HistoryCrossfenceAndRecordServlet extends HttpServlet {
 							"select c.* "
 									+ "from dbo.[cross_fence] c join dbo.[fence] f "
 									+ "on c.fence_id=f.fence_id "
-									+ "where c.time >=:start_time and c.time<=:end_time and f.shouhuan_id=:shouhuan_id "
+									+ "where c.time >:start_time and c.time<:end_time and f.shouhuan_id=:shouhuan_id "
 									+ "order by time desc").addEntity(
 							Cross_fence.class);
 			sqlCross.setString("start_time", start_time);
@@ -107,7 +107,7 @@ public class HistoryCrossfenceAndRecordServlet extends HttpServlet {
 			SQLQuery sqlRecord = session
 					.createSQLQuery(
 							"select * from dbo.[historyrecord] "
-									+ "where shouhuan_id =:shouhuan_id and time>=:start_time and time<=:end_time"
+									+ "where shouhuan_id =:shouhuan_id and time>:start_time and time<:end_time"
 									+ " order by time desc").addEntity(
 							Historyrecord.class);
 			sqlRecord.setString("shouhuan_id", shouhuan_id);
@@ -135,11 +135,18 @@ public class HistoryCrossfenceAndRecordServlet extends HttpServlet {
 		try {
 			SQLQuery sqlSos = session
 					.createSQLQuery(
-							"select * from dbo.[shouhuan_log] where shouhuan_id=:shouhuan_id and log_type=5")
+							"select * from dbo.[shouhuan_log] where shouhuan_id=:shouhuan_id and log_type=5 and time>:start_time and time<:end_time")
 					.addEntity(Shouhuan_log.class);
 			sqlSos.setString("shouhuan_id", shouhuan_id);
+			sqlSos.setString("start_time", start_time);
+			sqlSos.setString("end_time", end_time);
 			java.util.List<Shouhuan_log> sos = sqlSos.list();
 			sosIterator = sos.iterator();
+			for (int i = 0; i < sos.size() && i < 10; i++) {
+				System.out.println("sos------"
+						+ sos.get(i).getTime().toString());
+			}
+			
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.out.println("sql error");
@@ -237,6 +244,7 @@ public class HistoryCrossfenceAndRecordServlet extends HttpServlet {
 					jsonObject.put("from_type", historyrecord.getFrom_type());
 					jsonObject.put("time",
 							dateFormat.format(historyrecord.getTime()));
+					jsonObject.put("isHeard", historyrecord.getIsHeard());
 
 					jsonArray.add(jsonObject);
 					recordFlag = true;
@@ -266,7 +274,8 @@ public class HistoryCrossfenceAndRecordServlet extends HttpServlet {
 		}
 
 		
-
+		session.close();
+		sessionFactory.close();
 		// 规定某种规则+++++++++++++++++++++++++++++++++++++++++++++
 		// 返回jsonArray
 		data.put("code", "100");

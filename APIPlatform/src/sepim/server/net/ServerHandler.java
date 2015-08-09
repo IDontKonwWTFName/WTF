@@ -1,22 +1,15 @@
 package sepim.server.net;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 
 import net.sf.json.JSONObject;
 
-import org.hibernate.SQLQuery;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
+import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelStateEvent;
 import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
-
-import com.platform.model.Relation;
 
 import sepim.server.clients.World;
 import sepim.server.net.packet.ALHandler;
@@ -61,22 +54,44 @@ import sepim.server.net.packet.WORKTIMEHandler;
 public class ServerHandler extends SimpleChannelHandler {
 	
 	private final Logger logger = Logger.getLogger(this.getClass().getName());
+	String[] receiveUserIDAndCommands;
 	
 	@Override
-	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) {
+	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) 
+	{
 		System.out.println("receive a message from client");
+		
+		Object msg = e.getMessage();  
+		System.out.println("接收的字符数组长度:"+((ChannelBuffer)msg).array().length);
 		//造型成packet
-		Packet packet = (Packet) e.getMessage();
-		System.out.println("put received message into local packet, the packet is"+packet.getString());
+		//Packet packet = (Packet) e.getMessage();
+		
 		boolean verificat = false;
+		
+		//需要判断   包的类型， 如果是字符串可以  packet。getString();  如果是音频，需要 byte【】
 		//获取的手环发送信息
-		String receiveCommandString = packet.getString();
+	
+        //byte[] Cmdbytes = packet.getBytes();   
+        
+		String receiveCommandString =new String(((ChannelBuffer)msg).array());
+		System.out.println(receiveCommandString.length());
 		String userId = "";
 		String commands;
 		//用"["分割用户ID和
-		String[] receiveUserIDAndCommands = receiveCommandString.split("\\[");
+		//System.out.println("[  "+"[".getBytes()+" ]  "+"]".getBytes());
+	try{
+		 receiveUserIDAndCommands = receiveCommandString.split("\\[",2);
 		//给userID赋值
 		userId = receiveUserIDAndCommands[0];
+		System.out.println("userId"+userId.length());
+		System.out.println(receiveUserIDAndCommands[1].length());
+	}catch(Exception e1)
+	{
+	  e1.printStackTrace();
+	  System.out.println("The exception is  "+e1);
+	}
+		
+		
 		//去除"]"
 		commands = receiveUserIDAndCommands[1].substring(0,receiveUserIDAndCommands[1].length()-1);
 		//以*为标记分割字符串
@@ -94,10 +109,17 @@ public class ServerHandler extends SimpleChannelHandler {
 		//赋值
 		company = receiveCommandStrings[0];
 		ringId = receiveCommandStrings[1];
+		userId = ringId;
 		contentsLength = receiveCommandStrings[2];
 		contents = receiveCommandStrings[3];
+		System.out.println("company: "+company);
+		System.out.println("ringId: "+ringId);
+		System.out.println("contentsLength : "+contentsLength);
+		System.out.println("contents.length() :"+contents.length());
 		//注册手环ID和channel
 		World.getWorld().register(ringId,ctx.getChannel());
+		}
+
 //		//判断发送命令手机是否在是中心或辅助中心号码，如果"是"执行程序，如果"不是"返回手机
 //		if(World.getWorld().getRingPhoneListMap().get(ringId).contains(userId)){
 			//如果有UserId，则是通过手机APP发过来的命令，推送时作为依据
@@ -114,11 +136,17 @@ public class ServerHandler extends SimpleChannelHandler {
 //			//把数据推送给手机
 ////			new push.xxx(World.getWorld().getRingPhoneMap().get(ringId),jsonObject);
 //		}
-		}else{
-			ctx.getChannel().write("commandError!!!");
+		else{
+			ctx.getChannel().write("commandError!!!");//Exception caught: java.lang.IllegalArgumentException: unsupported message type: class java.lang.String
 		}
 		//通过验证，则进行命令发送
 //		if(verificat){
+//		//手机与手环对讲
+//		if(contents.startsWith("TK"))
+//		{
+//			new TKHandler().handle("TK",company,ringId, contentsLength,((ChannelBuffer)msg).array());
+//		}
+		
 		//链路保持
 		if(contents.startsWith("LK")){
 			new LinkHandler().handle("LK",company,ringId, contentsLength,contents);
@@ -313,8 +341,9 @@ public class ServerHandler extends SimpleChannelHandler {
 	}
 	
 	@Override
-	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) {
-//		World.getWorld().register(1,ctx.getChannel());
+	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) 
+	{
+ 		World.getWorld().register(1+"",ctx.getChannel());
 	}
 	
 	@Override
@@ -326,5 +355,5 @@ public class ServerHandler extends SimpleChannelHandler {
 	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
 		logger.info("Exception caught: " + e.getCause());
 	}
-	
+
 }

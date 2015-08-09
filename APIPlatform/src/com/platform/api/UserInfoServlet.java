@@ -1,12 +1,15 @@
 package com.platform.api;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -17,6 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.JSONObject;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.hibernate.*;
 import org.hibernate.cfg.Configuration;
 
@@ -90,86 +96,114 @@ public class UserInfoServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	//userinfo  post
+	//文件+jsonObject{user_id:xx}
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		request.setCharacterEncoding("utf-8");   
-        response.setCharacterEncoding("utf-8");
-		String id = request.getParameter("user_id");
-		String birthString = request.getParameter("birthday");
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		
-		java.util.Date birth = null;
-		try {
-			birth = sdf.parse(birthString);
-		} catch (ParseException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		request.setCharacterEncoding("utf-8");
+		response.setCharacterEncoding("utf-8");
+		// 设置编码
+		response.setContentType("text/json");
+
+		
+		boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+		// 判断是是否是Multipart
+		if (isMultipart) {
+			System.out.println("is multipart");
+			// 获取路径
+
+			DiskFileItemFactory factory = new DiskFileItemFactory();
+			// 设置 缓存的大小，当上传文件的容量超过该缓存时，直接放到 暂时存储室
+			factory.setSizeThreshold(1024 * 1024);
+			ServletFileUpload upload = new ServletFileUpload(factory);
+			upload.setHeaderEncoding("utf-8");
+
+			Map<String, String> data = new HashMap<String, String>();
+			Map<String, String> getdata = new HashMap<String, String>();
+			JSONObject jsonObject = null;
+			
+			
+			SessionFactory sf = new Configuration().configure()
+					.buildSessionFactory();
+			Session session = sf.openSession();
+			Transaction t = session.beginTransaction();
+			try {
+				List<FileItem> items = upload.parseRequest(request);
+
+				
+
+				for (FileItem item : items) {
+					if (item.isFormField()) { // username="username"
+						// 设置字符串,取得字符串JSON
+						String name = item.getFieldName();
+						String value = item.getString("utf-8");
+						jsonObject = JSONObject.fromObject(value);
+						
+						// shouhuan.set
+						System.out.println(name + " = " + value);
+					} else {
+						// 文件
+						// 将文件写入磁盘
+						//String realPath = this.getServletContext().getRealPath("WEB-INF/data/HeadIcon");
+						String realPath = "C:/Users/军/Desktop/data/HeadIcon/";
+						System.out.println("url:" + realPath);
+						// 创建文件
+						File dir = new File(realPath);
+
+						if (!dir.exists()) {
+							dir.mkdir();
+						}
+						// 得到文件对象,写图片文件时，
+						//
+						String name = item.getName();
+						//String path = jsonObject.getString("id")+ name.substring(name.lastIndexOf("."));
+						String path = jsonObject.getString("user_id")+ name.substring(name.lastIndexOf("."));
+						item.write(new File(dir, path));
+						// User_info user_info=new User_info();
+						// 将path写入数据库
+						jsonObject.put("path", path);
+					}
+				}
+				
+				SQLQuery sqlQuery=session.createSQLQuery("update dbo.[userinfo] set headiconurl=:path where user_id=:user_id");
+				sqlQuery.setString("path", jsonObject.getString("path"));
+				sqlQuery.setString("user_id", jsonObject.getString("user_id"));
+				sqlQuery.executeUpdate();
+				t.commit();
+				
+				data.put("code", "100");
+				data.put("msg", "跟新数据成功");
+				data.put("data", "");
+				response.getWriter().println(JSONObject.fromObject(data).toString());
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				data.put("code", "200");
+				data.put("msg", "跟新数据失败");
+				data.put("data", "");
+			}
+			finally{
+				session.close();
+				sf.close();
+				System.out.println(data.toString());
+			}
 		}
-		String url = request.getParameter("headiconurl");
-		Integer sex = 0;
-		String name =new String(request.getParameter("username").toString().getBytes(),"utf-8");
-		//String name = request.getParameter("username");
-		String num = request.getParameter("phonenumber");
-		String email = request.getParameter("email");
 		
-		try{
-			sex = Integer.valueOf(request.getParameter("sex"));
-		}catch(NumberFormatException e)
-		{
-			e.printStackTrace();
-		}
-		
-		System.out.println("User_info: "+id+" "+birthString+" "+url+" "+sex+" "+name+" "+num+" "+email);
-		response.setContentType("text/x-json");
-		
-		PrintWriter out = response.getWriter();
-		Map<String, String> data = new HashMap<String, String>();
-		SessionFactory sf = new Configuration().configure().buildSessionFactory();
-		Session s = sf.openSession();
-		Transaction t = s.beginTransaction();
-		
-		try{
-			
-			User_info info = new User_info();
-			info.setBirthday(birth);
-			info.setEmail(email);
-			info.setHeadiconurl(url);
-			info.setUser_id(id);
-			info.setSex(sex);
-			info.setUser_name(name);
-			info.setPhonenumber(num);
-			
-			s.save(info);
-			t.commit();
-			
-			data.put("code","100");
-			data.put("msg", "添加数据成功");
-			data.put("data", "");
-			
-			out.println(JSONObject.fromObject(data).toString());
-		}catch(Exception e)
-		{
-			t.rollback();
-			data.put("code","200");
-			data.put("msg", "添加数据失败");
-			data.put("data", "");
-			e.printStackTrace();
-			out.println(JSONObject.fromObject(data).toString());
-		}finally
-		{
-			s.close();
-			sf.close();
-		}
 	}
 	
 	/**
 	 * @see HttpServlet#doPut(HttpServletRequest, HttpServletResponse)
 	 */
+	//userinfo put
+	//user_id,which,value
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		request.setCharacterEncoding("utf-8");   
         response.setCharacterEncoding("utf-8");
-		BufferedReader in = new BufferedReader(new InputStreamReader(request.getInputStream()));  
+		BufferedReader in = new BufferedReader(new InputStreamReader(request.getInputStream(),"utf-8"));  
 	    String line;  
 	    StringBuilder sb = new StringBuilder();
 	    while ((line = in.readLine()) != null)
@@ -177,11 +211,11 @@ public class UserInfoServlet extends HttpServlet {
 //	        System.out.println(line);
 	        sb.append(line);
 	    }
-	  String sb1=new String(sb.toString().getBytes(),"utf-8");
+	 
 	    //System.out.println("user_info-----update"+sb.toString());
-	System.out.println("user_info-----update"+sb1);
+	    System.out.println("user_info-----update"+sb);
 	    JSONObject jo = JSONObject.fromObject(sb.toString());
-	    String id = null;
+	    String user_id = null;
 	    String which = null;
 	    String value = null;
 	    response.setContentType("text/x-json");
@@ -189,7 +223,7 @@ public class UserInfoServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		Map<String, String> data = new HashMap<String, String>();
 	    try{
-	    	id = jo.getString("user_id");
+	    	user_id = jo.getString("user_id");
 			which = jo.getString("which");
 			value = jo.getString("value");
 	    }catch(Exception e)
@@ -209,15 +243,16 @@ public class UserInfoServlet extends HttpServlet {
 		Transaction t = s.beginTransaction();
 		
 		try{
-			String sql = "update dbo.[User_info] set "+which+" = '"+value+"' where user_id ="+id;
-			System.out.println(sql);
-			SQLQuery query = s.createSQLQuery(sql);
-			query.addEntity(User_info.class);
+			
+			SQLQuery sqlQuery = s.createSQLQuery("update dbo.[User_info] set "+which+" =:value where user_id =:user_id");
+			sqlQuery.setString("value", value);
+			sqlQuery.setString("user_id", user_id);
+			sqlQuery.addEntity(User_info.class);
 //			SQLQuery query = s.createSQLQuery("update user set ? = ? where user_id = ?");
 //			query.setParameter(0, which);
 //			query.setParameter(1, value);
 //			query.setParameter(2, id);
-			query.executeUpdate();
+			sqlQuery.executeUpdate();
 			t.commit();
 			
 			data.put("code","100");

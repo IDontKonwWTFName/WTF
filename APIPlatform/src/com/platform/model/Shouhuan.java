@@ -119,6 +119,18 @@ public class Shouhuan
 	{
 		return registrationdate;
 	}
+	
+	
+	private Integer mode;
 
+	public void setMode(Integer mode)
+	{
+		this.mode = mode;
+	}
+
+	public Integer  getMode()
+	{
+		return mode;
+	}
 
 }

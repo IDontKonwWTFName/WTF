@@ -40,7 +40,7 @@ public class SocketConnectNetty extends Thread{
 			try{
 				OutputStream Os =clientsocket.getOutputStream();
 				DataOutputStream dos = new DataOutputStream(Os);
-				dos.writeUTF(userId+message);	
+				dos.writeUTF(message);	
 				dos.flush();
 	//			InputStream is=clientsocket.getInputStream();
 	//			DataInputStream dis = new DataInputStream(is);
@@ -81,8 +81,8 @@ public class SocketConnectNetty extends Thread{
 //				ctx.getChannel().write("commandError!!!");
 			}
 			System.out.println("µ±Ç°RingId"+ringId);
-			InetAddress ipadd = InetAddress.getByName("172.20.166.4"); 
-			s=new Socket(ipadd,8082);
+			InetAddress ipadd = InetAddress.getByName("218.9.122.126"); 
+			s=new Socket(ipadd,7220);
 			SocketConnectNetty task = new SocketConnectNetty(userId,message,s);
 			task.start();
 		} catch (Exception e1) {

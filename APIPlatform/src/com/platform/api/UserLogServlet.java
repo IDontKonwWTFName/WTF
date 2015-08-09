@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -91,44 +93,55 @@ public class UserLogServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
+	//log_type:  1:注册,2:意见反馈
+	//userlog post
+	//user_id, log_type,event
+	//
+	//
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		request.setCharacterEncoding("utf-8");   
         response.setCharacterEncoding("utf-8");
-		String id = request.getParameter("user_id");
-		String time = request.getParameter("time");
+        response.setContentType("text/x-json");
+        
+		String user_id = request.getParameter("user_id");
 		String event = request.getParameter("event");
-		Integer logid = 0;
-		Integer type = 0;
+		
+		Integer log_type = 0;
 		
 		try{
-			logid = Integer.valueOf(request.getParameter("user_log_id"));
-			type = Integer.valueOf(request.getParameter("type"));
+			
+			log_type = Integer.valueOf(request.getParameter("log_type"));
 		}catch(NumberFormatException e)
 		{
 			e.printStackTrace();
 		}
 		
-		System.out.println("User_info: "+id+" "+logid+" "+time+" "+event);
+		Date now = new Date();
+		SimpleDateFormat dateFormat = new SimpleDateFormat(
+				"yyyy-MM-dd HH:mm:ss");
+		String time = dateFormat.format(now);
+		
+		System.out.println("User_info: "+user_id+" "+time+" "+event);
 		response.setContentType("text/x-json");
 		
 		PrintWriter out = response.getWriter();
 		Map<String, String> data = new HashMap<String, String>();
-		SessionFactory sf = new Configuration().configure().buildSessionFactory();
-		Session s = sf.openSession();
-		Transaction t = s.beginTransaction();
+		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+		Session session = sessionFactory.openSession();
+		Transaction transaction = session.beginTransaction();
 		
 		try{
 			
 			User_log log = new User_log();
-			log.setEvent(event);
-			log.setLog_type(type);
-			log.setTime(time);
-			log.setUser_log_id(logid);
-			log.setUser_id(id);
 			
-			s.save(log);
-			t.commit();
+			log.setEvent(event);
+			log.setLog_type(log_type);
+			log.setTime(time);
+			log.setUser_id(user_id);
+			
+			session.save(log);
+			transaction.commit();
 			
 			data.put("code","100");
 			data.put("msg", "添加数据成功");
@@ -137,7 +150,7 @@ public class UserLogServlet extends HttpServlet {
 			out.println(JSONObject.fromObject(data).toString());
 		}catch(Exception e)
 		{
-			t.rollback();
+			transaction.rollback();
 			data.put("code","200");
 			data.put("msg", "添加数据失败");
 			data.put("data", "");
@@ -145,8 +158,8 @@ public class UserLogServlet extends HttpServlet {
 			out.println(JSONObject.fromObject(data).toString());
 		}finally
 		{
-			s.close();
-			sf.close();
+			session.close();
+			sessionFactory.close();
 		}
 	}
 

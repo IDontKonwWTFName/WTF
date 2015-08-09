@@ -140,6 +140,7 @@ public class RecordServlet extends HttpServlet {
 				hr.setTime(now);
 				hr.setRecord_url(path);
 				hr.setFrom_type(type);
+				hr.setIsHeard(false);
 				session.save(hr);
 				t.commit();
 				

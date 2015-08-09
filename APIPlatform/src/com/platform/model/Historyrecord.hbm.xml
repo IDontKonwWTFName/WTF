@@ -11,5 +11,6 @@
 	    </composite-id>
 	    <property name="record_url" type="java.lang.String"></property>
 	    <property name="from_type" type="java.lang.Boolean"></property>
+	    <property name="isHeard" type="java.lang.Boolean"></property>
 	</class>  
 </hibernate-mapping>  

@@ -45,7 +45,7 @@ public class LoginServlet extends HttpServlet {
 		JSONObject jo = new JSONObject();
 		Map<String,String> user = new HashMap<String, String>();
 		user.put("name","APIPlatform");
-		user.put("version","0.21");
+		user.put("version","0.61");
 		user.put("author", "手环");
 		user.put("email", "@哈工大");
 		jo = JSONObject.fromObject(user);
