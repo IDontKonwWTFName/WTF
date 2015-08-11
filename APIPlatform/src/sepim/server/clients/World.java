@@ -101,9 +101,13 @@ public class World {
 	 * @ringId 手环ID
 	 * @writeMessage 写入手环信息
 	 */
-	public void WriteMessageToRing(String ringId,String writeMessage){
+	public void WriteMessageToRing(String ringId,String writeMessage)
+	{
 		Channel writeChannel = ringChannelMap.get(ringId);
-		if(writeChannel!=null){
+		if(writeChannel!=null)
+		{
+			System.out.println("服务器端发往手环的writeChannel："+writeChannel);
+			System.out.println("服务器端发往手环的消息："+writeMessage);
 			writeChannel.write(writeMessage);
 		}
 	}

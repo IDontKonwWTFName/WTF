@@ -7,11 +7,14 @@ import sepim.server.clients.World;
 
 public class SlaveHandler {
 
-	public void handle(String leixing,String company, String ringId, String contentsLength,
-			String contents) {
-		if(contents.length()>6){
+	public void handle(String leixing,String company, String ringId, String contentsLength,String contents,String userId) {
+		if(!userId.equals(""))
+		{
+			System.out.println(ringId+"辅助中心号码设置！！");
 			World.getWorld().WriteMessageToRing(ringId,"["+company+"*"+ringId+"*"+contentsLength+"*"+contents+"]");
-		}else{
+		}
+		else
+		{
 			System.out.println(ringId+"辅助中心号码设置成功！！");
 			//把数据封装进json
 			JSONObject jsonObject = new JSONObject();

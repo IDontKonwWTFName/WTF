@@ -8,8 +8,10 @@ import sepim.server.clients.World;
 public class FLOWERHandler {
 
 	public void handle(String leixing,String company, String ringId, String contentsLength,
-			String contents) {
-		if(contents.length()>6){
+			String contents,String userId) {
+		if(!userId.equals(""))//手机发送
+		{
+			System.out.println(ringId+"小红花个数设置指令！！");
 			World.getWorld().WriteMessageToRing(ringId,"["+company+"*"+ringId+"*"+contentsLength+"*"+contents+"]");
 		}else{
 			System.out.println(ringId+"小红花个数设置指令发送成功！！");

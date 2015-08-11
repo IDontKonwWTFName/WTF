@@ -13,11 +13,8 @@ public class LinebasedEncoder extends OneToOneEncoder {
 	@Override
 	protected Object encode(ChannelHandlerContext ctx, Channel chl, Object obj) throws Exception {
 		ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();
-		byte[] body = obj.toString().getBytes();  //将对象转换为byte，伪代码，具体用什么进行序列化，你们自行选择。可以使用我上面说的一些
-        int dataLength = body.length;  //读取消息的长度
-        buffer.writeInt(dataLength);  //先将消息长度写入，也就是消息头
+		byte[] body = obj.toString().getBytes();  //将对象转换为byte
         buffer.writeBytes(body);  //消息体中包含我们要发送的数据
 		return buffer;
 	}
-
 }

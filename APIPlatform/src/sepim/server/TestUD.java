@@ -39,7 +39,7 @@ public class TestUD extends Thread {
 		try {
 				ID = ++ID;
 				System.out.println("client" + ID);
-				InetAddress ipadd = InetAddress.getByName("219.217.245.235");
+				InetAddress ipadd = InetAddress.getByName("192.168.199.195");
 				Socket s = new Socket(ipadd, 8082);
 				TestUD a = new TestUD(ID, s);
 				a.start();

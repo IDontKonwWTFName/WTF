@@ -10,9 +10,10 @@ import sepim.server.clients.World;
 public class TSHandler {
 
 	public void handle(String leixing,String company, String ringId, String contentsLength,
-			String contents) {
-		if(contents.length()>2){
-			System.out.println(ringId+"把以下数据推送到手机"+contents);
+			String contents,String userId) {
+		if(userId.equals(""))//手机发出
+		{
+			System.out.println(ringId+"参数查询成功"+contents);
 			String[] contentsStrings = contents.split(",",2);
 			String[] parameterStrings = contentsStrings[1].split(";");
 			//版本号
@@ -81,7 +82,10 @@ public class TSHandler {
 			ArrayList<String> channelIdList = new ArrayList<String>();
 			channelIdList.add(World.getWorld().getRingPhoneMap().get(ringId));
 			new Push().pushToApp(channelIdList,jsonObject.toString());
-		}else{
+		}
+		else
+		{
+			System.out.println(ringId+"参数查询"+contents);
 			World.getWorld().WriteMessageToRing(ringId,"["+company+"*"+ringId+"*"+contentsLength+"*"+contents+"]");
 		}
 	}

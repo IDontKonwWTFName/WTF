@@ -19,4 +19,8 @@
 
 
 </servlet>
+<servlet>
+  	<servlet-name>login</servlet-name>
+  	<servlet-class>tools.servlet.login</servlet-class>
+  </servlet>
 </web-app>

@@ -96,7 +96,7 @@ public class TestDecoder extends FrameDecoder {
 
         int actualLengthFieldOffset = buffer.readerIndex() + lengthFieldOffset;
         long frameLength;
-        switch (lengthFieldLength) //字符串长度占用的字节数
+        switch (lengthFieldLength) //�ַ�������ռ�õ��ֽ���
         {
 	        case 1:
 	            frameLength = buffer.getUnsignedByte(actualLengthFieldOffset);
@@ -163,10 +163,6 @@ public class TestDecoder extends FrameDecoder {
         ChannelBuffer frame = extractFrame(buffer, readerIndex, actualFrameLength);
         buffer.readerIndex(readerIndex + actualFrameLength);
         
-        //String s = new String(frame.array(),"GBK");
-        //System.out.println("发送的字符数组长度:"+frame.array().length);
-        //System.out.println("发送的字符串长度:"+s.length());
-		//Packet packet = new Packet(frame);
         return frame;
     }
 

@@ -32,9 +32,9 @@ public class Server {
 				Executors.newCachedThreadPool(), Executors.newCachedThreadPool());
 		ServerBootstrap bootstrap = new ServerBootstrap(factory);
 		bootstrap.setPipelineFactory(new ServerPipelineFactory());
-		bootstrap.bind(new InetSocketAddress("192.168.199.179", 8082));
+		bootstrap.bind(new InetSocketAddress("192.168.199.195", 8082));
 		logger.info("Ready and Listening");
-		initDataBase();
+//		initDataBase();
 	}
 	
 	public static void main(String args[]) {

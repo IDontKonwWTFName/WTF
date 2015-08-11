@@ -7,12 +7,16 @@ import sepim.server.clients.World;
 
 public class RESETHandler {
 
-	public void handle(String leixing,String company, String ringId, String contentsLength,
-			String contents) {
-		if(contents.length()>5){
-			contents=contents.substring(0,contents.length()-4);
+	public void handle(String leixing,String company, String ringId, String contentsLength,String contents,String userId) {
+		if(!userId.equals(""))//手机发送的
+		{
+			System.out.println("发送重启指令");
+			System.out.println("ringId"+ringId);
+			System.out.println("["+company+"*"+ringId+"*"+contentsLength+"*"+contents+"]");
 			World.getWorld().WriteMessageToRing(ringId,"["+company+"*"+ringId+"*"+contentsLength+"*"+contents+"]");
-		}else{
+		}
+		else
+		{
 			System.out.println(ringId+"重启成功！！");
 			//把数据封装进json
 			JSONObject jsonObject = new JSONObject();

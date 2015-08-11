@@ -7,11 +7,15 @@ import sepim.server.clients.World;
 
 public class SMSHandler {
 
-	public void handle(String leixing,String company, String ringId, String contentsLength,
-			String contents) {
-		if(contents.length()>3){
+	public void handle(String leixing,String company, String ringId, String contentsLength,String contents,String userId)
+	{
+		if(!userId.equals(""))//手机发出
+		{
+			System.out.println(ringId+"短信指令发送！！"+"["+company+"*"+ringId+"*"+contentsLength+"*"+contents+"]");
 			World.getWorld().WriteMessageToRing(ringId,"["+company+"*"+ringId+"*"+contentsLength+"*"+contents+"]");
-		}else{
+		}
+		else
+		{
 			System.out.println(ringId+"短信指令发送成功！！");
 			//把数据封装进json
 			JSONObject jsonObject = new JSONObject();

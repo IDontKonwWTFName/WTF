@@ -111,9 +111,12 @@ public class ChargeSucceededServlet extends HttpServlet{
 	        	Payment payment=new Payment();
 	        	
 	        	JSONObject jsonObject =JSONObject.fromObject(event.getObject());
+	        	
 	        	jsonObject.get("order_no");
 	        	jsonObject.get("amount");
-	        	jsonObject.get("order_no");
+	        	jsonObject.get("subjcet");
+	        	System.out.println(jsonObject);
+	        	
 	        	
 	        	
 	        	

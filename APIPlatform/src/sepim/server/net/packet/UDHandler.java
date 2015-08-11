@@ -1,25 +1,15 @@
 package sepim.server.net.packet;
 
-import java.util.Hashtable;
-
 import net.sf.json.JSONObject;
-
-import org.jboss.netty.channel.Channel;
 
 import com.a.push.Push;
 
-import sepim.server.clients.Client;
 import sepim.server.clients.World;
-import sepim.server.net.packet.handled.ChatPacketHandler;
-import sepim.server.net.packet.handled.CommandPacketHandler;
-import sepim.server.net.packet.handled.DefaultPacketHandler;
-import sepim.server.net.packet.handled.PackHandler;
 
 
 public class UDHandler {
-	
- 
-public void handle(String leixing,String company, String ringId, String contentsLength, String contents) {
+	public void handle(String leixing,String company, String ringId, String contentsLength, String contents)
+	{
 		String[] contentsStrings = contents.split(",");
 		//日期
 		String data = contentsStrings[1];
@@ -129,7 +119,14 @@ public void handle(String leixing,String company, String ringId, String contents
 		jsonObject.put("nearBaseStationAreaCode3",nearBaseStationAreaCode3);  
 		jsonObject.put("nearBaseStationNum3",nearBaseStationNum3);  
 		jsonObject.put("nearBaseStationSingalStr3",nearBaseStationSingalStr3);  
-		new Push().pushToApp(World.getWorld().getRingPhoneListMap().get(ringId),jsonObject.toString());
-}
-
+		if(leixing.equals("UD"))
+		{
+			System.out.println("位置数据上报");
+			new Push().pushToApp(World.getWorld().getRingPhoneListMap().get(ringId),jsonObject.toString());
+		}
+		else
+		{
+			System.out.println("盲点补传数据");
+		}
+	}
 }

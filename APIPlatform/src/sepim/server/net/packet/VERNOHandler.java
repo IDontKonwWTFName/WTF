@@ -10,9 +10,10 @@ import sepim.server.clients.World;
 public class VERNOHandler {
 
 	public void handle(String leixing,String company, String ringId, String contentsLength,
-			String contents) {
-		if(contents.length()>5){
-			System.out.println(ringId+"把以下数据推送到号码为"+World.getWorld().getRingPhoneMap().get(ringId)+"手机"+contents);
+			String contents,String userId) {
+		if(userId.equals(""))//手环发出
+		{
+			System.out.println(ringId+"版本查询成功"+World.getWorld().getRingPhoneMap().get(ringId)+"手机"+contents);
 			String[] contentsStrings = contents.split(",",2);
 			//版本信息
 			String verno = contentsStrings[1];
@@ -25,7 +26,10 @@ public class VERNOHandler {
 			ArrayList<String> channelIdList = new ArrayList<String>();
 			channelIdList.add(World.getWorld().getRingPhoneMap().get(ringId));
 			new Push().pushToApp(channelIdList,jsonObject.toString());
-		}else{
+		}
+		else
+		{
+			System.out.println(ringId+"版本查询！！");
 			World.getWorld().WriteMessageToRing(ringId,"["+company+"*"+ringId+"*"+contentsLength+"*"+contents+"]");
 		}
 	}

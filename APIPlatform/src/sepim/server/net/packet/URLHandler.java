@@ -10,9 +10,10 @@ import sepim.server.clients.World;
 public class URLHandler {
 
 	public void handle(String leixing,String company, String ringId, String contentsLength,
-			String contents) {
-		if(contents.length()>3){
-			System.out.println(ringId+"把以下数据推送到手机"+contents);
+			String contents,String userId) {
+		if(userId.equals(""))//手环发出
+		{
+			System.out.println(ringId+"查询 URL谷歌链接成功"+contents);
 			String[] contentsStrings = contents.split(",",2);
 			String[] parameterStrings = contentsStrings[1].split(";");
 			//谷歌URL
@@ -32,7 +33,10 @@ public class URLHandler {
 			ArrayList<String> channelIdList = new ArrayList<String>();
 			channelIdList.add(World.getWorld().getRingPhoneMap().get(ringId));
 			new Push().pushToApp(channelIdList,jsonObject.toString());
-			}else{
+		}
+		else
+		{
+			System.out.println(ringId+"查询 URL谷歌链接："+contents);
 			World.getWorld().WriteMessageToRing(ringId,"["+company+"*"+ringId+"*"+contentsLength+"*"+contents+"]");
 		}
 	}

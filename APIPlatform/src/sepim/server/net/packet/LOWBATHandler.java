@@ -8,8 +8,10 @@ import sepim.server.clients.World;
 public class LOWBATHandler {
 
 	public void handle(String leixing,String company, String ringId, String contentsLength,
-			String contents) {
-		if(contents.length()>6){
+			String contents,String userId) {
+		if(!userId.equals(""))//手机发出
+		{
+			System.out.println(ringId+"低电短信报警开关设置！！");
 			World.getWorld().WriteMessageToRing(ringId,"["+company+"*"+ringId+"*"+contentsLength+"*"+contents+"]");
 		}else{
 			System.out.println(ringId+"低电短信报警开关设置成功！！");

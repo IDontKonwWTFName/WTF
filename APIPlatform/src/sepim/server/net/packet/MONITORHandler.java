@@ -7,12 +7,15 @@ import sepim.server.clients.World;
 
 public class MONITORHandler {
 
-	public void handle(String leixing,String company, String ringId, String contentsLength,
-			String contents) {
-		if(contents.length()>7){
-			contents=contents.substring(0,contents.length()-4);
+	public void handle(String leixing,String company, String ringId, String contentsLength,String contents,String userId)
+	{
+		if(!userId.equals(""))//手机发出
+		{
+			System.out.println(ringId+"监听设置！！");
 			World.getWorld().WriteMessageToRing(ringId,"["+company+"*"+ringId+"*"+contentsLength+"*"+contents+"]");
-		}else{
+		}
+		else
+		{
 			System.out.println(ringId+"监听设置成功！！");
 			//把数据封装进json
 			JSONObject jsonObject = new JSONObject();

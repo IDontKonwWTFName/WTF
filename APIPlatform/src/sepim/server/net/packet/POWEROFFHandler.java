@@ -6,13 +6,16 @@ import net.sf.json.JSONObject;
 import sepim.server.clients.World;
 
 public class POWEROFFHandler {
-
-	public void handle(String leixing,String company, String ringId, String contentsLength,
-			String contents) {
-		if(contents.length()>8){
-			contents=contents.substring(0,contents.length()-4);
+	public void handle(String leixing,String company, String ringId, String contentsLength,String contents,String userId) {
+		if(!userId.equals(""))//手机发送的
+		{
+			System.out.println("发送关机指令");
+			System.out.println("ringId"+ringId);
+			System.out.println("["+company+"*"+ringId+"*"+contentsLength+"*"+contents+"]");
 			World.getWorld().WriteMessageToRing(ringId,"["+company+"*"+ringId+"*"+contentsLength+"*"+contents+"]");
-		}else{
+		}
+		else//手环返回的
+		{
 			System.out.println(ringId+"关机指令发送成功！！");
 			//把数据封装进json
 			JSONObject jsonObject = new JSONObject();

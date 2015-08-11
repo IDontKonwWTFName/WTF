@@ -81,7 +81,7 @@ public class SocketConnectNetty extends Thread{
 //				ctx.getChannel().write("commandError!!!");
 			}
 			System.out.println("µ±Ç°RingId"+ringId);
-			InetAddress ipadd = InetAddress.getByName("218.9.122.126"); 
+			InetAddress ipadd = InetAddress.getByName("127.0.0.1"); 
 			s=new Socket(ipadd,7220);
 			SocketConnectNetty task = new SocketConnectNetty(userId,message,s);
 			task.start();

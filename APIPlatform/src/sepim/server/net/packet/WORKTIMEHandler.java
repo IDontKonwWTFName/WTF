@@ -8,8 +8,10 @@ import sepim.server.clients.World;
 public class WORKTIMEHandler {
 
 	public void handle(String leixing,String company, String ringId, String contentsLength,
-			String contents) {
-		if(contents.length()>8){
+			String contents,String userId) {
+		if(!userId.equals(""))//手机发送
+		{
+			System.out.println(ringId+"工作时间设置指令设置！！");
 			World.getWorld().WriteMessageToRing(ringId,"["+company+"*"+ringId+"*"+contentsLength+"*"+contents+"]");
 		}else{
 			System.out.println(ringId+"工作时间设置指令设置成功！！");
