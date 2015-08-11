@@ -98,10 +98,14 @@ public class AddRelationServlet extends HttpServlet {
 		String shouhuan_id = request.getParameter("shouhuan_id");
 		String set_userid = request.getParameter("set_id");
 		String relation = request.getParameter("relation");
-		String powerString = request.getParameter("power");
-		int power = Integer.parseInt(powerString);
+//		String powerString = request.getParameter("power");
+//		int power = Integer.parseInt(powerString);
 		// int power=8;
 		String user_id = request.getParameter("user_id");
+		
+		int maxPower=9;
+		int midPower=4;
+		int minPower=0;
 
 		SessionFactory sessionFactory = new Configuration().configure()
 				.buildSessionFactory();
@@ -113,12 +117,12 @@ public class AddRelationServlet extends HttpServlet {
 		// 查询手环关联的是否有管理员，如果有，比较user_id和admin_id
 		try {
 			SQLQuery sqlQuery = session
-					.createSQLQuery("select * from dbo.[relation] where shouhuan_id=:shouhuan_id and administor=1");
+					.createSQLQuery("select user_id from dbo.[relation] where shouhuan_id=:shouhuan_id and administor=1");
 			sqlQuery.setString("shouhuan_id", shouhuan_id);
-			relation2 = (Relation) sqlQuery.uniqueResult();
-			admin_id = relation2.getUser_id();
+			admin_id = (String) sqlQuery.uniqueResult();
+			
 			System.out.println("admin_id:" + admin_id);
-			System.out.println("user_id:" + user_id);
+			
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.out.println("sql error");
@@ -130,61 +134,94 @@ public class AddRelationServlet extends HttpServlet {
 		// List<String> admin_id=sqlQuery.list();
 		// 如果没有管理员，直接插入，并且成为管理员
 		if (admin_id == null) {
-			Relation insertRelation = new Relation();
-			insertRelation.setShouhuan_id(shouhuan_id);
-			insertRelation.setUser_id(set_userid);
-			insertRelation.setPower(power);
-			insertRelation.setRelation(relation);
-			insertRelation.setAdministor(1);
-
-			session.save(insertRelation);
-			transaction.commit();
-			System.out.println("null");
-			data.put("code", "100");
-			data.put("msg", "添加成功！");
-			data.put("data", "");
-		} else {
-			if (admin_id.equals(user_id)) {
-				// 如果user_id就是管理员，那么设置他推送来的set_userid为关联者
+			try {
 				Relation insertRelation = new Relation();
 				insertRelation.setShouhuan_id(shouhuan_id);
 				insertRelation.setUser_id(set_userid);
-				insertRelation.setPower(power);
+				insertRelation.setPower(maxPower);
 				insertRelation.setRelation(relation);
-				insertRelation.setAdministor(0);
+				insertRelation.setAdministor(1);
 
 				session.save(insertRelation);
 				transaction.commit();
-				System.out.println("1");
-
+				System.out.println(admin_id);
 				data.put("code", "100");
-				data.put("msg", "添加成功");
+				data.put("msg", "添加成功！");
 				data.put("data", "");
+				
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			
+		} else {
+			if (admin_id.equals(user_id)) {
+				// 如果user_id就是管理员，那么设置他推送来的set_userid为关联者
+				//如果不是管理员，先加入到relation，并置为power=0
+				try {
+					Relation insertRelation = new Relation();
+					insertRelation.setShouhuan_id(shouhuan_id);
+					insertRelation.setUser_id(set_userid);
+					insertRelation.setPower(midPower);
+					insertRelation.setRelation(relation);
+					insertRelation.setAdministor(0);
+
+					session.save(insertRelation);
+					transaction.commit();
+					System.out.println("1");
+
+					data.put("code", "100");
+					data.put("msg", "添加成功");
+					data.put("data", "");
+					
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+				
 			} else {
 				// 推送给admin，让他发过来
 				// 应该 从admin_id查询channelID
-				String channelID = null;
-				channelID = "3473377944743044766";
+				try {
+					Relation insertRelation = new Relation();
+					insertRelation.setShouhuan_id(shouhuan_id);
+					insertRelation.setUser_id(set_userid);
+					insertRelation.setPower(minPower);
+					insertRelation.setRelation(relation);
+					insertRelation.setAdministor(0);
 
-				// 将推送信息 加到jsonObject中
-				JSONObject jsonObject = new JSONObject();
+					session.save(insertRelation);
+					transaction.commit();
+					
+					
+					String channelID = null;
+					channelID = "3473377944743044766";
 
-				jsonObject.put("sign", "addRelation");
-				jsonObject.put("shouhuan_id", shouhuan_id);
-				jsonObject.put("set_userid", set_userid);
-				jsonObject.put("power", power);
-				jsonObject.put("relation", relation);
-				JSONObject jsonObject2 = new JSONObject();
+					// 将推送信息 加到jsonObject中
+					JSONObject jsonObject = new JSONObject();
 
-				jsonObject2.put("title", "addRelation");
-				jsonObject2.put("description", "addRelation");
-				jsonObject2.put("custom_content", jsonObject.toString());
-				new Push().pushToApp(channelID, jsonObject2.toString());
-				System.out.println("推送给管理员！");
-				data.put("code", "200");
-				data.put("msg", "推送给管理员");
-				data.put("data", "");
+					jsonObject.put("sign", "addRelation");
+					jsonObject.put("shouhuan_id", shouhuan_id);
+					jsonObject.put("set_userid", set_userid);
+					jsonObject.put("power", 0);
+					jsonObject.put("relation", relation);
+					JSONObject jsonObject2 = new JSONObject();
 
+					jsonObject2.put("title", "addRelation");
+					jsonObject2.put("description", "addRelation");
+					jsonObject2.put("custom_content", jsonObject.toString());
+					new Push().pushToApp(channelID, jsonObject2.toString());
+					
+					
+					System.out.println("推送给管理员！");
+					data.put("code", "100");
+					data.put("msg", "推送给管理员");
+					data.put("data", "");
+
+					
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+				
+				
 			}
 		}
 
@@ -229,6 +266,7 @@ public class AddRelationServlet extends HttpServlet {
 		set_id = jsonObject.getString("set_id");
 		which = jsonObject.getString("which");
 		value = jsonObject.getString("value");
+		
 
 		SessionFactory sessionFactory = new Configuration().configure()
 				.buildSessionFactory();
@@ -315,7 +353,8 @@ public class AddRelationServlet extends HttpServlet {
 
 			}
 			// 如果转让管理员,先修改set_id为administer置1，然后将原管理员administer置为0，为一整个事务，如果执行错误，回滚
-			if (which.equals("administor")) {
+			if (which.equals("administer")) {
+				System.out.println(user_id+"--"+admin_id);
 				if (admin_id.equals(user_id)) {
 					try {
 

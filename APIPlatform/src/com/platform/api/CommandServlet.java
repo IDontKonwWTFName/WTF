@@ -496,8 +496,8 @@ public class CommandServlet extends HttpServlet {
 			flag=true;
 			System.out.println(NettyString);
 			break;
-	//POWEROFF 关机
-		case "25":
+	//POWEROFF 关机  25
+		case "POWEROFF":
 			companyString="LJ";
 			 cmdString="POWEROFF";
 			 //nettyParameter=parameter;
@@ -625,12 +625,14 @@ public class CommandServlet extends HttpServlet {
 			data.put("data", "");
 
 			out.println(JSONObject.fromObject(data).toString());
+			System.out.println(JSONObject.fromObject(data).toString());
 		} else {
 			// 失败
 			data.put("code", "200");
 			data.put("msg", "操作失败");
 			data.put("data", "");
 			out.println(JSONObject.fromObject(data).toString());
+			System.out.println(JSONObject.fromObject(data).toString());
 		}
 		s.close();
 		sf.close();

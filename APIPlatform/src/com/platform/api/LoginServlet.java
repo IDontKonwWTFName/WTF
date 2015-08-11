@@ -82,7 +82,7 @@ public class LoginServlet extends HttpServlet {
             if(user != null && user.getPassword().equals(passwd))
             {
             //登录成功后返回所有关联手环ID
-            	SQLQuery sqlQuery =session.createSQLQuery("select s.* from dbo.[relation] r join dbo.[shouhuan] s on r.shouhuan_id=s.shouhuan_id where  r.user_id=:user_id").addEntity(Shouhuan.class);
+            	SQLQuery sqlQuery =session.createSQLQuery("select s.* from dbo.[relation] r join dbo.[shouhuan] s on r.shouhuan_id=s.shouhuan_id where  r.user_id=:user_id and r.power>0").addEntity(Shouhuan.class);
             	sqlQuery.setString("user_id", user_id);
             	List<Shouhuan> shouhuans=sqlQuery.list();
             	JSONObject  jsonObject =null;

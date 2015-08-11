@@ -2,6 +2,7 @@ package com.platform.api;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.hibernate.SQLQuery;
@@ -19,6 +21,7 @@ import org.hibernate.cfg.Configuration;
 import org.jboss.netty.handler.codec.http.HttpRequest;
 import org.jboss.netty.handler.codec.http.HttpResponse;
 
+import com.platform.model.Fence;
 import com.platform.model.Historylocation;
 
 /**
@@ -57,6 +60,14 @@ public class GetShouhuanLatestInfoServlet extends HttpServlet {
 			Historylocation historylocation = (Historylocation) sqlQuery
 					.uniqueResult();
 			System.out.println(historylocation.getLat());
+			//得到fence
+			SQLQuery sqlQuery2 = session.createSQLQuery(
+					"select * from dbo.[fence] where shouhuan_id=:shouhuan_id")
+					.addEntity(Fence.class);
+			sqlQuery2.setString("shouhuan_id", shouhuan_id);
+			List<Fence> fences = sqlQuery2.list();
+			// List to JSONArray
+			JSONArray jsonArray = new JSONArray().fromObject(fences);
 
 			data.put("code", "100");
 			data.put("msg", "位置信息");
@@ -65,6 +76,7 @@ public class GetShouhuanLatestInfoServlet extends HttpServlet {
 			data.put("bat", "75");
 			data.put("online", "1");
 			data.put("gprs", "89");
+			data.put("fence", jsonArray.toString());
 
 		} catch (Exception e) {
 			// TODO: handle exception

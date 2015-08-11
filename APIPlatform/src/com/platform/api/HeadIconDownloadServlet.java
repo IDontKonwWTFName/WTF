@@ -13,12 +13,17 @@ import java.io.OutputStream;
 
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sound.midi.MidiDevice.Info;
+
+import net.sf.json.JSONObject;
 
 import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
@@ -50,6 +55,7 @@ public class HeadIconDownloadServlet extends HttpServlet{
 		SessionFactory sessionFactory=new Configuration().configure().buildSessionFactory();
 		org.hibernate.Session session = sessionFactory.openSession();
 		Transaction transaction =session.beginTransaction();
+		Map< String, String>data =new HashMap<String, String>();
 		
 		String url=null;
 		try {
@@ -71,25 +77,45 @@ public class HeadIconDownloadServlet extends HttpServlet{
 			
 		} catch (Exception e) {
 			// TODO: handle exception
+			data.put("code", "500");
+			data.put("msg", "sql error");
+			data.put("data", "");
+			response.getWriter().println(JSONObject.fromObject(data).toString());
 		}finally{
 			session.close();
 			sessionFactory.close();
 		}
+		if (url!=null){
+			try {
+				//File f=new File("C:/apache-tomcat-7.0.62/webapps/APIPlatform/upload/"+info.getHeadiconurl());
+			    File f =new File("C:/Users/军/Desktop/data/HeadIcon/"+url);
+		        FileInputStream fi=new FileInputStream(f);
+		        byte temp[]=new byte[1024*3];//3M的空间
+		        //回复
+		        response.setContentType("multipart/form-data");
+		        response.setContentLength((int)f.length());
+		        OutputStream output=response.getOutputStream();
+		        while(fi.read(temp)!=-1)
+		        {
+		        	output.write(temp);
+		        }
+		        
+
+				
+			} catch (Exception e) {
+				// TODO: handle exception
+				data.put("code", "500");
+				data.put("msg", "open file error");
+				data.put("data", "");
+				response.getWriter().println(JSONObject.fromObject(data).toString());
+			}
+			
+			
+		}
 		
 		
-		//File f=new File("C:/apache-tomcat-7.0.62/webapps/APIPlatform/upload/"+info.getHeadiconurl());
-	    File f =new File("C:/Users/军/Desktop/data/HeadIcon/"+url);
-        FileInputStream fi=new FileInputStream(f);
-        byte temp[]=new byte[1024*3];//3M的空间
-        //回复
-        response.setContentType("multipart/form-data");
-        response.setContentLength((int)f.length());
-        OutputStream output=response.getOutputStream();
-        while(fi.read(temp)!=-1)
-        {
-        	output.write(temp);
-        }
-        System.out.println(download_id+"download");
+		
+		
         
 		
 	}

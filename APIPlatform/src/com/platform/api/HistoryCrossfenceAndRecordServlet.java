@@ -88,11 +88,12 @@ public class HistoryCrossfenceAndRecordServlet extends HttpServlet {
 			sqlCross.setString("end_time", end_time);
 			sqlCross.setString("shouhuan_id", shouhuan_id);
 			java.util.List<Cross_fence> cross = sqlCross.list();
+			
 			crossIterator = cross.iterator();
-			for (int i = 0; i < cross.size() && i < 10; i++) {
-				System.out.println("cross------"
-						+ cross.get(i).getTime().toString());
-			}
+			
+//			while (crossIterator.hasNext()) {
+//				System.out.println("cross---"+crossIterator.next().getTime());
+//			}
 		} catch (Exception e) {
 			// TODO: handle exception
 			data.put("code", "500");
@@ -114,11 +115,12 @@ public class HistoryCrossfenceAndRecordServlet extends HttpServlet {
 			sqlRecord.setString("start_time", start_time);
 			sqlRecord.setString("end_time", end_time);
 			java.util.List<Historyrecord> record = sqlRecord.list();
+			
 			recordIterator = record.iterator();
-			for (int i = 0; i < record.size() && i < 10; i++) {
-				System.out.println("record------"
-						+ record.get(i).getTime().toString());
-			}
+			
+//			while (recordIterator.hasNext()) {
+//				System.out.println("record---"+recordIterator.next().getTime());
+//			}
 
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -141,11 +143,12 @@ public class HistoryCrossfenceAndRecordServlet extends HttpServlet {
 			sqlSos.setString("start_time", start_time);
 			sqlSos.setString("end_time", end_time);
 			java.util.List<Shouhuan_log> sos = sqlSos.list();
+			
 			sosIterator = sos.iterator();
-			for (int i = 0; i < sos.size() && i < 10; i++) {
-				System.out.println("sos------"
-						+ sos.get(i).getTime().toString());
-			}
+			
+//			while (sosIterator.hasNext()) {
+//				System.out.println("sos---"+sosIterator.next().getTime());
+//			}
 			
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -158,12 +161,16 @@ public class HistoryCrossfenceAndRecordServlet extends HttpServlet {
 		Cross_fence cross_fence = new Cross_fence();
 		Historyrecord historyrecord = new Historyrecord();
 		Shouhuan_log shouhuan_log = new Shouhuan_log();
+		
 		boolean crossFlag = true;
 		boolean recordFlag = true;
 		boolean sosFlag = true;
 		int f = 0;
 		Date start = null;
-	
+
+		JSONObject jsonObject = null;// new JSONObject();
+
+		JSONArray jsonArray = new JSONArray();
 
 		try {
 			start = dateFormat.parse("2000-01-01 00:00:00");
@@ -171,42 +178,47 @@ public class HistoryCrossfenceAndRecordServlet extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		JSONObject jsonObject = null;// new JSONObject();
-
-		JSONArray jsonArray = new JSONArray();
+		//取数据，放在JSONArray里面
 		while (f < 10) {
 			// 先取三个数
-			if (crossIterator.hasNext()) {
-				if (crossFlag) {
+			if (crossFlag) {
+				if (crossIterator.hasNext()) {
 					cross_fence = crossIterator.next();
 					crossFlag = false;
+				} else {
+					cross_fence.setTime(start);
 				}
-			} else {
-				cross_fence.setTime(start);
+			}else {
+				
 			}
 
-			if (recordIterator.hasNext()) {
-				if (recordFlag) {
+			if (recordFlag) {
+				if (recordIterator.hasNext()) {
 					historyrecord = recordIterator.next();
 					recordFlag = false;
+				} else {
+					historyrecord.setTime(start);
 				}
-			} else {
-				historyrecord.setTime(start);
+			}else {
+				
 			}
 
-			if (sosIterator.hasNext()) {
-				if (sosFlag) {
+			if (sosFlag) {
+				if (sosIterator.hasNext()) {
 					shouhuan_log = sosIterator.next();
 					sosFlag = false;
+				}else {
+					shouhuan_log.setTime(start);
 				}
 			} else {
-				shouhuan_log.setTime(start);
+				
 			}
-
+			
+		System.out.println(f+"---cross"+cross_fence.getTime()+"history"+historyrecord.getTime()+"sos"+shouhuan_log.getTime());
 			if (cross_fence.getTime().after(historyrecord.getTime())) {
 				if (cross_fence.getTime().after(shouhuan_log.getTime())) {
 					// cross
+					System.out.println("cross");
 					jsonObject = new JSONObject();
 					jsonObject.put("sign", "cross");
 
@@ -222,6 +234,7 @@ public class HistoryCrossfenceAndRecordServlet extends HttpServlet {
 
 				} else {
 					// sos
+					System.out.println("sos");
 					jsonObject = new JSONObject();
 					jsonObject.put("sign", "sos");
 
@@ -236,6 +249,7 @@ public class HistoryCrossfenceAndRecordServlet extends HttpServlet {
 			} else {
 				if (historyrecord.getTime().after(shouhuan_log.getTime())) {
 					// record
+					System.out.println("record");
 					jsonObject = new JSONObject();
 					jsonObject.put("sign", "record");
 
@@ -251,6 +265,7 @@ public class HistoryCrossfenceAndRecordServlet extends HttpServlet {
 
 				} else {
 					// sos
+					System.out.println("sos");
 					if (shouhuan_log.getTime().after(start)) {
 						jsonObject = new JSONObject();
 						jsonObject.put("sign", "sos");

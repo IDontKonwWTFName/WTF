@@ -11,9 +11,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+
 import antlr.debug.Event;
 
 import com.pingplusplus.model.Webhooks;
+import com.platform.model.Payment;
 
 import net.sf.json.JSONObject;
 
@@ -95,11 +101,29 @@ public class ChargeSucceededServlet extends HttpServlet{
 	        reader.close();
 	        // 解析异步通知数据
 	        com.pingplusplus.model.Event event = Webhooks.eventParse(buffer.toString());
+	       
 	        if ("charge.succeeded".equals(event.getType())) {
+	        	//支付成功通知
+	        	SessionFactory sessionFactory =new Configuration().configure().buildSessionFactory();
+	        	Session session=sessionFactory.openSession();
+	        	Transaction transaction =session.beginTransaction();
+	        	
+	        	Payment payment=new Payment();
+	        	
+	        	JSONObject jsonObject =JSONObject.fromObject(event.getObject());
+	        	jsonObject.get("order_no");
+	        	jsonObject.get("amount");
+	        	jsonObject.get("order_no");
+	        	
+	        	
+	        	
+	        	
 	            response.setStatus(200);
-	        } else if ("refund.succeeded".equals(event.getType())) {
-	            response.setStatus(200);
-	        } else {
+	        } 
+//	        else if ("refund.succeeded".equals(event.getType())) {
+//	            response.setStatus(200);
+//	        } 
+	        else {
 	            response.setStatus(500);
 	        }
 		

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.platform.model">  
+	<class name="App_Version" table="app_version">   
+	    <id name="version_id" type="java.lang.Integer">
+	     <generator class="native"/>
+	    </id>  
+	    <property name="app_type" type="java.lang.Integer"></property> 
+	    <property name="app_url" type="java.lang.String"></property>
+	    <property name="version_code" type="java.lang.String"></property>
+	    <property name="version_name" type="java.lang.String"></property>
+	</class>  
+</hibernate-mapping>  

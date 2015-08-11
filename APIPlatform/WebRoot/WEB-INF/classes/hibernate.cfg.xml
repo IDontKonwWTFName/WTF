@@ -16,7 +16,7 @@
       <property name="hibernate.transaction.factory_class">
          org.hibernate.transaction.JDBCTransactionFactory
          </property>
-  
+  		<mapping resource="com/platform/model/App_Version.hbm.xml"/>
         <mapping resource="com/platform/model/User.hbm.xml"/>
         <mapping resource="com/platform/model/User_info.hbm.xml"/> 
         <mapping resource="com/platform/model/User_log.hbm.xml"/>   
