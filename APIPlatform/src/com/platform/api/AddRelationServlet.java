@@ -171,7 +171,7 @@ public class AddRelationServlet extends HttpServlet {
 
 					data.put("code", "100");
 					data.put("msg", "添加成功");
-					data.put("data", "");
+					data.put("data", "administer");
 					
 				} catch (Exception e) {
 					// TODO: handle exception
@@ -431,7 +431,7 @@ public class AddRelationServlet extends HttpServlet {
 			String admin=(String) sqlQuery1.uniqueResult();
 			System.out.println(admin);
 			//如果user_id=delete_Id，并且不是管理员
-			if (!user_id.endsWith(delete_id)) {
+			if (!user_id.equals(delete_id)) {
 				
 				if (admin.equals(user_id)){
 					SQLQuery sqlQuery = session
@@ -449,7 +449,7 @@ public class AddRelationServlet extends HttpServlet {
 				
 			}else {
 				//如果是管理员，并且两个不相等
-				if (admin.endsWith(user_id)){
+				if (admin.equals(user_id)){
 					SQLQuery sqlQuery = session
 							.createSQLQuery("delete  dbo.[relation] where shouhuan_id=:shouhuan_id and user_id=:user_id");
 					sqlQuery.setString("shouhuan_id", shouhuan_id);

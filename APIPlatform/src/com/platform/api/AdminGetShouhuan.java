@@ -27,6 +27,10 @@ import com.platform.model.Shouhuan;
 public class AdminGetShouhuan extends HttpServlet {
 
 	@Override
+	
+	//每个人的id，性别和注册时间
+	//admingetshouhuan  get
+	//
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
@@ -48,13 +52,13 @@ public class AdminGetShouhuan extends HttpServlet {
 		for (Shouhuan s : shouhuans) {
 			jsonObject=new JSONObject();
 			jsonObject.put("shouhuan_id", s.getShouhuan_id());
-			jsonObject.put("name", s.getName());
-			jsonObject.put("nickname",s.getNickname());
-			jsonObject.put("birthday",s.getBirthday() );
+//			jsonObject.put("name", s.getName());
+//			jsonObject.put("nickname",s.getNickname());
+//			jsonObject.put("birthday",s.getBirthday() );
 			jsonObject.put("registrationdate",s.getRegistrationdate());
 			jsonObject.put("sex", s.getSex());
-			jsonObject.put("curentversion", s.getCurrentversion());
-			jsonObject.put("tempororyright", s.getTemporaryright());
+//			jsonObject.put("curentversion", s.getCurrentversion());
+//			jsonObject.put("tempororyright", s.getTemporaryright());
 			
 			jsonArray.add(jsonObject);
 		}
@@ -63,7 +67,7 @@ public class AdminGetShouhuan extends HttpServlet {
 		data.put("code", "100");
 		data.put("msg", "get 数据成功");
 		data.put("data", jsonArray.toString());
-		response.getWriter().println(data.toString());
+		response.getWriter().println(JSONObject.fromObject(data).toString());
 		System.out.println(data.toString()); 
 	} catch (Exception e) {
 		// TODO: handle exception

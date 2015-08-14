@@ -1,6 +1,7 @@
 package com.platform.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Payment implements Serializable
 {
@@ -56,27 +57,27 @@ public class Payment implements Serializable
 	}
 
 
-	private String end_time;
+	private Date end_time;
 
-	public void setEnd_time(String end_time)
+	public void setEnd_time(Date end_time)
 	{
 		this.end_time = end_time;
 	}
 
-	public String  getEnd_time()
+	public Date  getEnd_time()
 	{
 		return end_time;
 	}
 
 
-	private String begin_time;
+	private Date begin_time;
 
-	public void setBegin_time(String begin_time)
+	public void setBegin_time(Date begin_time)
 	{
 		this.begin_time = begin_time;
 	}
 
-	public String  getBegin_time()
+	public Date  getBegin_time()
 	{
 		return begin_time;
 	}

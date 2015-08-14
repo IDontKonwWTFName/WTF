@@ -105,7 +105,7 @@ public class RecordServlet extends HttpServlet {
 						// =this.getServletContext().getRealPath("historyrecord/");
 						// String realPath
 						// =this.getServletContext().getRealPath("WEB-INF/data/HistoryRecord/"+js.getString("shouhuan_id"));
-						String realPath = "C:/Users/军/Desktop/data/HistoryRecord/"
+						String realPath = "D:/data/HistoryRecord/"
 								+ js.getString("shouhuan_id");
 						System.out.println("url:" + realPath);
 						// 创建文件夹

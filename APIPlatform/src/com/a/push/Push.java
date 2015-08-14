@@ -3,6 +3,14 @@ package com.a.push;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
+
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+
 import net.sf.json.JSONObject;
 
 import com.baidu.yun.core.log.YunLogEvent;
@@ -26,13 +34,30 @@ public class Push {
 		List<String>ids=new ArrayList<>();
 		ids.add("3473377944743044766");
 		ids.add("4587906591108883625");
-		String data="{\"title\":\"TEST\",\"description\":\"Hello Baidu push! LJ is coming!\"}";
-		push.pushToApp(ids, data);
+		String data="{\"title\":\"TEST\",\"description\":\"Hello Baidu push! LJ is coming-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------!\"}";
+//		push.pushToApp(ids, data);
+		push.pushToApp("3473377944743044766", data);
 	}
-	public void pushToApp (String id,String data) {
-
-
-		System.out.println("in push");
+	public String toChannelID(String user_id) {
+		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+		Session session = sessionFactory.openSession();
+		
+		String channel_id=null;
+		try {
+			SQLQuery sqlQuery=session.createSQLQuery("select channel_id from dbo.[user_info] where user_id=:user_id");
+			sqlQuery.setString("user_id", user_id);
+			channel_id=(String) sqlQuery.uniqueResult();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return channel_id;
+	}
+	public void pushToApp (String id,String data) 
+	{
+		
+		
+		
+		System.out.println("in push"+data);
 		//String channelID=id;
 		String channelID="3473377944743044766";
 		
@@ -41,8 +66,8 @@ public class Push {
 		System.out.println(message);
 		//message="{\"title\":\"TEST\",\"description\":\"Hello Baidu push! LJ is coming!\"}";
 
-		String apiKey = "4EuPdgS8Gi0onoWiM6dV1z1I";
-		String secretKey = "ufZTEYd0c8oPM2DlsbnGbZiHhGuN9Ku8";
+		String apiKey = "GzddpTYVNK5TyphCL2eAddga";
+		String secretKey = "vHoVYaUKmEzLL4F6yivggoDOkS5Dz9k1";
 		PushKeyPair pair = new PushKeyPair(apiKey, secretKey);
 		try {
 			BaiduPushClient pushClient = new BaiduPushClient(pair,
@@ -57,7 +82,7 @@ public class Push {
 					.addChannelId(channelID)
 					.addMsgExpires(new Integer(3600))
 					. // 设置消息的有效时间,单位秒,默认3600 x 5.
-					addMessageType(1)
+					addMessageType(0)
 					. // 设置消息类型,0表示消息,1表示通知,默认为0.
 					addMessage(message)
 					.addDeviceType(3); // 设置设备类型，3 for android, 4 for ios.
@@ -98,7 +123,7 @@ public class Push {
 
 	public void pushToApp(List<String> ids, String data) {
 
-		System.out.println("in push");
+		System.out.println("in push"+data);
 		//String channelID=id;
 		//String channelID="3473377944743044766";
 		List< String>id=ids;
@@ -108,8 +133,8 @@ public class Push {
 		System.out.println(message);
 		//message="{\"title\":\"TEST\",\"description\":\"Hello Baidu push! LJ is coming!\"}";
 
-		String apiKey = "4EuPdgS8Gi0onoWiM6dV1z1I";
-		String secretKey = "ufZTEYd0c8oPM2DlsbnGbZiHhGuN9Ku8";
+		String apiKey = "GzddpTYVNK5TyphCL2eAddga";
+		String secretKey = "vHoVYaUKmEzLL4F6yivggoDOkS5Dz9k1";
 		PushKeyPair pair = new PushKeyPair(apiKey, secretKey);
 		try {
 			BaiduPushClient pushClient = new BaiduPushClient(pair,
@@ -123,10 +148,10 @@ public class Push {
 			//每个channelID都发一次
 			for(String channelIDString:ids){
 				PushMsgToSingleDeviceRequest yun_request = new PushMsgToSingleDeviceRequest()
-				.addChannelId(channelIDString)
+				.addChannelId("3473377944743044766")
 				.addMsgExpires(new Integer(3600))
 				. // 设置消息的有效时间,单位秒,默认3600 x 5.
-				addMessageType(1)
+				addMessageType(0)
 				. // 设置消息类型,0表示消息,1表示通知,默认为0.
 				addMessage(message)
 				.addDeviceType(3); // 设置设备类型，3 for android, 4 for ios.

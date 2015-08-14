@@ -28,7 +28,7 @@ public class TestFunction extends Thread {
 			DataOutputStream dos = new DataOutputStream(Os);
 			String ringId = sb.toString();
 			System.out.println("ringId:"+ringId);
-			if(ringId.contains("TK"))
+			if(ringId.contains("TK")&&!ringId.contains("TKQ"))
 			{
 				System.out.println("TK");
 				VoiceOfClient  voiceOfClient = new  VoiceOfClient(ID,clientsocket);
@@ -67,7 +67,7 @@ public class TestFunction extends Thread {
 		try {
 				ID = ++ID;
 				System.out.println("client" + ID);
-				InetAddress ipadd = InetAddress.getByName("192.168.199.195");
+				InetAddress ipadd = InetAddress.getByName("182.92.67.109");
 				Socket s = new Socket(ipadd, 8082);
 				TestFunction a = new TestFunction(ID, s);
 				a.start();

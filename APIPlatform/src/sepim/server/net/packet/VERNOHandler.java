@@ -19,7 +19,7 @@ public class VERNOHandler {
 			String verno = contentsStrings[1];
 			//把数据封装进json
 			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("leixing",leixing);  
+			jsonObject.put("type",leixing);  
 			jsonObject.put("shouhuan_id",ringId); 
 			jsonObject.put("verno",verno);  
 			//把数据推送给手机

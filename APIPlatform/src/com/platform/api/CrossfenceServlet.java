@@ -112,9 +112,9 @@ public class CrossfenceServlet extends HttpServlet {
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	//
-	//
+	 */ 
+	//cross_fence post
+	//user_id,fence_id,lng,lat,in_out
 	//
 	//
 	//
@@ -122,28 +122,51 @@ public class CrossfenceServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		request.setCharacterEncoding("utf-8");   
         response.setCharacterEncoding("utf-8");
+        response.setContentType("text/x-json");
+        
 		Integer id = 0;
-		Integer inout = 0;
-		Date time = null;
+		//boolean inout=false ;
+		Integer in_out=0;
+		Double lng=(double) 0;
+		Double lat=(double) 0;
+		Date time = new Date();
+		
 		SimpleDateFormat time_fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		
+		try {
+			in_out=Integer.valueOf(request.getParameter("in_out"));
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		try{
 			id = Integer.valueOf(request.getParameter("fence_id"));
 		}catch(NumberFormatException e)
 		{
 			e.printStackTrace();
 		}
-		
-		try{
-			time = time_fmt.parse(request.getParameter("time"));
-		}catch(Exception e)
-		{
-			System.out.println("Cross_fence: time format error");
-			e.printStackTrace();
-			time = new Date();
+		try {
+			lng=Double.valueOf(request.getParameter("lng"));
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		try {
+			lat=Double.valueOf(request.getParameter("lat"));
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
 		
-		System.out.println("CrossFence: "+id+" "+inout+" "+time);
+//		try{
+//			
+//			//time = time_fmt.parse(request.getParameter("time"));
+//		}catch(Exception e)
+//		{
+//			System.out.println("Cross_fence: time format error");
+//			e.printStackTrace();
+//			time = new Date();
+//		}
+		
+		System.out.println("CrossFence: "+id+" "+in_out+" "+time);
 		response.setContentType("text/x-json");
 		
 		PrintWriter out = response.getWriter();
@@ -156,8 +179,10 @@ public class CrossfenceServlet extends HttpServlet {
 			
 			Cross_fence  cf = new Cross_fence();
 			cf.setTime(time);
-			cf.setIn_Out(inout);
+			cf.setIn_Out(in_out);
 			cf.setFence_id(id);
+			cf.setLng(lng);
+			cf.setLat(lat);
 			
 			s.save(cf);
 			t.commit();
@@ -167,13 +192,13 @@ public class CrossfenceServlet extends HttpServlet {
 			data.put("data", "");
 			
 			out.println(JSONObject.fromObject(data).toString());
-		}catch(Exception e)
+		}catch(Exception e2)
 		{
 			t.rollback();
 			data.put("code","200");
 			data.put("msg", "Ìí¼ÓÊý¾ÝÊ§°Ü");
 			data.put("data", "");
-			e.printStackTrace();
+			e2.printStackTrace();
 			out.println(JSONObject.fromObject(data).toString());
 		}finally
 		{

@@ -3,7 +3,9 @@ package com.a.aPay;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Date;
 import java.util.Enumeration;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -101,23 +103,29 @@ public class ChargeSucceededServlet extends HttpServlet{
 	        reader.close();
 	        // 解析异步通知数据
 	        com.pingplusplus.model.Event event = Webhooks.eventParse(buffer.toString());
-	       
+	      
+	        
 	        if ("charge.succeeded".equals(event.getType())) {
 	        	//支付成功通知
 	        	SessionFactory sessionFactory =new Configuration().configure().buildSessionFactory();
 	        	Session session=sessionFactory.openSession();
 	        	Transaction transaction =session.beginTransaction();
 	        	
+	        	
+	        
+
+	        	JSONObject jsonObject=JSONObject.fromObject(event.getData().get("object"));
+	        	System.out.println(jsonObject.get("metadata"));
+	        	JSONObject metadata=JSONObject.fromObject(jsonObject.get("metadata"));
+	        	System.out.println(metadata.getString("shouhuan_id"));
+	        	
 	        	Payment payment=new Payment();
-	        	
-	        	JSONObject jsonObject =JSONObject.fromObject(event.getObject());
-	        	
-	        	jsonObject.get("order_no");
-	        	jsonObject.get("amount");
-	        	jsonObject.get("subjcet");
-	        	System.out.println(jsonObject);
-	        	
-	        	
+	        	payment.setShouhuan_id(metadata.getString("shouhuan_id"));
+	        	payment.setUser_id(metadata.getString("user_id"));
+	        	payment.setService_type(Integer.valueOf(metadata.getString("service_type")));
+	        	 Date date=new Date();
+	        	payment.setBegin_time(date);
+	        	 
 	        	
 	        	
 	        	

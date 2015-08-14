@@ -83,7 +83,7 @@ public void handle(String leixing,String company, String ringId, String contents
 		String nearBaseStationSingalStr3 = contentsStrings[32];
 		
 		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("leixing",leixing);  
+		jsonObject.put("type",leixing);  
 		jsonObject.put("shouhuan_id",ringId); 
 		jsonObject.put("data",data); 
 		jsonObject.put("time",time);  

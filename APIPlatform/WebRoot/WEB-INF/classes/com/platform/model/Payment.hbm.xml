@@ -9,7 +9,7 @@
 		<property name="shouhuan_id" type="java.lang.String"></property>
 		<property name="user_id" type="java.lang.String"></property>
 	    <property name="service_type" type="java.lang.Integer"></property>
-	    <property name="begin_time" type="java.lang.String"></property>
-	    <property name="end_time" type="java.lang.String"></property>
+	    <property name="begin_time" type="java.util.Date"></property>
+	    <property name="end_time" type="java.util.Date"></property>
 	</class>  
 </hibernate-mapping>  

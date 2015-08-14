@@ -19,7 +19,7 @@ public class MONITORHandler {
 			System.out.println(ringId+"监听设置成功！！");
 			//把数据封装进json
 			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("leixing",leixing);  
+			jsonObject.put("type",leixing);  
 			jsonObject.put("shouhuan_id",ringId); 
 			//把数据推送给手机
 			new Push().pushToApp(World.getWorld().getRingPhoneListMap().get(ringId),jsonObject.toString());

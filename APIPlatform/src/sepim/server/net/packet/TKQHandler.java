@@ -2,7 +2,6 @@ package sepim.server.net.packet;
 // app and ring talk with each other
 // 手环和手机对讲 功能
 
-import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.File;
@@ -28,7 +27,7 @@ public class TKQHandler{
 	public String handle(String leixing,String company, String ringId, String contentsLength,byte[] contents) 
 	{
 		 // file name
-		 String filename= "E:\\temp.amr";
+		 String filename= "D:\\temp.amr";
 	     
 	     String filetxt = null;
 	     try 
@@ -38,9 +37,9 @@ public class TKQHandler{
 	    	 // TODO Auto-generated catch block
 	    	 e.printStackTrace();
 	     }
-	     String dataLength = To16(Integer.toHexString(filetxt.length()+3)); 
+	     String dataLength = To16(Integer.toHexString(filetxt.length()+6)); 
 	     
-	     String data = "[3G*1506012101*"+dataLength+"*TK,"+filetxt+"]";
+	     String data = "["+company+"*"+ringId+"*"+dataLength+"*TK,"+filetxt+"]";
 	     System.out.println(data);
 	     World.getWorld().WriteMessageToRing(ringId,data);
 	     
@@ -64,28 +63,21 @@ public class TKQHandler{
 	    StringBuilder hexData = new StringBuilder();
 	    byte bt = 0;
 	
-	    for(int i=0;i<file.length();i++) { 
-	
+	    for(int i=0;i<file.length();i++)
+	    { 
 	    	bt = dps.readByte(); // 以十六进制的无符号整数形式返回一个字符串表示形式。
 	    	String str = Integer.toHexString(bt);
-	
-	        if(str.length() == 8) { //去掉补位的f
-	
-	        str = str.substring(6);
-	
+	        if(str.length() == 8)
+	        { 
+	        	//去掉补位的f
+	        	str = str.substring(6);
+	        }
+	        if(str.length() == 1) 
+	        {
+	        	str = "0"+str;
+	        }	
+	        hexData.append(str.toUpperCase());
 	    }
-	
-	    if(str.length() == 1) 
-	    {
-	    	str = "0X0"+str;
-	    }	
-	    else
-	    {
-	    	str = "0X"+str;
-	    }
-	    hexData.append(str.toUpperCase());
-	    }
-
     	return hexData.toString();
     }
 

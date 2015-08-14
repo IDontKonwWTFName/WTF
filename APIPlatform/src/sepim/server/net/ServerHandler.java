@@ -122,8 +122,10 @@ public class ServerHandler extends SimpleChannelHandler {
 			System.out.println("contentsLength : "+contentsLength);
 			//System.out.println("contents:"+contents);
 			System.out.println("userId:"+userId);
+			System.out.println("显示1：:"+ctx.getChannel());
 			//注册手环ID和channel
 			World.getWorld().register(ringId,ctx.getChannel());
+			System.out.println("注册成功");
 		}
 
 		//判断发送命令手机是否在是中心或辅助中心号码，如果"是"执行程序，如果"不是"返回手机

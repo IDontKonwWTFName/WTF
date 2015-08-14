@@ -21,7 +21,7 @@ public class WHITELISTHandler {
 				System.out.println(ringId+"WHITELIST1设置成功！！");
 				//把数据封装进json
 				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("leixing","WHITELIST1");  
+				jsonObject.put("type","WHITELIST1");  
 				jsonObject.put("shouhuan_id",ringId); 
 				//把数据推送给手机
 				new Push().pushToApp(World.getWorld().getRingPhoneListMap().get(ringId),jsonObject.toString());
@@ -39,7 +39,7 @@ public class WHITELISTHandler {
 				System.out.println(ringId+"WHITELIST2设置成功！！");
 				//把数据封装进json
 				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("leixing","WHITELIST2");  
+				jsonObject.put("type","WHITELIST2");  
 				jsonObject.put("shouhuan_id",ringId); 
 				//把数据推送给手机
 				new Push().pushToApp(World.getWorld().getRingPhoneListMap().get(ringId),jsonObject.toString());

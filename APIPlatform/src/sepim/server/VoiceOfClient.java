@@ -33,8 +33,8 @@ public class VoiceOfClient extends Thread {
 	public void init(){
 	try{
 		ID=++ID;
-		System.out.println("client"+ID+" is sending message to ip "+InetAddress.getByName("192.168.199.195"));
-		InetAddress ipadd = InetAddress.getByName("192.168.199.195"); 
+		System.out.println("client"+ID+" is sending message to ip "+InetAddress.getByName("182.92.67.109"));
+		InetAddress ipadd = InetAddress.getByName("182.92.67.109"); 
 		Socket s=new Socket(ipadd,8082);
 		
 		new VoiceOfClient(ID,this.clientsocket).start();

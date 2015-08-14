@@ -92,7 +92,7 @@ public class HeadIconServlet extends HttpServlet {
 						// 文件
 						// 将文件写入磁盘
 						//String realPath = this.getServletContext().getRealPath("WEB-INF/data/HeadIcon");
-						String realPath = "C:/Users/军/Desktop/data/HeadIcon/";
+						String realPath = "D:/data/HeadIcon/";
 						System.out.println("url:" + realPath);
 						// 创建文件
 						File dir = new File(realPath);

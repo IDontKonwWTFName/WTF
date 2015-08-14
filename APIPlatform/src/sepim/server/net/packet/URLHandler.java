@@ -24,7 +24,7 @@ public class URLHandler {
 			String time = parameterStrings[2].split(":",2)[1];
 			//把数据封装进json
 			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("leixing",leixing);  
+			jsonObject.put("type",leixing);  
 			jsonObject.put("shouhuan_id",ringId); 
 			jsonObject.put("url",url);  
 			jsonObject.put("data",data);

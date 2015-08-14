@@ -127,7 +127,7 @@ public class AppVersionServlet extends HttpServlet{
 		if (url!=null){
 			try {
 				//File f=new File("C:/apache-tomcat-7.0.62/webapps/APIPlatform/upload/"+info.getHeadiconurl());
-			    File f =new File("C:/Users/军/Desktop/data/AppVersion/"+url);
+			    File f =new File("D:/data/AppVersion/"+url);
 		        FileInputStream fi=new FileInputStream(f);
 		        byte temp[]=new byte[1024*3];//3M的空间
 		        //回复

@@ -21,7 +21,7 @@ public class SOSHandler {
 				System.out.println(ringId+"sos1设置成功！！");
 				//把数据封装进json
 				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("leixing","SOS1");  
+				jsonObject.put("type","SOS1");  
 				jsonObject.put("shouhuan_id",ringId); 
 				//把数据推送给手机
 				new Push().pushToApp(World.getWorld().getRingPhoneListMap().get(ringId),jsonObject.toString());
@@ -39,7 +39,7 @@ public class SOSHandler {
 				System.out.println(ringId+"sos2设置成功！！");
 				//把数据封装进json
 				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("leixing","SOS2");  
+				jsonObject.put("type","SOS2");  
 				jsonObject.put("shouhuan_id",ringId); 
 				//把数据推送给手机
 				new Push().pushToApp(World.getWorld().getRingPhoneListMap().get(ringId),jsonObject.toString());
@@ -57,7 +57,7 @@ public class SOSHandler {
 				System.out.println(ringId+"sos3设置成功！！");
 				//把数据封装进json
 				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("leixing","SOS3");  
+				jsonObject.put("type","SOS3");  
 				jsonObject.put("shouhuan_id",ringId); 
 				//把数据推送给手机
 				new Push().pushToApp(World.getWorld().getRingPhoneListMap().get(ringId),jsonObject.toString());
@@ -68,7 +68,7 @@ public class SOSHandler {
 			System.out.println(ringId+"sos同时设置成功！！");
 			//把数据封装进json
 			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("leixing","SOS");  
+			jsonObject.put("type","SOS");  
 			jsonObject.put("shouhuan_id",ringId); 
 			//把数据推送给手机
 			new Push().pushToApp(World.getWorld().getRingPhoneListMap().get(ringId),jsonObject.toString());

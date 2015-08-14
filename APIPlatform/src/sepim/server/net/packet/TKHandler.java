@@ -7,9 +7,16 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-import org.jboss.netty.channel.Channel;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
 import org.jboss.netty.channel.ChannelHandlerContext;
+
+import com.platform.model.Historyrecord;
 
 import sepim.server.clients.World;
 
@@ -39,67 +46,99 @@ public class TKHandler{
 		}
 		else
 		{
-			String test_temp="";
-			for(byte b:contents)
+			String realPath = "D:/data/HistoryRecord/"+ringId;
+			// 创建文件夹
+			File dir = new File(realPath);
+			if (!dir.exists()) 
 			{
-				test_temp+= b +" ";
+				dir.mkdir();
 			}
-			System.out.println("test_temp"+test_temp);
 			
-			String filename = "E:\\temp.amr" ;
+			Date now = new Date();
+			SimpleDateFormat dateFormat = new SimpleDateFormat(
+					"yyyy_MM_dd_HH_mm_ss");
+			String time = dateFormat.format(now);
+			
+			
+			String filename = realPath+"/"+ringId+time+".amr" ;
 			if(userId.equals(""))
 			{
 				System.out.println("服务器收到手环发送的音频");
 				File voicefile = new File(filename);
 				
-				StringBuilder hexData = new StringBuilder();//存成16进制
-				
 				byte temp = 0; 
-				String str = "";
-				
-				byte temp1=125;
+			
 				try 
 				{
 					FileOutputStream file = new FileOutputStream(voicefile);
-					for(int i=23;i<contents.length-1;i++)
+					int length = contents.length-1;
+					for(int i=23;i<length;i++)
 					{					
-	//					if(contents[i]==125)
-	//					{
-	//						file.write(temp1);
-	//						temp=1;
-	//						file.write(temp);
-	//					}
-	//					else if(contents[i]==91)
-	//					{
-	//						file.write(temp1);
-	//						temp=2;
-	//						file.write(temp);
-	//					}
-	//					else if(contents[i]==93)
-	//					{
-	//						file.write(temp1);
-	//						temp=3;
-	//						file.write(temp);
-	//					}
-	//					else if(contents[i]==44)
-	//					{
-	//						file.write(temp1);
-	//						temp=4;
-	//						file.write(temp);
-	//					}
-	//					else if(contents[i]==42)
-	//					{
-	//						file.write(temp1);
-	//						temp=5;
-	//						file.write(temp);
-	//					}
-	//					else
-	//					{
+						if(contents[i]==125)
+						{
+							if(i!=length-1)
+							{
+								if(contents[i+1]==1)
+								{
+									file.write(contents[i]);
+									i++;
+								}
+								else if(contents[i+1]==2)
+								{
+									temp = 91;
+									file.write(temp);
+									i++;
+								}
+								else if(contents[i+1]==3)
+								{
+									temp = 93;
+									file.write(temp);
+									i++;
+								}
+								else if(contents[i+1]==4)
+								{
+									temp = 44;
+									file.write(temp);
+									i++;
+								}
+								else if(contents[i+1]==5)
+								{
+									temp = 42;
+									file.write(temp);
+									i++;
+								}
+								else
+								{
+									file.write(contents[i]);
+								}
+							}
+							else
+							{
+								file.write(contents[i]);
+							}
+						}
+						else
+						{
 							file.write(contents[i]);
-	//					}
+						}
 					}
 					file.flush();
 					file.close();
+					
+				    SessionFactory sessionFactory =new Configuration().configure().buildSessionFactory();
+			        Session session =sessionFactory.openSession();
+			        Transaction transaction=session.beginTransaction();
+					
+					Historyrecord hr = new Historyrecord();
+					hr.setShouhuan_id(ringId);
+					hr.setFrom_id(ringId);
+					hr.setTime(now);
+					hr.setRecord_url(ringId+time+".amr");
+					hr.setFrom_type(false);
+					hr.setIsHeard(false);
+					session.save(hr);
+					transaction.commit();
+						
 					World.getWorld().WriteMessageToRing(ringId,"["+company+"*"+ringId+"*0004*TK,1]");
 				} 
 				catch (FileNotFoundException e1)

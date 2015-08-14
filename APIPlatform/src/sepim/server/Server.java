@@ -32,9 +32,9 @@ public class Server {
 				Executors.newCachedThreadPool(), Executors.newCachedThreadPool());
 		ServerBootstrap bootstrap = new ServerBootstrap(factory);
 		bootstrap.setPipelineFactory(new ServerPipelineFactory());
-		bootstrap.bind(new InetSocketAddress("192.168.199.195", 8082));
+		bootstrap.bind(new InetSocketAddress("182.92.67.109", 8082));
 		logger.info("Ready and Listening");
-//		initDataBase();
+		initDataBase();
 	}
 	
 	public static void main(String args[]) {
@@ -42,20 +42,17 @@ public class Server {
 	}
 	
 	public void initDataBase(){
-		SessionFactory sessionFactory = new Configuration().configure()
-				.buildSessionFactory();
+		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 		Session session = sessionFactory.openSession();
 		//从数据库读取出手环ID列表
 		ArrayList<String> ringIdList = new ArrayList<String>();
 		try {
 			SQLQuery sqlQueryRingId = session.createSQLQuery(
-					"select shouhuan_id from dbo.[relation]");
+					"select distinct shouhuan_id from dbo.[relation]");
 			List ringIdListInit = sqlQueryRingId.list();
 			//去重
 			for(Object initRingId : ringIdListInit){
-				if(!ringIdList.contains(initRingId.toString())){
 					ringIdList.add(initRingId.toString());
-				}
 			}
 			//从数据库通过手环ID读取出辅助中心号码channelID和中心号码channelID列表
 			for(String shouhuan_id:ringIdList){

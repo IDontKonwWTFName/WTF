@@ -1,4 +1,3 @@
-<%@page import="sepim.server.clients.World"%>
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
 <html>
   <head>    
@@ -16,11 +15,15 @@ var cluster;
 var markers = []; 
 var lineArr;
 var cloudDataLayer;
+var zuobianmarker;
+var zuobiaoList;
+var i =0;
 //初始化地图对象，加载地图  
 function mapInit(){  
+    zuobiaoList = new Array();
     mapObj = new AMap.Map("container",{  
-    center:new AMap.LngLat(116.397428,39.90923), //地图中心点  
-    level:11  //地图显示的比例尺级别  
+    center:new AMap.LngLat(126.631536,45.742928), //地图中心点  
+    level:13  //地图显示的比例尺级别  
     //zoomEnable:false
     }); 
     AMap.event.addListener(mapObj,'click',getLnglat); //点击事件    
@@ -30,16 +33,29 @@ function getLnglat(e){
     var x = e.lnglat.getLng();
     var y = e.lnglat.getLat(); 
     document.getElementById("lnglat").innerHTML = x + "," + y;
+    if(i<4){
+	    zuobianmarker = new AMap.Marker({  
+	        position:(new AMap.LngLat(x,y)),  
+	        draggable:true,  //点标记可拖拽  
+	        cursor:'move',  
+	        raiseOnDrag:true //鼠标拖拽点标记时开启点标记离开地图的效果
+	    });  
+	    zuobianmarker.setMap(mapObj);
+	    zuobiaoList[i]=x+","+y;
+	    i++;
+	 }
 }
+
 //清空地图
 function clearMap(){
     mapObj.clearMap();
-    cloudDataLayer.setMap(null);
+    zuobiaoList = new Array();
+    i=0;
 }
 function addMarker2(){
     mapObj.clearMap();
     marker2 = new AMap.Marker({  
-        position:(new AMap.LngLat(116.384182,39.916451)),  
+        position:(new AMap.LngLat(126.632995,45.742569)),  
         draggable:true,  //点标记可拖拽  
         cursor:'move',  
         raiseOnDrag:true //鼠标拖拽点标记时开启点标记离开地图的效果
@@ -69,7 +85,7 @@ function iJuhe(){
         markers.push(marker);  
     }  
     setTimeout(function(){
-        addCluster(0); e
+        addCluster(0); 
     },500);     
 }
 function addCluster(tag)  
@@ -101,16 +117,16 @@ function completeEventHandler(){
         offset:new AMap.Pixel(-26,-13), //相对于基点的位置  
         autoRotation:true  
     });        
-    var lngX = 116.273881;  
-    var latY = 39.807409;         
+    var lngX = 126.56064;  
+    var latY = 45.705179;         
     lineArr = new Array();   
     lineArr.push(new AMap.LngLat(lngX,latY));   
-    for (var i = 1; i <30; i++){   
-        lngX = lngX+Math.random()*0.05;   
+    for (var i = 1; i <15; i++){   
+        lngX = lngX+Math.random()*0.02;   
         if(i%2){   
             latY = latY+Math.random()*0.0001;   
         }else{   
-            latY = latY+Math.random()*0.06;   
+            latY = latY+Math.random()*0.03;   
         }   
         lineArr.push(new AMap.LngLat(lngX,latY));   
     }  
@@ -133,11 +149,13 @@ function endRun(){   //结束动画播放
 }
 //添加多边形覆盖物  
 function addPolygon(){  
-   var polygonArr=new Array();//多边形覆盖物节点坐标数组   
-   polygonArr.push(new AMap.LngLat("116.319809","39.956596"));   
-   polygonArr.push(new AMap.LngLat("116.556702","39.983434"));   
-   polygonArr.push(new AMap.LngLat("116.483917","39.845449"));   
-   polygonArr.push(new AMap.LngLat("116.244278","39.848612"));   
+   var polygonArr=new Array();//多边形覆盖物节点坐标数组 
+   var j ;  
+   for(j=0;j<4;j++){
+   var zuobian = zuobiaoList[j];
+   var zuobianXY= zuobian.split(",");
+   		polygonArr.push(new AMap.LngLat(zuobianXY[0],zuobianXY[1]));   
+   }
    polygon=new AMap.Polygon({     
    path:polygonArr,//设置多边形边界路径  
    strokeColor:"#0000ff", //线颜色  
@@ -148,6 +166,7 @@ function addPolygon(){
   });   
    polygon.setMap(mapObj);  
  }  
+
 
 //在指定位置打开默认信息窗体  
 function openInfo(){    

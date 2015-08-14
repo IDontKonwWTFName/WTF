@@ -64,7 +64,7 @@ public class RecordDownloadServlet extends HttpServlet{
 //		}
 		
 		
-		File f=new File("C:/Users/¾ü/Desktop/data/HistoryRecord/"+shouhuan_id+"/"+url);
+		File f=new File("D:/data/HistoryRecord/"+shouhuan_id+"/"+url);
 	    
         FileInputStream fi=new FileInputStream(f);
         byte temp[]=new byte[1024*3];//3MµÄ¿Õ¼ä

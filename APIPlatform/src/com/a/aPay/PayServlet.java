@@ -1,6 +1,8 @@
 package com.a.aPay;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -73,6 +75,7 @@ public class PayServlet extends HttpServlet {
 			// Payment info = (Payment) query.uniqueResult();
 			sqlQuery.setString("shouhuan_id", shouhuan_id);
 			List<Payment> payment = sqlQuery.list();
+			
 			data.put("code", "100");
 			data.put("msg", "获取数据成功");
 			data.put("data", JSONArray.fromObject(payment).toString());
@@ -111,32 +114,43 @@ public class PayServlet extends HttpServlet {
 		
 		//支付信息
 		Map<String, String> data = new HashMap<String, String>();
-		String user_id = request.getParameter("user_id");
-		String shouhuan_id = request.getParameter("shouhuan_id");
-		String service_type = request.getParameter("service_type");
+		
+		BufferedReader bufferedReader =new BufferedReader(new InputStreamReader(request.getInputStream()));
+		String line=null;
+		StringBuilder sb=new StringBuilder();
+		while((line=bufferedReader.readLine())!=null){
+			sb.append(line);
+		}
+		JSONObject jsonObject=JSONObject.fromObject(sb.toString());
+		
+//		String user_id = request.getParameter("user_id");
+//		String shouhuan_id = request.getParameter("shouhuan_id");
+//		String service_type = request.getParameter("service_type");
+		String shouhuan_id=jsonObject.getString("shouhuan_id");
+		String user_id=jsonObject.getString("user_id");
+		String service_type=jsonObject.getString("service_type");
+		
+		
 
 		SessionFactory sessionFactory = new Configuration().configure()
 				.buildSessionFactory();
 		Session session = sessionFactory.openSession();
 
 		SQLQuery sqlQuery = session.createSQLQuery(
-				"select * from dbo.[service] where sevice_type:=service_type ")
+				"select * from dbo.[service] where service_type=:service_type ")
 				.addEntity(Service.class);
 		sqlQuery.setString("service_type", service_type);
 		Service service = (Service) sqlQuery.uniqueResult();
 
-		// pay信息
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("user_id", user_id);
-		jsonObject.put("shouhuan_id", shouhuan_id);
-		jsonObject.put("service_type", service_type);
+
+		
 		//order_no
 		Date date = new Date();
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
 				"yyyyMMddHHmmss");
 		String dateString = simpleDateFormat.format(date);
 		Random random = new Random();
-		int r = random.nextInt() % 100;
+		int r = random.nextInt() % 100+100;
 		String order_no = user_id + dateString + r;
 
 		Charge charge = null;
@@ -150,7 +164,14 @@ public class PayServlet extends HttpServlet {
 		chargeMap.put("order_no", order_no);
 		chargeMap.put("channel", "alipay");
 		chargeMap.put("client_ip", "127.0.0.1");
-		chargeMap.put("metadata", jsonObject.toString());
+		// pay信息
+		Map<String, String> map = new HashMap<String,String>();
+		map.put("user_id", user_id);
+		map.put("shouhuan_id", shouhuan_id);
+		map.put("service_type", service_type);
+		chargeMap.put("metadata", map);
+		
+		
 		Map<String, String> app = new HashMap<String, String>();
 		app.put("id", appId);
 		chargeMap.put("app", app);
