@@ -48,7 +48,7 @@ public class VoiceOfClient extends Thread {
 		try{
 			
 	        // file name
-			String filename= "E:\\test.amr";
+			String filename= "D:\\temp.amr";
             File music = new File(filename);
             total=(int) music.length();
             System.out.println("the file size is " +total+" bytes");

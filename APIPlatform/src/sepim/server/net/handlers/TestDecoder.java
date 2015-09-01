@@ -8,7 +8,6 @@ import org.jboss.netty.handler.codec.frame.CorruptedFrameException;
 import org.jboss.netty.handler.codec.frame.FrameDecoder;
 import org.jboss.netty.handler.codec.frame.TooLongFrameException;
 
-import sepim.server.net.packet.Packet;
 
 public class TestDecoder extends FrameDecoder {
 

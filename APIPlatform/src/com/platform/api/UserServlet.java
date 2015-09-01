@@ -97,7 +97,7 @@ public class UserServlet extends HttpServlet {
 	// 修改密码
 	// user post
 	// user_id,password,new_password
-	//
+	
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
@@ -137,6 +137,7 @@ public class UserServlet extends HttpServlet {
 				data.put("msg", "更新密码成功");
 				data.put("data", "");
 				out.println(JSONObject.fromObject(data).toString());
+				System.out.println(data.toString());
 
 			}
 
@@ -182,6 +183,7 @@ public class UserServlet extends HttpServlet {
 			id = jo.getString("user_id");
 			which = jo.getString("which");
 			value = jo.getString("value");
+			System.out.println("id=" + id + "  which=" + which + "  value=" + value); 
 		} catch (Exception e) {
 			data.put("code", "200");
 			data.put("msg", "修改数据失败");
@@ -199,8 +201,8 @@ public class UserServlet extends HttpServlet {
 		Transaction t = s.beginTransaction();
 
 		try {
-			String sql = "update user set " + which + " = " + value
-					+ " where user_id =" + id;
+			String sql = "update dbo.[user] set " + which + "='" + value
+					+ "' where user_id ='" + id + "'";
 			System.out.println(sql);
 			SQLQuery query = s.createSQLQuery(sql);
 			query.addEntity(User.class);

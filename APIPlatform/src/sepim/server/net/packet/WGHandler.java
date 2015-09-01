@@ -8,12 +8,7 @@ import org.jboss.netty.channel.Channel;
 
 import com.a.push.Push;
 
-import sepim.server.clients.Client;
 import sepim.server.clients.World;
-import sepim.server.net.packet.handled.ChatPacketHandler;
-import sepim.server.net.packet.handled.CommandPacketHandler;
-import sepim.server.net.packet.handled.DefaultPacketHandler;
-import sepim.server.net.packet.handled.PackHandler;
 
 
 public class WGHandler {

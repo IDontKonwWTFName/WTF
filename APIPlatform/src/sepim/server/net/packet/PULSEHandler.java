@@ -6,7 +6,7 @@ import net.sf.json.JSONObject;
 import sepim.server.clients.World;
 
 public class PULSEHandler {
-
+	//暂未使用
 	public void handle(String leixing,String company, String ringId, String contentsLength,String contents,String userId) 
 	{
 		if(userId.equals(""))//手环发送的

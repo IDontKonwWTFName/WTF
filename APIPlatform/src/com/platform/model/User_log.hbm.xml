@@ -9,7 +9,7 @@
 	    </id>  
 	    <property name="log_type" type="java.lang.Integer"></property> 
 	    <property name="user_id" type="java.lang.String"></property>
-	    <property name="time" type="java.lang.String"></property>
+	    <property name="time" type="java.util.Date"></property>
 	    <property name="event" type="java.lang.String"></property>
 	</class>  
 </hibernate-mapping>  

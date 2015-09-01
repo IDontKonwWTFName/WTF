@@ -4,6 +4,18 @@ import java.util.Date;
 
 public class Shouhuan
 {
+	
+	public String getStepnums() {
+		return stepnums;
+	}
+
+	public void setStepnums(String stepnums) {
+		this.stepnums = stepnums;
+	}
+
+
+	private String stepnums;
+	
 	private Date birthday;
 
 	public void setBirthday(Date birthday)
@@ -132,5 +144,168 @@ public class Shouhuan
 	{
 		return mode;
 	}
+	
+	private String rate;
+
+	public void setRate(String rate)
+	{
+		this.rate = rate;
+	}
+
+	public String  getRate()
+	{
+		return rate;
+	}
+	
+	private String time;
+
+	public void setTime(String time)
+	{
+		this.time = time;
+	}
+
+	public String  getTime()
+	{
+		return time;
+	}
+	
+	
+	private String whitelist;
+
+	public void setWhitelist(String whitelist)
+	{
+		this.whitelist = whitelist;
+	}
+
+	public String  getWhitelist()
+	{
+		return whitelist;
+	}
+	
+	
+	private String moniter;
+
+	public void setMoniter(String moniter)
+	{
+		this.moniter = moniter;
+	}
+
+	public String  getMoniter()
+	{
+		return moniter;
+	}
+	
+	
+	private String sos;
+
+	public void setSos(String sos)
+	{
+		this.sos = sos;
+	}
+
+	public String  getSos()
+	{
+		return sos;
+	}
+	
+	
+	private String centernumber;
+
+	public void setCenternumber(String centernumber)
+	{
+		this.centernumber = centernumber;
+	}
+
+	public String  getCenternumber()
+	{
+		return centernumber;
+	}
+	
+	private Integer sossms;
+
+	public void setSossms(Integer sossms)
+	{
+		this.sossms = sossms;
+	}
+
+	public Integer  getSossms()
+	{
+		return sossms;
+	}
+	
+	private Integer lowbat;
+
+	public void setLowbat(Integer lowbat)
+	{
+		this.lowbat = lowbat;
+	}
+
+	public Integer  getLowbat()
+	{
+		return lowbat;
+	}
+	
+	private Integer remove;
+
+	public void setRemove(Integer remove)
+	{
+		this.remove = remove;
+	}
+
+	public Integer  getRemove()
+	{
+		return remove;
+	}
+	
+	private Integer pedo;
+
+	public void setPedo(Integer pedo)
+	{
+		this.pedo = pedo;
+	}
+
+	public Integer  getPedo()
+	{
+		return pedo;
+	}
+	
+	private Integer smsonoff;
+
+	public void setSmsonoff(Integer smsonoff)
+	{
+		this.smsonoff = smsonoff;
+	}
+
+	public Integer  getSmsonoff()
+	{
+		return smsonoff;
+	}
+	
+	
+	private String clock;
+
+	public void setClock(String clock)
+	{
+		this.clock = clock;
+	}
+
+	public String  getClock()
+	{
+		return clock;
+	}
+	
+	private String flower;
+
+	public void setFlower(String flower)
+	{
+		this.flower = flower;
+	}
+
+	public String  getFlower()
+	{
+		return flower;
+	}
+	
+	
 
 }

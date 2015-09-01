@@ -90,17 +90,21 @@ public class ServiceServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
+	// service post 
+	// describle,service_price(RMB,yuan),workime(month,1-255)
+	//
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		request.setCharacterEncoding("utf-8");   
         response.setCharacterEncoding("utf-8");
 		String desc = request.getParameter("describle");
-		Integer type = 0;
+//		Integer type = 0;
 		Integer price = 0;
 		Integer ime = 0;
 		
 		try{
-			type = Integer.valueOf(request.getParameter("service_type"));
+	//		type = Integer.valueOf(request.getParameter("service_type"));
 			price = Integer.valueOf(request.getParameter("service_price"));
 			ime = Integer.valueOf(request.getParameter("workime"));
 		}catch(NumberFormatException e)
@@ -108,7 +112,7 @@ public class ServiceServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 		
-		System.out.println("Service: "+desc+" "+type+" "+price+" "+ime);
+		System.out.println("Service: "+desc+" "+price+" "+ime);
 		response.setContentType("text/x-json");
 		
 		PrintWriter out = response.getWriter();
@@ -120,11 +124,13 @@ public class ServiceServlet extends HttpServlet {
 		try{
 			
 			Service service = new Service();
+			
 			service.setService_describe(desc);
 			service.setService_price(price);
-			service.setService_type(type);
+		//	service.setService_type(type);
 			service.setService_workime(ime);
 			
+			System.out.println("Service-type: "+ service.getService_type());
 			s.save(service);
 			t.commit();
 			

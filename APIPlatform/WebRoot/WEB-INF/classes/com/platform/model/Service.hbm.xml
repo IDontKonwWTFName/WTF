@@ -4,7 +4,7 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="com.platform.model">  
 	<class name="Service" table="service">   
-	    <id name="service_type" type="java.lang.Integer"></id>  
+	    <id name="service_type" type="java.lang.Integer"><generator class="native"/></id>  
 	    <property name="service_price" type="java.lang.Integer"></property> 
 	    <property name="service_describe" type="java.lang.String"></property>
 	    <property name="service_workime" type="java.lang.Integer"></property>

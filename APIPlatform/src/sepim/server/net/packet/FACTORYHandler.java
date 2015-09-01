@@ -6,7 +6,7 @@ import net.sf.json.JSONObject;
 import sepim.server.clients.World;
 
 public class FACTORYHandler {
-
+//暂时未用
 	public void handle(String leixing,String company, String ringId, String contentsLength,
 			String contents,String userId) {
 		if(!userId.equals(""))//手机发出

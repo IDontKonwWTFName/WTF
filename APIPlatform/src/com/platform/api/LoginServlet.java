@@ -98,6 +98,7 @@ public class LoginServlet extends HttpServlet {
     			data.put("msg","验证成功");
     			data.put("data",jsonArray.toString());
     			
+    			
             } else {
             	data.put("code","200");
     			data.put("msg","用户名或密码错误");

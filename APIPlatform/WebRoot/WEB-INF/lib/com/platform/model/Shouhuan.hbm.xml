@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.platform.model">  
+	<class name="Shouhuan" table="shouhuan">   
+	    <id name="shouhuan_id" type="java.lang.String"></id>  
+	    <property name="birthday" type="java.util.Date"></property> 
+	    <property name="headiconurl" type="java.lang.String"></property>
+	    <property name="temporaryright" type="java.lang.Integer"></property>
+	    <property name="sex" type="java.lang.Integer"></property>
+	    <property name="currentversion" type="java.lang.Integer"></property>
+	    <property name="nickname" type="java.lang.String"></property>
+	    <property name="name" type="java.lang.String"></property>
+	    <property name="registrationdate" type="java.lang.String"></property>
+	    <property name="mode" type="java.lang.Integer"></property>
+	</class>  
+</hibernate-mapping>  

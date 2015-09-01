@@ -14,5 +14,21 @@
 	    <property name="name" type="java.lang.String"></property>
 	    <property name="registrationdate" type="java.lang.String"></property>
 	    <property name="mode" type="java.lang.Integer"></property>
+	    <property name="sossms" type="java.lang.Integer"></property>
+	    <property name="lowbat" type="java.lang.Integer"></property>
+	    <property name="remove" type="java.lang.Integer"></property>
+	    <property name="pedo" type="java.lang.Integer"></property>
+	    <property name="smsonoff" type="java.lang.Integer"></property>
+	    
+	    <property name="clock" type="java.lang.String"></property>
+	    
+	    <property name="rate" type="java.lang.String"></property>
+	    <property name="time" type="java.lang.String"></property>
+	    <property name="whitelist" type="java.lang.String"></property>
+	    <property name="moniter" type="java.lang.String"></property>
+	    <property name="sos" type="java.lang.String"></property>
+	    <property name="centernumber" type="java.lang.String"></property>
+	   	<property name="flower" type="java.lang.String"></property>
+	   
 	</class>  
 </hibernate-mapping>  

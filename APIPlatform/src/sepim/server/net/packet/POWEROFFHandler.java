@@ -4,14 +4,15 @@ import com.a.push.Push;
 
 import net.sf.json.JSONObject;
 import sepim.server.clients.World;
+import sepim.server.clients.WriteSql;
 
 public class POWEROFFHandler {
 	public void handle(String leixing,String company, String ringId, String contentsLength,String contents,String userId) {
 		if(!userId.equals(""))//手机发送的
 		{
 			System.out.println("发送关机指令");
-			System.out.println("ringId"+ringId);
-			System.out.println("["+company+"*"+ringId+"*"+contentsLength+"*"+contents+"]");
+			String command = "["+company+"*"+ringId+"*"+contentsLength+"*"+contents+"]";
+			WriteSql.getWritesql().WriteIntoUserInfo(userId, command+"	发送关机指令");
 			World.getWorld().WriteMessageToRing(ringId,"["+company+"*"+ringId+"*"+contentsLength+"*"+contents+"]");
 		}
 		else//手环返回的

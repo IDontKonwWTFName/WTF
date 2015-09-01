@@ -1,15 +1,27 @@
 package sepim.server.clients;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import org.jboss.netty.channel.Channel;
 
-import sepim.server.clients.chat.Chat;
 
 public class World {
 	
+	//手环发送lk的最新时间
+	private HashMap<String,Date> ringLkTimeMap = new HashMap<String,Date>();
+	
+	public HashMap<String, Date> getRingLkTimeMap() {
+		return ringLkTimeMap;
+	}		
+	//手环自定义定位
+	private HashMap<String,List<Ring>> ringLocationMap = new HashMap<String,List<Ring>>();
+	public HashMap<String, List<Ring>> getRingLocationMap() {
+		return ringLocationMap;
+	}
+		
 	//客户端手环channelList
 	private List<Channel> channelList = new ArrayList<Channel>();
 	
@@ -25,6 +37,22 @@ public class World {
 	//手环和当前操作手环的电话对应映射关系
 	private HashMap<String, String> ringPhoneMap = new HashMap<String, String>();
 	
+	//手机和推送ID的映射关系
+	private HashMap<String, String> phoneChannelMap = new HashMap<String, String>();
+	public HashMap<String, String> getPhoneChannelMap()
+	{
+		return phoneChannelMap;
+	}
+
+	
+	//手机发送指令和手机对应映射关系
+	private HashMap<String, String> phoneCommandMap = new HashMap<String, String>();
+	
+	public HashMap<String, String> getPhoneCommandMap() 
+	{
+		return phoneCommandMap;
+	}
+
 	//手环和所有具有操作手环权限的映射关系
 	private HashMap<String,ArrayList<String>> ringPhoneListMap = new HashMap<String, ArrayList<String>>();
 	
@@ -40,12 +68,19 @@ public class World {
 	 * @ringId 手环ID
 	 * @channel 手环建立的channel
 	 */
-	public void register(String ringId,Channel channel) {
-		if(!ringChannelMap.keySet().contains(ringId)){
+	public void register(String ringId,Channel channel) 
+	{
+		if(!ringChannelMap.keySet().contains(ringId))
+		{
 			setIndex(getIndex() + 1);
 			channelRingMap.put(channel, ringId);
 			ringChannelMap.put(ringId, channel);
 			channelList.add(channel);
+		}
+		else 
+		{
+			channelRingMap.put(channel, ringId);
+			ringChannelMap.put(ringId, channel);
 		}
 	}
 	
@@ -111,6 +146,24 @@ public class World {
 			writeChannel.write(writeMessage);
 		}
 	}
+	
+	/*
+	 * 通过手环ID在映射关系中寻找到对应手环channel并把信息写入手环
+	 * @ringId 手环ID
+	 * @writeMessage 写入手环信息
+	 */
+	public void WriteMessageToRing(String ringId,byte[] writeMessage)
+	{
+		Channel writeChannel = ringChannelMap.get(ringId);
+		if(writeChannel!=null)
+		{
+			System.out.println("服务器端发往手环的writeChannel："+writeChannel);
+			System.out.println("服务器端发往手环的消息字节数组：");
+			writeChannel.write(writeMessage);
+		}
+	}
+	
+	
 	
 	/*
 	 * 获取当前连接手环的映射关系列表

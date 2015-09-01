@@ -4,7 +4,9 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="com.platform.model">  
 	<class name="Shouhuan_log" table="shouhuan_log">   
-	    <id name="shouhuan_log_id" type="java.lang.Integer"></id>  
+	    <id name="shouhuan_log_id" type="java.lang.Integer">
+	    <generator class="native"/>
+	   	</id>  
 	    <property name="log_type" type="java.lang.Integer"></property> 
 	    <property name="shouhuan_id" type="java.lang.String"></property>
 	    <property name="time" type="java.util.Date"></property>

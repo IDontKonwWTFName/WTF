@@ -108,7 +108,7 @@ public class FenceServlet extends HttpServlet {
 	 *      response)
 	 */
 	// ÃÌº”Œß¿∏
-	// post:fence_name,shouhuan_id,user_id,fence(points),sign
+	// post:fence_name,shouhuan_id,user_id,fence(points),type,time
 	// ∑µªÿ:code,data:fence_id
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
@@ -121,19 +121,20 @@ public class FenceServlet extends HttpServlet {
 		String fence_name = request.getParameter("fence_name");
 		String shouhuan_id = request.getParameter("shouhuan_id");
 		String user_id = request.getParameter("user_id");
+		String timesString=request.getParameter("time");
 
 		// Integer id = 0;
-		Integer sign = 0;
+		Integer type = 0;
 
 		try {
 			// id = Integer.valueOf(request.getParameter("fence_id"));
-			sign = Integer.valueOf(request.getParameter("sign"));
+			type = Integer.valueOf(request.getParameter("type"));
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		}
 
 		System.out.println("Fence: " + fence + " " + fence_name + " "
-				+ shouhuan_id + " " + user_id + " " + sign);
+				+ shouhuan_id + " " + user_id + " " + type+" "+timesString);
 
 		PrintWriter out = response.getWriter();
 		Map<String, String> data = new HashMap<String, String>();
@@ -152,7 +153,8 @@ public class FenceServlet extends HttpServlet {
 			fen.setFence_name(fence_name);
 			fen.setShouhuan_id(shouhuan_id);
 			fen.setUser_id(user_id);
-			fen.setSign(sign);
+			fen.setType(type);
+			fen.setTime(timesString);
 
 			s.save(fen);
 

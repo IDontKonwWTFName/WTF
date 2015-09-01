@@ -45,60 +45,68 @@ public class PaymentServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-    //payment
-    //get
-    //shouhuan_id,user_id
-    //JSONARray  返回: service_type,end_time
-    
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		request.setCharacterEncoding("utf-8");   
-        response.setCharacterEncoding("utf-8");
-        response.setContentType("text/x-json");
-		String shouhuan_id = request.getParameter("shouhuan_id");
-		
-		System.out.println("Payment_id: "+shouhuan_id);
-		
-		
-		PrintWriter out = response.getWriter();
-		Map<String, String> data = new HashMap<String, String>();
-		
-		if(shouhuan_id==null || shouhuan_id.equals(""))
-		{
-			data.put("code","200");
-			data.put("msg", "获取数据失败");
-			data.put("data", "");
-			out.println(JSONObject.fromObject(data).toString());
-			return;
-		}
-		
-		SessionFactory sf = new Configuration().configure().buildSessionFactory();
-		Session s = sf.openSession();
-	
-		try{
-			SQLQuery sqlQuery = s.createSQLQuery("select * from payment where shouhuan_id=:shouhuan_id").addEntity(Payment.class);
-			//Payment info = (Payment) query.uniqueResult();
-			sqlQuery.setString("shouhuan_id", shouhuan_id);
-			List<Payment> payment =sqlQuery.list();
-			data.put("code","100");
-			data.put("msg", "获取数据成功");
-			data.put("data", JSONArray.fromObject(payment).toString());
-			
-			out.println(JSONObject.fromObject(data).toString());
-		}catch(Exception e)
-		{
-			data.put("code","200");
-			data.put("msg", "获取数据失败");
-			data.put("data", "");
-			e.printStackTrace();
-			out.println(JSONObject.fromObject(data).toString());
-		}finally
-		{
-			s.close();
-			sf.close();
-		}
-	}
+ // pay
+ 	// get
+ 	// shouhuan_id,user_id
+ 	// JSONARray 返回: service_type,end_time
+ 	protected void doGet(HttpServletRequest request,
+ 			HttpServletResponse response) throws ServletException, IOException {
+ 		// TODO Auto-generated method stub
+ 		request.setCharacterEncoding("utf-8");
+ 		response.setCharacterEncoding("utf-8");
+ 		response.setContentType("text/x-json");
+ 		String shouhuan_id = request.getParameter("shouhuan_id");
 
+ 		System.out.println("Payment_id: " + shouhuan_id);
+
+ 		PrintWriter out = response.getWriter();
+ 		Map<String, String> data = new HashMap<String, String>();
+
+ 		if (shouhuan_id == null || shouhuan_id.equals("")) {
+ 			data.put("code", "200");
+ 			data.put("msg", "获取数据失败");
+ 			data.put("data", "");
+ 			out.println(JSONObject.fromObject(data).toString());
+ 			return;
+ 		}
+
+ 		SessionFactory sf = new Configuration().configure()
+ 				.buildSessionFactory();
+ 		Session s = sf.openSession();
+
+ 		try {
+ 			SQLQuery sqlQuery = s.createSQLQuery(
+ 					"select * from dbo.[payment] where shouhuan_id=:shouhuan_id and end_time=(select max(end_time) from dbo.[payment] where shouhuan_id=:shouhuan_id)")
+ 					.addEntity(Payment.class);
+ 			// Payment info = (Payment) query.uniqueResult();
+ 			sqlQuery.setString("shouhuan_id", shouhuan_id);
+ 			
+ 			Payment payment=(Payment) sqlQuery.uniqueResult();
+ 			
+ 			JSONArray jsonArray =new JSONArray();
+ 			JSONObject jsonObject=new JSONObject();
+ 			jsonObject.put("service_type", payment.getService_type());
+ 			jsonObject.put("end_time", payment.getEnd_time().toString());
+ 			jsonArray.add(jsonObject);
+ 			
+ 			data.put("code", "100");
+ 			data.put("msg", "获取数据成功");
+ 			data.put("data", jsonArray.toString());
+
+ 			out.println(JSONObject.fromObject(data).toString());
+ 			System.out.println(jsonObject.toString()+"----------------------");
+ 		} catch (Exception e) {
+ 			data.put("code", "200");
+ 			data.put("msg", "获取数据失败");
+ 			data.put("data", "");
+ 			e.printStackTrace();
+ 			out.println(JSONObject.fromObject(data).toString());
+ 		} finally {
+ 			s.close();
+ 			sf.close();
+ 		}
+
+ 	}
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
@@ -243,54 +251,59 @@ public class PaymentServlet extends HttpServlet {
 //	/**
 //	 * @see HttpServlet#doDelete(HttpServletRequest, HttpServletResponse)
 //	 */
-//	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//		// TODO Auto-generated method stub
-//		request.setCharacterEncoding("utf-8");   
-//        response.setCharacterEncoding("utf-8");
-//		String id = request.getParameter("payment_id");
-//		System.out.println("Payment_id(delete): "+id);
-//		response.setContentType("text/x-json");
-//		
-//		PrintWriter out = response.getWriter();
-//		Map<String, String> data = new HashMap<String, String>();
-//		
-//		if(id==null || id.equals(""))
-//		{
-//			data.put("code","200");
-//			data.put("msg", "获取数据失败");
-//			data.put("data", "");
-//			out.println(JSONObject.fromObject(data).toString());
-//			return;
-//		}
-//		
-//		SessionFactory sf = new Configuration().configure().buildSessionFactory();
-//		Session s = sf.openSession();
-//		Transaction t = s.beginTransaction();
-//	
-//		try{
-//			SQLQuery query = s.createSQLQuery("delete from payment where payment_id=?");
-//			query.addEntity(Payment.class);
-//			query.setParameter(0, id);
-//			query.executeUpdate();
-//			t.commit();
-//			
-//			data.put("code","100");
-//			data.put("msg", "获取数据成功");
-//			data.put("data", "");
-//			
-//			out.println(JSONObject.fromObject(data).toString());
-//		}catch(Exception e)
-//		{
-//			data.put("code","200");
-//			data.put("msg", "获取数据失败");
-//			data.put("data", "");
-//			e.printStackTrace();
-//			out.println(JSONObject.fromObject(data).toString());
-//		}finally
-//		{
-//			s.close();
-//			sf.close();
-//		}
-//	}
-
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		request.setCharacterEncoding("utf-8");   
+		response.setCharacterEncoding("utf-8");
+		String shouhuan_id = request.getParameter("shouhuan_id");
+	    String payment_id = request.getParameter("payment_id");
+	    response.setContentType("text/x-json");
+	
+	    PrintWriter out = response.getWriter();
+	    Map<String, String> data = new HashMap<String, String>();
+	
+	    if(shouhuan_id==null || shouhuan_id.equals("") || payment_id==null || payment_id.equals(""))
+	    {
+	    	data.put("code","200");
+	    	data.put("msg", "获取数据失败");
+	    	data.put("data", "");
+	    	out.println(JSONObject.fromObject(data).toString());
+	    	return;
+	    }
+	
+	    SessionFactory sf = new Configuration().configure().buildSessionFactory();
+	    Session s = sf.openSession();
+	    Transaction t = s.beginTransaction();
+	    SQLQuery query;
+	    try{
+	        if(shouhuan_id != null && !shouhuan_id.equals("")){
+	        	query = s.createSQLQuery("delete from payment where shouhuan_id=?");
+	        	query.addEntity(Payment.class);
+	        	query.setParameter(0, shouhuan_id);
+	        }else{
+				query = s.createSQLQuery("delete from payment where payment_id=?");
+				query.addEntity(Payment.class);
+				query.setParameter(0, payment_id);
+	        }
+	        query.executeUpdate();
+	        t.commit();
+		
+	        data.put("code","100");
+	        data.put("msg", "删除成功");
+	        data.put("data", "");
+		
+	        out.println(JSONObject.fromObject(data).toString());
+	    }catch(Exception e)
+	    {
+	    	data.put("code","200");
+	    	data.put("msg", "出现错误");
+	    	data.put("data", "");
+	    	e.printStackTrace();
+	    	out.println(JSONObject.fromObject(data).toString());
+	    }finally
+	    {
+	    	s.close();
+	    	sf.close();
+	    }
+	}
 }

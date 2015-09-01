@@ -18,6 +18,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
+import sepim.server.clients.World;
+
 /** * @author  作者 E-mail: * @date 创建时间：2015年8月10日 下午3:20:23 * @version 1.0 * @parameter  * @since  * @return  */
 @WebServlet("/addchannelid")
 
@@ -56,6 +58,15 @@ public class AddChannelIdServlet extends HttpServlet{
 			data.put("data", "");
 			response.getWriter().println(JSONObject.fromObject(data).toString());
 			System.out.println(JSONObject.fromObject(data).toString());
+			
+			
+			
+			/*
+			 * 2015/8/17
+			 * 胡启罡修改，建立UserId和ChannelId的映射哈希表*/
+			World.getWorld().getPhoneChannelMap().put(user_id,channel_id);
+			
+			
 		} catch (Exception e) {
 			// TODO: handle exception
 			data.put("code", "500");

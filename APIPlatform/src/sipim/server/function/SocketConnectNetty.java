@@ -62,26 +62,28 @@ public class SocketConnectNetty extends Thread{
 //			//去除中括号
 //			message = message.substring(1,message.length()-1);
 			//以*为标记分割字符串
-			String[] receiveCommandStrings = message.split("\\*");
-			//公司名
-			String company = "";
-			//手环ID
-			String ringId = "";
-			//内容长度
-			String contentsLength ="";
-			//内容
-			String contents = "";
-			//判断手环发送信息是否符合要求
-			if(receiveCommandStrings.length==4){
-			//赋值
-			company = receiveCommandStrings[0];
-			ringId = receiveCommandStrings[1];
-			contentsLength = receiveCommandStrings[2];
-			contents = receiveCommandStrings[3];
-			}else{
-//				ctx.getChannel().write("commandError!!!");
-			}
-			System.out.println("当前RingId"+ringId);
+//			String[] receiveCommandStrings = message.split("\\*");
+//			//公司名
+//			String company = "";
+//			//手环ID
+//			String ringId = "";
+//			//内容长度
+//			String contentsLength ="";
+//			//内容
+//			String contents = "";
+//			//判断手环发送信息是否符合要求
+//			if(receiveCommandStrings.length==4){
+//			//赋值
+//			company = receiveCommandStrings[0];
+//			ringId = receiveCommandStrings[1];
+//			contentsLength = receiveCommandStrings[2];
+//			contents = receiveCommandStrings[3];
+//			}
+//			else
+//			{
+////				ctx.getChannel().write("commandError!!!");
+//			}
+//			System.out.println("当前RingId"+ringId);
 			InetAddress ipadd = InetAddress.getByName("182.92.67.109"); 
 			s=new Socket(ipadd,8082);
 			SocketConnectNetty task = new SocketConnectNetty(userId,message,s);

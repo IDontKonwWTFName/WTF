@@ -52,7 +52,7 @@ public class ShouhuanServlet extends HttpServlet {
 	 */
     //shouhuan get
     //shouhuan_id,user_id
-    //返回:birthday,mode,name,sex
+    //返回:birthday,mode,name,sex,rate,time,whitelist,moniter,sos,centernummber,flower,sossms,lowbat,remove,pedo,smsonoff,clock
     //
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
@@ -83,15 +83,30 @@ public class ShouhuanServlet extends HttpServlet {
 			SQLQuery sqlQuery = session.createSQLQuery("select * from dbo.[shouhuan] where shouhuan_id=:shouhuan_id").addEntity(Shouhuan.class);
 			sqlQuery.setString("shouhuan_id", shouhuan_id);
 			Shouhuan shouhuan = (Shouhuan) sqlQuery.uniqueResult();
+//			JSONObject jsonObject =new JSONObject().fromObject(shouhuan);
 			JSONObject jsonObject =new JSONObject();
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd"); 
+			jsonObject.put("shouhuan_id",shouhuan_id);
 			jsonObject.put("birthday",formatter.format(shouhuan.getBirthday()));
-			jsonObject.put("mode", shouhuan.getMode());
-			jsonObject.put("name", shouhuan.getName());
-			jsonObject.put("sex",shouhuan.getSex());
-			
-			System.out.println(shouhuan.getBirthday());
-			 
+			jsonObject.put("mode", shouhuan.getMode()==null ?"":shouhuan.getMode());
+			jsonObject.put("nickname", shouhuan.getNickname() == null ? "" : shouhuan.getNickname());
+			jsonObject.put("registrationdate", shouhuan.getRegistrationdate() ==null ? "":shouhuan.getRegistrationdate());
+			jsonObject.put("name", shouhuan.getName() == null ? "" : shouhuan.getName());
+			jsonObject.put("sex",shouhuan.getSex() == null ? "" : shouhuan.getSex());
+			jsonObject.put("rate", shouhuan.getRate() == null ? "" : shouhuan.getRate());
+			jsonObject.put("time", shouhuan.getTime() == null ? "" : shouhuan.getTime() );
+			jsonObject.put("whitelist", shouhuan.getWhitelist() == null ? "" : shouhuan.getWhitelist());
+			jsonObject.put("moniter", shouhuan.getMoniter() == null ? "" : shouhuan.getMoniter());
+			jsonObject.put("sos", shouhuan.getSos() == null ? "" : shouhuan.getSos());
+			jsonObject.put("centernumber", shouhuan.getCenternumber() == null ? "" : shouhuan.getCenternumber());
+			jsonObject.put("flower", shouhuan.getFlower() == null ? "" : shouhuan.getFlower());
+			jsonObject.put("sossms", shouhuan.getSossms() == null ? "" : shouhuan.getSossms());
+			jsonObject.put("lowbat", shouhuan.getLowbat() == null ? "" : shouhuan.getLowbat());
+			jsonObject.put("remove", shouhuan.getRemove() == null ? "" : shouhuan.getRemove());
+			jsonObject.put("pedo", shouhuan.getPedo() == null ? "" : shouhuan.getPedo());
+			jsonObject.put("smsonoff", shouhuan.getSmsonoff() == null ? "" : shouhuan.getSmsonoff());
+			jsonObject.put("clock",shouhuan.getClock() == null ? "" : shouhuan.getClock());
+						 
 			data.put("code","100");
 			data.put("msg", "获取数据成功");
 			data.put("data", jsonObject.toString());
@@ -336,10 +351,25 @@ public class ShouhuanServlet extends HttpServlet {
 		Transaction t = s.beginTransaction();
 		
 		try{
-			SQLQuery sqlQuery = s.createSQLQuery("update shouhuan set "+which+" =:value where shouhuan_id =:shouhuan_id");
-			sqlQuery.setString("value", value);
-			sqlQuery.setString("shouhuan_id", shouhuan_id);
-			sqlQuery.addEntity(Shouhuan.class);
+			SQLQuery sqlQuery = null;
+			/*
+			 * linsos为林力帆修改，其他情况均按false处理；
+			 */
+			if(which.equals("linsos")){
+				String[] csStr = value.split(" ");
+				sqlQuery = s.createSQLQuery("update shouhuan set sos=:sos,centernumber=:centernumber where shouhuan_id =:shouhuan_id");
+				sqlQuery.setString("sos", csStr[0]);
+				sqlQuery.setString("centernumber", csStr[1]);
+				sqlQuery.setString("shouhuan_id", shouhuan_id);
+				sqlQuery.addEntity(Shouhuan.class);
+			}else{
+				s.createSQLQuery("update shouhuan set "+which+" =:value where shouhuan_id =:shouhuan_id");
+				sqlQuery.setString("value", value);
+				sqlQuery.setString("shouhuan_id", shouhuan_id);
+				sqlQuery.addEntity(Shouhuan.class);
+			}
+			
+			
 //			SQLQuery query = s.createSQLQuery("update user set ? = ? where user_id = ?");
 //			query.setParameter(0, which);
 //			query.setParameter(1, value);
@@ -455,54 +485,54 @@ public class ShouhuanServlet extends HttpServlet {
 //	/**
 //	 * @see HttpServlet#doDelete(HttpServletRequest, HttpServletResponse)
 //	 */
-//	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//		// TODO Auto-generated method stub
-//		request.setCharacterEncoding("utf-8");   
-//        response.setCharacterEncoding("utf-8");
-//		String id = request.getParameter("shouhuan_id");
-//		System.out.println("Shouhuan(delete): "+id);
-//		response.setContentType("text/x-json");
-//		
-//		PrintWriter out = response.getWriter();
-//		Map<String, String> data = new HashMap<String, String>();
-//		
-//		if(id==null || id.equals(""))
-//		{
-//			data.put("code","200");
-//			data.put("msg", "获取数据失败");
-//			data.put("data", "");
-//			out.println(JSONObject.fromObject(data).toString());
-//			return;
-//		}
-//		
-//		SessionFactory sf = new Configuration().configure().buildSessionFactory();
-//		Session s = sf.openSession();
-//		Transaction t = s.beginTransaction();
-//		
-//		try{
-//			SQLQuery query = s.createSQLQuery("delete from shouhuan where shouhuan_id=?");
-//			query.addEntity(Shouhuan.class);
-//			query.setParameter(0, id);
-//			query.executeUpdate();
-//			t.commit();
-//			
-//			data.put("code","100");
-//			data.put("msg", "获取数据成功");
-//			data.put("data", "");
-//			
-//			out.println(JSONObject.fromObject(data).toString());
-//		}catch(Exception e)
-//		{
-//			data.put("code","200");
-//			data.put("msg", "获取数据失败");
-//			data.put("data", "");
-//			e.printStackTrace();
-//			out.println(JSONObject.fromObject(data).toString());
-//		}finally
-//		{
-//			s.close();
-//			sf.close();
-//		}
-//	}
-//}
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		request.setCharacterEncoding("utf-8");   
+        response.setCharacterEncoding("utf-8");
+		String id = request.getParameter("shouhuan_id");
+		System.out.println("Shouhuan(delete): "+id);
+		response.setContentType("text/x-json");
+		
+		PrintWriter out = response.getWriter();
+		Map<String, String> data = new HashMap<String, String>();
+		
+		if(id==null || id.equals(""))
+		{
+			data.put("code","200");
+			data.put("msg", "获取数据失败");
+			data.put("data", "");
+			out.println(JSONObject.fromObject(data).toString());
+			return;
+		}
+		
+		SessionFactory sf = new Configuration().configure().buildSessionFactory();
+		Session s = sf.openSession();
+		Transaction t = s.beginTransaction();
+		
+		try{
+			SQLQuery query = s.createSQLQuery("delete from shouhuan where shouhuan_id=?");
+			query.addEntity(Shouhuan.class);
+			query.setParameter(0, id);
+			query.executeUpdate();
+			t.commit();
+			
+			data.put("code","100");
+			data.put("msg", "获取数据成功");
+			data.put("data", "");
+			
+			out.println(JSONObject.fromObject(data).toString());
+		}catch(Exception e)
+		{
+			data.put("code","200");
+			data.put("msg", "获取数据失败");
+			data.put("data", "");
+			e.printStackTrace();
+			out.println(JSONObject.fromObject(data).toString());
+		}finally
+		{
+			s.close();
+			sf.close();
+		}
+	}
+
 }

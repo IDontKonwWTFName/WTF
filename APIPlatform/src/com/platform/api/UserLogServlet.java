@@ -118,11 +118,7 @@ public class UserLogServlet extends HttpServlet {
 		}
 		
 		Date now = new Date();
-		SimpleDateFormat dateFormat = new SimpleDateFormat(
-				"yyyy-MM-dd HH:mm:ss");
-		String time = dateFormat.format(now);
 		
-		System.out.println("User_info: "+user_id+" "+time+" "+event);
 		response.setContentType("text/x-json");
 		
 		PrintWriter out = response.getWriter();
@@ -137,7 +133,7 @@ public class UserLogServlet extends HttpServlet {
 			
 			log.setEvent(event);
 			log.setLog_type(log_type);
-			log.setTime(time);
+			log.setTime(now);
 			log.setUser_id(user_id);
 			
 			session.save(log);

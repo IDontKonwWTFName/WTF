@@ -70,14 +70,14 @@ public class CommandServlet extends HttpServlet {
 		String shouhuan_id = request.getParameter("shouhuan_id");
 		String cmd = request.getParameter("cmd");
 		//默认手环ID为这个
-		shouhuan_id = "1506012101";
+		//shouhuan_id = "1506012101";
 
 		PrintWriter out = response.getWriter();
 		Map<String, String> data = new HashMap<String, String>();
 
-		SessionFactory sf = new Configuration().configure()
-				.buildSessionFactory();
-		Session s = sf.openSession();
+//		SessionFactory sf = new Configuration().configure()
+//				.buildSessionFactory();
+//		Session s = sf.openSession();
 
 		boolean flag = false;
 		/*
@@ -149,8 +149,7 @@ public class CommandServlet extends HttpServlet {
 			out.println(JSONObject.fromObject(data).toString());
 			System.out.println(JSONObject.fromObject(data).toString());
 		}
-		s.close();
-		sf.close();
+		
 		// switch (cmd) {
 		//
 		//

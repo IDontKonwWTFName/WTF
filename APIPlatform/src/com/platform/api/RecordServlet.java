@@ -31,6 +31,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
+import sipim.server.function.SocketConnectNetty;
 import antlr.debug.TraceAdapter;
 
 import com.platform.model.Historyrecord;
@@ -123,9 +124,14 @@ public class RecordServlet extends HttpServlet {
 						item.write(new File(dir, path));
 						// User_info user_info=new User_info();
 						// 将path写入数据库
-
+						int l = 0;	
+						String cmdString  = "TK,"+realPath+"/"+path;
+						l = cmdString.length() + js.getString("from_id").length();
+						String len = String.format("%04x", l);
+				        cmdString="[LJ*"+js.getString("shouhuan_id")+"*"+len+"*"+cmdString+"]"+js.getString("from_id");
+						// 传给netty
+						new SocketConnectNetty().connect(js.getString("from_id"), cmdString);
 					}
-
 				}
 
 				Boolean type = null;

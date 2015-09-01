@@ -28,16 +28,16 @@ public class Fence
 	}
 
 
-	private Integer sign;
+	private Integer type;
 
-	public void setSign(Integer sign)
+	public void setType(Integer type)
 	{
-		this.sign = sign;
+		this.type = type;
 	}
 
-	public Integer  getSign()
+	public Integer  getType()
 	{
-		return sign;
+		return type;
 	}
 
 
@@ -77,6 +77,18 @@ public class Fence
 	public String  getFence_name()
 	{
 		return fence_name;
+	}
+	
+	private String time;
+
+	public void setTime(String time)
+	{
+		this.time = time;
+	}
+
+	public String  getTime()
+	{
+		return time;
 	}
 
 

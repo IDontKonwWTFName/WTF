@@ -8,7 +8,7 @@ import net.sf.json.JSONObject;
 import sepim.server.clients.World;
 
 public class TSHandler {
-
+	//暂未使用
 	public void handle(String leixing,String company, String ringId, String contentsLength,
 			String contents,String userId) {
 		if(userId.equals(""))//手机发出

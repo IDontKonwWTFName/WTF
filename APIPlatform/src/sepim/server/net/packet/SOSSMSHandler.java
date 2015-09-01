@@ -1,14 +1,21 @@
 package sepim.server.net.packet;
 
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+
 import com.a.push.Push;
 
 import net.sf.json.JSONObject;
 import sepim.server.clients.World;
 
 public class SOSSMSHandler {
-
+	//暂未使用
 	public void handle(String leixing,String company, String ringId, String contentsLength,
 			String contents,String userId) {
+		System.out.println("----");
 		if(!userId.equals(""))//手机发出
 		{
 			System.out.println(ringId+"SOS短信报警开关设置！！");
@@ -21,6 +28,21 @@ public class SOSSMSHandler {
 			jsonObject.put("shouhuan_id",ringId); 
 			//把数据推送给手机
 			new Push().pushToApp(World.getWorld().getRingPhoneListMap().get(ringId),jsonObject.toString());
+			
+			/*
+			 * by luojun  8.28
+			 */
+			SessionFactory sessionFactory =new Configuration().configure().buildSessionFactory();
+			Session session =sessionFactory.openSession();
+			Transaction transaction=session.beginTransaction();
+			
+			SQLQuery sqlQuery= session.createSQLQuery("update dbo.[shouhuan] set sossms=:sossms where shouhuan_id=:shouhuan_id");
+			sqlQuery.setString("sossms",World.getWorld().getPhoneCommandMap().get(ringId+leixing).split(",")[1] );
+			sqlQuery.setString("shouhuan_id",ringId );
+			sqlQuery.executeUpdate();
+			transaction.commit();
+			session.close();
+			sessionFactory.close();
 		}
 	}
 

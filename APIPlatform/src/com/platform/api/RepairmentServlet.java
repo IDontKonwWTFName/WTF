@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.hibernate.SQLQuery;
@@ -20,6 +21,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
+import com.baidu.yun.core.annotation.R;
 import com.platform.model.*;
 
 /**
@@ -44,15 +46,15 @@ public class RepairmentServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		request.setCharacterEncoding("utf-8");   
         response.setCharacterEncoding("utf-8");
-		String userid = request.getParameter("repairment_id");
+		String shouhuan_id = request.getParameter("shouhuan_id");
 		
-		System.out.println("Repairment_id: "+userid);
+		System.out.println("Shouhuan_id: "+shouhuan_id);
 		response.setContentType("text/x-json");
 		
 		PrintWriter out = response.getWriter();
 		Map<String, String> data = new HashMap<String, String>();
 		
-		if(userid==null || userid.equals(""))
+		if(shouhuan_id==null || shouhuan_id.equals(""))
 		{
 			data.put("code","200");
 			data.put("msg", "获取数据失败");
@@ -65,12 +67,24 @@ public class RepairmentServlet extends HttpServlet {
 		Session s = sf.openSession();
 	
 		try{
-			SQLQuery query = s.createSQLQuery("select * from repairment where repairment="+userid).addEntity(Repairment.class);
-			Repairment info = (Repairment) query.uniqueResult();
+			SQLQuery query = s.createSQLQuery("select * from repairment where shouhuan_id="+shouhuan_id).addEntity(Repairment.class);
+			List<Repairment> rs = query.list();
+			JSONObject jsonObject=null;
+			JSONArray jsonArray=new JSONArray();
+			
+			for(Repairment r : rs){
+				jsonObject=new JSONObject();
+				jsonObject.put("repair_info", r.getRepair_info());
+				jsonObject.put("repair_payment", r.getRepair_payment());
+				jsonObject.put("repair_time", r.getRepair_time());
+				jsonObject.put("repairment_id", r.getRepairment_id());
+				
+				jsonArray.add(jsonObject);
+			}
 			
 			data.put("code","100");
 			data.put("msg", "获取数据成功");
-			data.put("data", JSONObject.fromObject(info).toString());
+			data.put("data", jsonArray.toString());
 			
 			out.println(JSONObject.fromObject(data).toString());
 		}catch(Exception e)
@@ -242,14 +256,16 @@ public class RepairmentServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		request.setCharacterEncoding("utf-8");   
         response.setCharacterEncoding("utf-8");
-		String id = request.getParameter("repairment_id");
-		System.out.println("Repairment_id(delete): "+id);
+		String repairment_id = request.getParameter("repairment_id");
+		String shouhuan_id = request.getParameter("shouhuan_id");
+		if(repairment_id != null || !repairment_id.equals("") ) System.out.println("Repairment_id(delete): "+repairment_id);
+		if(shouhuan_id != null || !shouhuan_id.equals("") ) System.out.println("shouhuan_id(delete): "+shouhuan_id);
 		response.setContentType("text/x-json");
 		
 		PrintWriter out = response.getWriter();
 		Map<String, String> data = new HashMap<String, String>();
 		
-		if(id==null || id.equals(""))
+		if(repairment_id==null || repairment_id.equals("") || shouhuan_id==null || shouhuan_id.equals(""))
 		{
 			data.put("code","200");
 			data.put("msg", "获取数据失败");
@@ -263,9 +279,16 @@ public class RepairmentServlet extends HttpServlet {
 		Transaction t = s.beginTransaction();
 	
 		try{
-			SQLQuery query = s.createSQLQuery("delete from repairment where repairment_id=?");
-			query.addEntity(Repairment.class);
-			query.setParameter(0, id);
+			SQLQuery query;
+			if(repairment_id != null || !repairment_id.equals("")){
+				query = s.createSQLQuery("delete from repairment where repairment_id=?");
+				query.addEntity(Repairment.class);
+				query.setParameter(0, repairment_id);
+			}else{
+				query = s.createSQLQuery("delete from repairment where shouhuan_id=?");
+				query.addEntity(Repairment.class);
+				query.setParameter(0, shouhuan_id);
+			}
 			query.executeUpdate();
 			t.commit();
 			

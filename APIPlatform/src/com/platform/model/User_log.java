@@ -1,5 +1,7 @@
 package com.platform.model;
 
+import java.util.Date;
+
 public class User_log
 {
 	private Integer log_type;
@@ -41,18 +43,16 @@ public class User_log
 	}
 
 
-	private String time;
-
-	public void setTime(String time)
-	{
-		this.time = time;
-	}
-
-	public String  getTime()
-	{
+	public Date getTime() {
 		return time;
 	}
 
+	public void setTime(Date time) {
+		this.time = time;
+	}
+
+
+	private Date time;
 
 	private String event;
 

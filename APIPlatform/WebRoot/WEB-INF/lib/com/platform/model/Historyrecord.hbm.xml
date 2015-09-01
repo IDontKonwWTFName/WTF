@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.platform.model">  
+	<class name="Historyrecord" table="Historyrecord">
+		<composite-id>
+		<key-property name="from_id" type="java.lang.String"></key-property>
+	    <key-property name="shouhuan_id" type="java.lang.String"></key-property>
+	    <key-property name="time" type="java.util.Date"></key-property>
+	    </composite-id>
+	    <property name="record_url" type="java.lang.String"></property>
+	    <property name="from_type" type="java.lang.Boolean"></property>
+	    <property name="isHeard" type="java.lang.Boolean"></property>
+	</class>  
+</hibernate-mapping>  
